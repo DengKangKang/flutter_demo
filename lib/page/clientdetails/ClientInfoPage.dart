@@ -37,20 +37,43 @@ class ClientInfoPageState extends State<ClientInfoPage>
 
   ClientInfoPageState(this._client) {
     if (_client != null) {
-      _company = companyTypes.firstWhere((e) => e.id == _client.company_type);
-      _industry = industries.firstWhere((e) => e.id == _client.industry);
-      _source = sourceTypes.firstWhere((e) => e.id == _client.source_id);
-      _location = locations.firstWhere((e) => e.id == _client.location);
-      _invoiceCount = _client.annual_invoice.toString();
-      _startTarget = booleans.firstWhere((e) => e.id == _client.is_important);
-      _secondaryDevelopment =
-          booleans.firstWhere((e) => e.id == _client.on_premise);
-      _progress =
-          progresses.firstWhere((e) => e.id == _client.progress_percent);
-      _expectedContractAmount = _client.anticipated_amount;
-      _expectedSignDate = _client.anticipated_date;
-      _lnsize = _client.company_size;
-      _companyIntro = _client.memo;
+      if (_client.company_type != null)
+        _company = companyTypes.firstWhere((e) => e.id == _client.company_type);
+
+      if (_client.industry != null)
+        _industry = industries.firstWhere((e) => e.id == _client.industry);
+
+      if (_client.source_id != null)
+        _source = sourceTypes.firstWhere((e) => e.id == _client.source_id);
+
+      if (_client.location != null)
+        _location = locations.firstWhere((e) => e.id == _client.location);
+
+      if (_client.annual_invoice != null)
+        _invoiceCount = _client.annual_invoice.toString();
+
+      if (_client.is_important != null)
+        _startTarget = booleans.firstWhere((e) => e.id == _client.is_important);
+
+      if (_client.on_premise != null)
+        _secondaryDevelopment =
+            booleans.firstWhere((e) => e.id == _client.on_premise);
+
+      if (_client.progress_percent != null)
+        _progress =
+            progresses.firstWhere((e) => e.id == _client.progress_percent);
+
+      if (_client.anticipated_amount != null)
+        _expectedContractAmount = _client.anticipated_amount;
+
+      if (_client.anticipated_date != null)
+        _expectedSignDate = _client.anticipated_date;
+
+      if (_client.company_size != null)
+        _lnsize = _client.company_size;
+
+      if (_client.memo != null)
+        _companyIntro = _client.memo;
     }
   }
 

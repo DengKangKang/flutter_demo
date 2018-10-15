@@ -26,10 +26,14 @@ class ContactsPageState extends State<ContactsPage>
 
   ContactsPageState(this._client) {
     if (_client != null) {
-      _firstPartyRepresentatives = _client.leads_contact;
-      _contactWay = _client.leads_mobile;
-      _email = _client.leads_email;
-      _title = _client.job_title;
+      if (_client.leads_contact != null)
+        _firstPartyRepresentatives = _client.leads_contact;
+
+      if (_client.leads_mobile != null) _contactWay = _client.leads_mobile;
+
+      if (_client.leads_email != null) _email = _client.leads_email;
+
+      if (_client.job_title != null) _title = _client.job_title;
     }
   }
 
