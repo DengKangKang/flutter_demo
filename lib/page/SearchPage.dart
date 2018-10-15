@@ -107,7 +107,6 @@ class __ResultListState extends State<_ResultList> {
         _loadMore();
       }
     });
-    initData();
     super.initState();
   }
 
