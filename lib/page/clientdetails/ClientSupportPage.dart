@@ -106,10 +106,39 @@ class ClientSupportPageState extends State {
   }
 
   void newSupport(BuildContext context) async {
+    var supportList = new List<RadioBean>();
+    supportList.add(RadioBean(SUPPORT_TYPE_PRE_SALES, "售前支持"));
+    var hasHardWare = _clientSupports.firstWhere(
+        ((e) => e.application_type == SUPPORT_TYPE_HARDWARE),
+        orElse: () => null);
+    if (hasHardWare == null) {
+      supportList.add(RadioBean(SUPPORT_TYPE_HARDWARE, "硬件设备"));
+    }
+    var hasDebugAccount = _clientSupports.firstWhere(
+        ((e) => e.application_type == SUPPORT_TYPE_DEBUG_ACCOUNT),
+        orElse: () => null);
+    if (hasDebugAccount == null) {
+      supportList.add(RadioBean(SUPPORT_TYPE_DEBUG_ACCOUNT, "测试账号"));
+    }
+    var hasReleaseAccount = _clientSupports.firstWhere(
+        ((e) => e.application_type == SUPPORT_TYPE_RELEASE_ACCOUNT),
+        orElse: () => null);
+    if (hasReleaseAccount == null) {
+      supportList.add(RadioBean(SUPPORT_TYPE_RELEASE_ACCOUNT, "正式账号"));
+    }
+
+    if (supportList.isEmpty) {
+      Scaffold.of(context).showSnackBar(
+        new SnackBar(
+          content: new Text("无可新增支持"),
+        ),
+      );
+      return;
+    }
     RadioBean result = await showDialog(
       context: context,
       builder: (context) {
-        return new RadioListPage.supportTypes();
+        return new RadioListPage(supportList);
       },
     );
     bool needRefresh;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
@@ -26,7 +27,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
   RadioBean _industry = industries[0];
   RadioBean _source = sourceTypes[0];
   RadioBean _location = locations[0];
-  String _invoiceCount = "";
+
+  var _invoiceCountController = TextEditingController.fromValue(
+    new TextEditingValue(
+      text: "",
+    ),
+  );
+
+  String _invoiceCountError = "";
+
   RadioBean _startTarget = booleans[0];
   RadioBean _secondaryDevelopment = booleans[0];
   RadioBean _progress = progresses[0];
@@ -50,7 +59,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
         _location = locations.firstWhere((e) => e.id == _client.location);
 
       if (_client.annual_invoice != null)
-        _invoiceCount = _client.annual_invoice.toString();
+        _invoiceCountController.text = _client.annual_invoice.toString();
 
       if (_client.is_important != null)
         _startTarget = booleans.firstWhere((e) => e.id == _client.is_important);
@@ -69,11 +78,9 @@ class ClientInfoPageState extends State<ClientInfoPage>
       if (_client.anticipated_date != null)
         _expectedSignDate = _client.anticipated_date;
 
-      if (_client.company_size != null)
-        _lnsize = _client.company_size;
+      if (_client.company_size != null) _lnsize = _client.company_size;
 
-      if (_client.memo != null)
-        _companyIntro = _client.memo;
+      if (_client.memo != null) _companyIntro = _client.memo;
     }
   }
 
@@ -389,20 +396,17 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           ),
                           new Flexible(
                             child: TextField(
-                              controller: TextEditingController.fromValue(
-                                new TextEditingValue(
-                                  text: _invoiceCount,
-                                ),
-                              ),
+                              controller: _invoiceCountController,
                               textAlign: TextAlign.end,
                               decoration: new InputDecoration(
                                 hintText: "请输入企业年度发票量",
                                 border: InputBorder.none,
                               ),
                               style: Theme.of(context).textTheme.body1,
-                              onChanged: (s) {
-                                _invoiceCount = s;
-                              },
+                              inputFormatters: [
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              keyboardType: TextInputType.number,
                             ),
                           ),
                         ],
@@ -631,7 +635,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           new Container(
                             margin: EdgeInsets.only(right: 16.0),
                             child: new Text(
-                              "请输入预计签约额",
+                              "预计签约额",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
                                       color: Colors.grey,
@@ -641,6 +645,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           ),
                           new Flexible(
                             child: TextField(
+                              keyboardType: TextInputType.number,
                               controller: TextEditingController.fromValue(
                                 new TextEditingValue(
                                   text: _expectedContractAmount,
@@ -648,7 +653,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                               ),
                               textAlign: TextAlign.end,
                               decoration: new InputDecoration(
-                                hintText: "请输入公司简介",
+                                hintText: "请输入预计签约额",
                                 border: InputBorder.none,
                               ),
                               style: Theme.of(context).textTheme.body1,
@@ -711,8 +716,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _expectedSignDate,
-                                style: Theme.of(context).textTheme.body1,
+                                _expectedSignDate.isEmpty
+                                    ? "请选择预计签约日"
+                                    : _expectedSignDate,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .body1
+                                    .merge(new TextStyle(color: Colors.grey)),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -855,7 +865,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
 
   RadioBean get startTarget => _startTarget;
 
-  String get invoiceCount => _invoiceCount;
+  String get invoiceCount => _invoiceCountController.text;
 
   RadioBean get location => _location;
 

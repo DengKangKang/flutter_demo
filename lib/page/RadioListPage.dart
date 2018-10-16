@@ -174,7 +174,7 @@ final titles = [
 ];
 final companyTypes = [
   RadioBean(0, "请选择公司类型"),
-  RadioBean(1, "有限责任公司有限责任公司有限责任公司有限责任公司有限责任公司有限责任公司"),
+  RadioBean(1, "有限责任公司"),
   RadioBean(2, "股份有限公司"),
   RadioBean(3, "国有企业"),
   RadioBean(4, "全民集体企业"),

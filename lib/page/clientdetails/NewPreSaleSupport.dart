@@ -174,8 +174,11 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _date,
-                                style: Theme.of(context).textTheme.body1,
+                                _date.isEmpty ? "请选择日期" : _date,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .body1
+                                    .merge(new TextStyle(color: Colors.grey)),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),

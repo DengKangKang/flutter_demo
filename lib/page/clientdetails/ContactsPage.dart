@@ -128,7 +128,7 @@ class ContactsPageState extends State<ContactsPage>
                   ),
                   new Flexible(
                     child: TextField(
-                      keyboardType: TextInputType.multiline,
+                      keyboardType: TextInputType.emailAddress,
                       maxLengthEnforced: true,
                       maxLines: null,
                       controller: TextEditingController.fromValue(
@@ -182,7 +182,7 @@ class ContactsPageState extends State<ContactsPage>
                   ),
                   new Flexible(
                     child: TextField(
-                      keyboardType: TextInputType.multiline,
+                      keyboardType: TextInputType.emailAddress,
                       maxLengthEnforced: true,
                       maxLines: null,
                       controller: TextEditingController.fromValue(

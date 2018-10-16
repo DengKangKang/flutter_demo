@@ -1,15 +1,9 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/data/Constant.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
-import 'package:flutter_app/data/http/rsp/BaseRsp.dart';
-import 'package:flutter_app/data/http/rsp/LoginRsp.dart';
-import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
-import 'package:flutter_app/page/HomePage.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/weight/Tool.dart';
-import 'package:intl/intl.dart';
 
 class NewReleaseAccSupport extends StatefulWidget {
   NewReleaseAccSupport(this._leadId, {Key key}) : super(key: key);
@@ -27,7 +21,6 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
 
   final int _leadId;
   final _key = new GlobalKey<ScaffoldState>();
-
 
   String _account = "";
   String _email = "";
@@ -61,383 +54,334 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
         ],
       ),
       body: Builder(
-        builder: (context) =>
-        new Column(
-          children: <Widget>[
-            new Container(
-              margin: EdgeInsets.only(
-                top: 12.0,
-                right: 16.0,
-                left: 16.0,
-              ),
-              child: new Card(
-                elevation: 2.0,
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                margin: EdgeInsets.all(0.0),
-                shape: new RoundedRectangleBorder(
-                  borderRadius:
-                  new BorderRadius.all(new Radius.circular(4.0)),
-                ),
-                child: new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      new Container(
-                        margin: EdgeInsets.only(right: 16.0),
-                        child: new Text(
-                          "*用户名",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1
-                              .merge(
-                            TextStyle(
-                              color: Colors.grey,
+        builder: (context) => new Column(
+              children: <Widget>[
+                new Container(
+                  margin: EdgeInsets.only(
+                    top: 12.0,
+                    right: 16.0,
+                    left: 16.0,
+                  ),
+                  child: new Card(
+                    elevation: 2.0,
+                    color: Theme.of(context).backgroundColor,
+                    margin: EdgeInsets.all(0.0),
+                    shape: new RoundedRectangleBorder(
+                      borderRadius:
+                          new BorderRadius.all(new Radius.circular(4.0)),
+                    ),
+                    child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          new Container(
+                            margin: EdgeInsets.only(right: 16.0),
+                            child: new Text(
+                              "*用户名",
+                              style: Theme.of(context).textTheme.body1.merge(
+                                    TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                             ),
                           ),
-                        ),
-                      ),
-                      new Flexible(
-                        child: TextField(
-                          controller: TextEditingController.fromValue(
-                            new TextEditingValue(
-                              text: _account,
+                          new Flexible(
+                            child: TextField(
+                              controller: TextEditingController.fromValue(
+                                new TextEditingValue(
+                                  text: _account,
+                                ),
+                              ),
+                              textAlign: TextAlign.end,
+                              decoration: new InputDecoration(
+                                hintText: "请输入用户名",
+                                border: InputBorder.none,
+                              ),
+                              style: Theme.of(context).textTheme.body1,
+                              onChanged: (s) {
+                                _account = s;
+                              },
                             ),
                           ),
-                          textAlign: TextAlign.end,
-                          decoration: new InputDecoration(
-                            hintText: "请输入用户名",
-                            border: InputBorder.none,
-                          ),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1,
-                          onChanged: (s) {
-                            _account = s;
-                          },
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-            new Container(
-              margin: EdgeInsets.only(
-                top: 12.0,
-                right: 16.0,
-                left: 16.0,
-              ),
-              child: new Card(
-                elevation: 2.0,
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                margin: EdgeInsets.all(0.0),
-                shape: new RoundedRectangleBorder(
-                  borderRadius:
-                  new BorderRadius.all(new Radius.circular(4.0)),
-                ),
-                child: new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      new Container(
-                        margin: EdgeInsets.only(right: 16.0),
-                        child: new Text(
-                          "*注册邮箱",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1
-                              .merge(
-                            TextStyle(
-                              color: Colors.grey,
+                new Container(
+                  margin: EdgeInsets.only(
+                    top: 12.0,
+                    right: 16.0,
+                    left: 16.0,
+                  ),
+                  child: new Card(
+                    elevation: 2.0,
+                    color: Theme.of(context).backgroundColor,
+                    margin: EdgeInsets.all(0.0),
+                    shape: new RoundedRectangleBorder(
+                      borderRadius:
+                          new BorderRadius.all(new Radius.circular(4.0)),
+                    ),
+                    child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          new Container(
+                            margin: EdgeInsets.only(right: 16.0),
+                            child: new Text(
+                              "*注册邮箱",
+                              style: Theme.of(context).textTheme.body1.merge(
+                                    TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                             ),
                           ),
-                        ),
-                      ),
-                      new Flexible(
-                        child: TextField(
-                          controller: TextEditingController.fromValue(
-                            new TextEditingValue(
-                              text: _email,
+                          new Flexible(
+                            child: TextField(
+                              controller: TextEditingController.fromValue(
+                                new TextEditingValue(
+                                  text: _email,
+                                ),
+                              ),
+                              textAlign: TextAlign.end,
+                              decoration: new InputDecoration(
+                                hintText: "请输入注册邮箱",
+                                border: InputBorder.none,
+                              ),
+                              style: Theme.of(context).textTheme.body1,
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (s) {
+                                _email = s;
+                              },
                             ),
                           ),
-                          textAlign: TextAlign.end,
-                          decoration: new InputDecoration(
-                            hintText: "请输入注册邮箱",
-                            border: InputBorder.none,
-                          ),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1,
-                          onChanged: (s) {
-                            _email = s;
-                          },
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-            new Container(
-              margin: EdgeInsets.only(
-                top: 12.0,
-                right: 16.0,
-                left: 16.0,
-              ),
-              child: new Card(
-                elevation: 2.0,
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                margin: EdgeInsets.all(0.0),
-                shape: new RoundedRectangleBorder(
-                  borderRadius:
-                  new BorderRadius.all(new Radius.circular(4.0)),
-                ),
-                child: new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      new Container(
-                        margin: EdgeInsets.only(right: 16.0),
-                        child: new Text(
-                          "*初始密码",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1
-                              .merge(
-                            TextStyle(
-                              color: Colors.grey,
+                new Container(
+                  margin: EdgeInsets.only(
+                    top: 12.0,
+                    right: 16.0,
+                    left: 16.0,
+                  ),
+                  child: new Card(
+                    elevation: 2.0,
+                    color: Theme.of(context).backgroundColor,
+                    margin: EdgeInsets.all(0.0),
+                    shape: new RoundedRectangleBorder(
+                      borderRadius:
+                          new BorderRadius.all(new Radius.circular(4.0)),
+                    ),
+                    child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          new Container(
+                            margin: EdgeInsets.only(right: 16.0),
+                            child: new Text(
+                              "*初始密码",
+                              style: Theme.of(context).textTheme.body1.merge(
+                                    TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                             ),
                           ),
-                        ),
-                      ),
-                      new Flexible(
-                        child: TextField(
-                          controller: TextEditingController.fromValue(
-                            new TextEditingValue(
-                              text: _password,
+                          new Flexible(
+                            child: TextField(
+                              controller: TextEditingController.fromValue(
+                                new TextEditingValue(
+                                  text: _password,
+                                ),
+                              ),
+                              textAlign: TextAlign.end,
+                              decoration: new InputDecoration(
+                                hintText: "请输入初始密码",
+                                border: InputBorder.none,
+                              ),
+                              style: Theme.of(context).textTheme.body1,
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (s) {
+                                _password = s;
+                              },
                             ),
                           ),
-                          textAlign: TextAlign.end,
-                          decoration: new InputDecoration(
-                            hintText: "请输入初始密码",
-                            border: InputBorder.none,
-                          ),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1,
-                          onChanged: (s) {
-                            _password = s;
-                          },
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-            new Container(
-              margin: EdgeInsets.only(
-                top: 12.0,
-                right: 16.0,
-                left: 16.0,
-              ),
-              child: new Card(
-                elevation: 2.0,
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                margin: EdgeInsets.all(0.0),
-                shape: new RoundedRectangleBorder(
-                  borderRadius:
-                  new BorderRadius.all(new Radius.circular(4.0)),
-                ),
-                child: new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      new Container(
-                        margin: EdgeInsets.only(right: 16.0),
-                        child: new Text(
-                          "*功能模块",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1
-                              .merge(
-                            TextStyle(
-                              color: Colors.grey,
+                new Container(
+                  margin: EdgeInsets.only(
+                    top: 12.0,
+                    right: 16.0,
+                    left: 16.0,
+                  ),
+                  child: new Card(
+                    elevation: 2.0,
+                    color: Theme.of(context).backgroundColor,
+                    margin: EdgeInsets.all(0.0),
+                    shape: new RoundedRectangleBorder(
+                      borderRadius:
+                          new BorderRadius.all(new Radius.circular(4.0)),
+                    ),
+                    child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          new Container(
+                            margin: EdgeInsets.only(right: 16.0),
+                            child: new Text(
+                              "*功能模块",
+                              style: Theme.of(context).textTheme.body1.merge(
+                                    TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                             ),
                           ),
-                        ),
-                      ),
-                      new Flexible(
-                        child: TextField(
-                          controller: TextEditingController.fromValue(
-                            new TextEditingValue(
-                              text: _function,
+                          new Flexible(
+                            child: TextField(
+                              controller: TextEditingController.fromValue(
+                                new TextEditingValue(
+                                  text: _function,
+                                ),
+                              ),
+                              textAlign: TextAlign.end,
+                              decoration: new InputDecoration(
+                                hintText: "请输入功能模块",
+                                border: InputBorder.none,
+                              ),
+                              style: Theme.of(context).textTheme.body1,
+                              onChanged: (s) {
+                                _function = s;
+                              },
                             ),
                           ),
-                          textAlign: TextAlign.end,
-                          decoration: new InputDecoration(
-                            hintText: "请输入功能模块",
-                            border: InputBorder.none,
-                          ),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1,
-                          onChanged: (s) {
-                            _function = s;
-                          },
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-            new Container(
-              margin: EdgeInsets.only(
-                top: 12.0,
-                right: 16.0,
-                left: 16.0,
-              ),
-              child: new Card(
-                elevation: 2.0,
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                margin: EdgeInsets.all(0.0),
-                shape: new RoundedRectangleBorder(
-                  borderRadius:
-                  new BorderRadius.all(new Radius.circular(4.0)),
-                ),
-                child: new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      new Container(
-                        margin: EdgeInsets.only(right: 16.0),
-                        child: new Text(
-                          "*开通票量",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1
-                              .merge(
-                            TextStyle(
-                              color: Colors.grey,
+                new Container(
+                  margin: EdgeInsets.only(
+                    top: 12.0,
+                    right: 16.0,
+                    left: 16.0,
+                  ),
+                  child: new Card(
+                    elevation: 2.0,
+                    color: Theme.of(context).backgroundColor,
+                    margin: EdgeInsets.all(0.0),
+                    shape: new RoundedRectangleBorder(
+                      borderRadius:
+                          new BorderRadius.all(new Radius.circular(4.0)),
+                    ),
+                    child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          new Container(
+                            margin: EdgeInsets.only(right: 16.0),
+                            child: new Text(
+                              "*开通票量",
+                              style: Theme.of(context).textTheme.body1.merge(
+                                    TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                             ),
                           ),
-                        ),
-                      ),
-                      new Flexible(
-                        child: TextField(
-                          controller: TextEditingController.fromValue(
-                            new TextEditingValue(
-                              text: _invoiceCount,
+                          new Flexible(
+                            child: TextField(
+                              controller: TextEditingController.fromValue(
+                                new TextEditingValue(
+                                  text: _invoiceCount,
+                                ),
+                              ),
+                              textAlign: TextAlign.end,
+                              decoration: new InputDecoration(
+                                hintText: "请输入开通票量",
+                                border: InputBorder.none,
+                              ),
+                              style: Theme.of(context).textTheme.body1,
+                              inputFormatters: [
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              keyboardType: TextInputType.number,
+                              onChanged: (s) {
+                                _invoiceCount = s;
+                              },
                             ),
                           ),
-                          textAlign: TextAlign.end,
-                          decoration: new InputDecoration(
-                            hintText: "请输入开通票量",
-                            border: InputBorder.none,
-                          ),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1,
-                          onChanged: (s) {
-                            _invoiceCount = s;
-                          },
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-            new Container(
-              margin: EdgeInsets.only(
-                top: 12.0,
-                right: 16.0,
-                left: 16.0,
-              ),
-              child: new Card(
-                elevation: 2.0,
-                color: Theme
-                    .of(context)
-                    .backgroundColor,
-                margin: EdgeInsets.all(0.0),
-                shape: new RoundedRectangleBorder(
-                  borderRadius:
-                  new BorderRadius.all(new Radius.circular(4.0)),
-                ),
-                child: new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      new Container(
-                        margin: EdgeInsets.only(right: 16.0),
-                        child: new Text(
-                          "备注",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1
-                              .merge(
-                            TextStyle(
-                              color: Colors.grey,
+                new Container(
+                  margin: EdgeInsets.only(
+                    top: 12.0,
+                    right: 16.0,
+                    left: 16.0,
+                  ),
+                  child: new Card(
+                    elevation: 2.0,
+                    color: Theme.of(context).backgroundColor,
+                    margin: EdgeInsets.all(0.0),
+                    shape: new RoundedRectangleBorder(
+                      borderRadius:
+                          new BorderRadius.all(new Radius.circular(4.0)),
+                    ),
+                    child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          new Container(
+                            margin: EdgeInsets.only(right: 16.0),
+                            child: new Text(
+                              "备注",
+                              style: Theme.of(context).textTheme.body1.merge(
+                                    TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                             ),
                           ),
-                        ),
-                      ),
-                      new Flexible(
-                        child: TextField(
-                          controller: TextEditingController.fromValue(
-                            new TextEditingValue(
-                              text: _memo,
+                          new Flexible(
+                            child: TextField(
+                              controller: TextEditingController.fromValue(
+                                new TextEditingValue(
+                                  text: _memo,
+                                ),
+                              ),
+                              textAlign: TextAlign.end,
+                              decoration: new InputDecoration(
+                                hintText: "请输入备注",
+                                border: InputBorder.none,
+                              ),
+                              style: Theme.of(context).textTheme.body1,
+                              onChanged: (s) {
+                                _memo = s;
+                              },
                             ),
                           ),
-                          textAlign: TextAlign.end,
-                          decoration: new InputDecoration(
-                            hintText: "请输入备注",
-                            border: InputBorder.none,
-                          ),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .body1,
-                          onChanged: (s) {
-                            _memo = s;
-                          },
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
       ),
     );
   }
@@ -461,6 +405,15 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
       return;
     }
 
+    if (!EmailValidator.validate(_email)) {
+      _key.currentState.showSnackBar(
+        new SnackBar(
+          content: new Text("邮箱格式不正确"),
+        ),
+      );
+      return;
+    }
+
     if (_password == null || _password.isEmpty) {
       _key.currentState.showSnackBar(
         new SnackBar(
@@ -478,7 +431,6 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
       );
       return;
     }
-
 
     if (_invoiceCount == null || _invoiceCount.isEmpty) {
       _key.currentState.showSnackBar(

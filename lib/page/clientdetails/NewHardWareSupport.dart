@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/data/Constant.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
-import 'package:flutter_app/data/http/rsp/BaseRsp.dart';
-import 'package:flutter_app/data/http/rsp/LoginRsp.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
-import 'package:flutter_app/page/HomePage.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/weight/Tool.dart';
-import 'package:intl/intl.dart';
 
 class NewHardWareSupport extends StatefulWidget {
   NewHardWareSupport(this._leadId, {Key key}) : super(key: key);
@@ -236,6 +231,10 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                 border: InputBorder.none,
                               ),
                               style: Theme.of(context).textTheme.body1,
+                              inputFormatters: [
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              keyboardType: TextInputType.number,
                               onChanged: (s) {
                                 _count = s;
                               },
@@ -289,6 +288,10 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                 border: InputBorder.none,
                               ),
                               style: Theme.of(context).textTheme.body1,
+                              inputFormatters: [
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              keyboardType: TextInputType.number,
                               onChanged: (s) {
                                 _price = s;
                               },
@@ -381,6 +384,16 @@ class NewHardWareSupportState extends State<StatefulWidget> {
       _key.currentState.showSnackBar(
         new SnackBar(
           content: new Text("请输入数量"),
+        ),
+      );
+      return;
+    }
+
+    var count = int.tryParse(_count);
+    if (count == null || count < 0) {
+      _key.currentState.showSnackBar(
+        new SnackBar(
+          content: new Text("数量只能为正整数"),
         ),
       );
       return;

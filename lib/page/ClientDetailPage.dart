@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
 import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
@@ -197,6 +198,7 @@ class ClientDetailPageState extends State<StatefulWidget> {
       );
       return;
     }
+
     if (_clientInfoPageKey.currentState.invoiceCount.isEmpty) {
       _key.currentState.showSnackBar(
         new SnackBar(
@@ -217,6 +219,15 @@ class ClientDetailPageState extends State<StatefulWidget> {
     var email = _contactsPageKey.currentState != null
         ? _contactsPageKey.currentState.email
         : _client.leads_email;
+
+    if (email != null && email.isEmpty && !EmailValidator.validate(email)) {
+      _key.currentState.showSnackBar(
+        new SnackBar(
+          content: new Text("邮箱格式不正确"),
+        ),
+      );
+      return;
+    }
 
     var title = _contactsPageKey.currentState != null
         ? _contactsPageKey.currentState.title
