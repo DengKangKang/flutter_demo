@@ -127,14 +127,6 @@ class ClientSupportPageState extends State {
       supportList.add(RadioBean(SUPPORT_TYPE_RELEASE_ACCOUNT, "正式账号"));
     }
 
-    if (supportList.isEmpty) {
-      Scaffold.of(context).showSnackBar(
-        new SnackBar(
-          content: new Text("无可新增支持"),
-        ),
-      );
-      return;
-    }
     RadioBean result = await showDialog(
       context: context,
       builder: (context) {
@@ -240,15 +232,30 @@ class ClientSupportPageState extends State {
       children.add(new Container(
         margin: EdgeInsets.only(top: 12.0),
         child: new Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text(
-              '设备名称：',
-              style: Theme.of(context).textTheme.body1,
+            new Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Text(
+                  '设备名称：',
+                  style: Theme.of(context).textTheme.body1,
+                ),
+                new Text(
+                  devices
+                      .firstWhere((e) => e.id == clientSupport.device_name)
+                      .name,
+                  style: Theme.of(context).textTheme.body1,
+                ),
+              ],
             ),
             new Text(
-              devices.firstWhere((e) => e.id == clientSupport.device_name).name,
-              style: Theme.of(context).textTheme.body1,
+              clientSupport.state.toInt() == 1 ? "申请中" : "已通过",
+              style: TextStyle(
+                  color: clientSupport.state.toInt() == 1
+                      ? Colors.green
+                      : Colors.blue),
             ),
           ],
         ),
@@ -367,17 +374,29 @@ class ClientSupportPageState extends State {
       children.add(new Container(
         margin: EdgeInsets.only(top: 12.0),
         child: new Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text(
-              '对象职责：',
-              style: Theme.of(context).textTheme.body1,
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Text(
+                  '对象职责：',
+                  style: Theme.of(context).textTheme.body1,
+                ),
+                new Text(
+                  responsibilities
+                      .firstWhere((e) => e.id == clientSupport.responsibility)
+                      .name,
+                  style: Theme.of(context).textTheme.body1,
+                ),
+              ],
             ),
             new Text(
-              responsibilities
-                  .firstWhere((e) => e.id == clientSupport.responsibility)
-                  .name,
-              style: Theme.of(context).textTheme.body1,
+              clientSupport.state.toInt() == 1 ? "申请中" : "已通过",
+              style: TextStyle(
+                  color: clientSupport.state.toInt() == 1
+                      ? Colors.green
+                      : Colors.blue),
             ),
           ],
         ),
@@ -479,18 +498,28 @@ class ClientSupportPageState extends State {
       children.add(new Container(
         margin: EdgeInsets.only(top: 12.0),
         child: new Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text(
-              '用户名：',
-              style: Theme.of(context).textTheme.body1,
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Text(
+                  '用户名：',
+                  style: Theme.of(context).textTheme.body1,
+                ),
+                new Text(
+                  clientSupport.fc_admin_name,
+                  style: Theme.of(context).textTheme.body1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            new Flexible(
-              child: new Text(
-                clientSupport.fc_admin_name,
-                style: Theme.of(context).textTheme.body1,
-                overflow: TextOverflow.ellipsis,
-              ),
+            new Text(
+              clientSupport.state.toInt() == 1 ? "申请中" : "已通过",
+              style: TextStyle(
+                  color: clientSupport.state.toInt() == 1
+                      ? Colors.green
+                      : Colors.blue),
             ),
           ],
         ),
