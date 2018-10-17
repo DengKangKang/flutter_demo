@@ -23,14 +23,15 @@ class ClientDetailPage extends StatefulWidget {
 }
 
 class ClientDetailPageState extends State<StatefulWidget> {
-  final Client _client;
-  String _clientName = "";
-
   ClientDetailPageState(this._client) {
+    _clientNameTextController = new TextEditingController();
     if (_client != null) {
-      _clientName = _client.leads_name;
+      _clientNameTextController.text = _client.leads_name;
     }
   }
+
+  final Client _client;
+  TextEditingController _clientNameTextController;
 
   final _controller = new PageController();
 
@@ -101,19 +102,13 @@ class ClientDetailPageState extends State<StatefulWidget> {
               child: new Column(
                 children: <Widget>[
                   TextField(
-                      controller: TextEditingController.fromValue(
-                        new TextEditingValue(
-                          text: _clientName,
-                        ),
-                      ),
-                      decoration: new InputDecoration(
-                        hintText: "请输入客户名称",
-                        border: InputBorder.none,
-                      ),
-                      style: Theme.of(context).textTheme.title,
-                      onChanged: (s) {
-                        _clientName = s;
-                      }),
+                    controller: _clientNameTextController,
+                    decoration: new InputDecoration(
+                      hintText: "请输入客户名称",
+                      border: InputBorder.none,
+                    ),
+                    style: Theme.of(context).textTheme.title,
+                  ),
                   new Expanded(
                     child: new Container(
                       margin: EdgeInsets.symmetric(
@@ -158,7 +153,7 @@ class ClientDetailPageState extends State<StatefulWidget> {
   }
 
   void _onNewOrSave(BuildContext context) async {
-    if (_clientName.isEmpty) {
+    if (_clientNameTextController.text.isEmpty) {
       _key.currentState.showSnackBar(
         new SnackBar(
           content: new Text("请输入客户名称"),
@@ -252,7 +247,7 @@ class ClientDetailPageState extends State<StatefulWidget> {
     onLoading(context);
     var rsp = await ApiService().newOrSaveClient(
       _client?.id,
-      _clientName,
+      _clientNameTextController.text,
       _clientInfoPageKey.currentState.company.id,
       _clientInfoPageKey.currentState.industry.id,
       _clientInfoPageKey.currentState.source.id,

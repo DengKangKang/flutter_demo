@@ -44,7 +44,7 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
     return new Scaffold(
       key: _key,
       appBar: new AppBar(
-        title: new Text("新增售前服务"),
+        title: new Text("新增售前支持"),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
