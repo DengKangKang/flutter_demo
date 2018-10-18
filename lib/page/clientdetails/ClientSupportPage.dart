@@ -500,20 +500,23 @@ class ClientSupportPageState extends State {
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                new Text(
-                  '用户名：',
-                  style: Theme.of(context).textTheme.body1,
-                ),
-                new Text(
-                  clientSupport.fc_admin_name,
-                  style: Theme.of(context).textTheme.body1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
+            new Flexible(child:new Container(
+              margin: EdgeInsets.only(right: 16.0),
+              child:  new Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  new Text(
+                    '用户名：',
+                    style: Theme.of(context).textTheme.body1,
+                  ),
+                  new Flexible(child: new Text(
+                    clientSupport.fc_admin_name,
+                    style: Theme.of(context).textTheme.body1,
+                    overflow: TextOverflow.ellipsis,
+                  )),
+                ],
+              ),
+            )),
             new Text(
               clientSupport.state.toInt() == 1 ? "申请中" : "已通过",
               style: TextStyle(
