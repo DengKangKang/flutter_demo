@@ -9,3 +9,6 @@ build/
 ios/.generated/
 packages
 .flutter-plugins
+app/Lightningkey
+app/src/main/java/io/
+gen/
