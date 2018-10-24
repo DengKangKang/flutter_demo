@@ -28,10 +28,10 @@ class HomePageState extends State<StatefulWidget> {
   @override
   void initState() {
     new Persistence().getUsername().then((username) {
-      _username = username;
+      _username = username??'';
     });
     new Persistence().getUserAccount().then((userAccount) {
-      _userAccount = userAccount;
+      _userAccount = userAccount??'';
     });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==

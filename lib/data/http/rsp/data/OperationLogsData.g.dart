@@ -23,7 +23,6 @@ OperationLog _$OperationLogFromJson(Map<String, dynamic> json) {
   return new OperationLog(
       json['leads_id'] as String,
       json['create_time'] as String,
-      json['user_id'] as int,
       json['user_realname'] as String,
       json['system_log'] as String,
       json['category'] as int);
@@ -32,14 +31,12 @@ OperationLog _$OperationLogFromJson(Map<String, dynamic> json) {
 abstract class _$OperationLogSerializerMixin {
   String get leads_id;
   String get create_time;
-  int get user_id;
   String get user_realname;
   String get system_log;
   int get category;
   Map<String, dynamic> toJson() => <String, dynamic>{
         'leads_id': leads_id,
         'create_time': create_time,
-        'user_id': user_id,
         'user_realname': user_realname,
         'system_log': system_log,
         'category': category

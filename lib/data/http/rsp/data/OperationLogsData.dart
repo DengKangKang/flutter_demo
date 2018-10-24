@@ -22,13 +22,11 @@ class OperationLogsData extends Object with _$OperationLogsDataSerializerMixin {
 
 @JsonSerializable()
 class OperationLog extends Object with _$OperationLogSerializerMixin {
-
-  OperationLog(this.leads_id, this.create_time, this.user_id,
-      this.user_realname, this.system_log, this.category);
+  OperationLog(this.leads_id, this.create_time, this.user_realname,
+      this.system_log, this.category);
 
   String leads_id;
   String create_time;
-  int user_id;
   String user_realname;
   String system_log;
   int category;
@@ -36,7 +34,6 @@ class OperationLog extends Object with _$OperationLogSerializerMixin {
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated _$UserFromJson constructor.
   /// The constructor is named after the source class, in this case User.
-  factory OperationLog.fromJson(Map<String, dynamic> json) => _$OperationLogFromJson(json);
-
-
+  factory OperationLog.fromJson(Map<String, dynamic> json) =>
+      _$OperationLogFromJson(json);
 }
