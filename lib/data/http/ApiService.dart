@@ -183,20 +183,15 @@ class ApiService {
     String function = "",
     String invoiceCount = "",
     String memo = "",
-
-    String responsibility ="",
-    String date ="",
-    String projectProgress ="",
-    String need ="",
-
-    String deviceName ="",
-    String usageModel ="",
-    String count ="",
-    String price ="",
-    String memoDevice ="",
-
-
-
+    String responsibility = "",
+    String date = "",
+    String projectProgress = "",
+    String need = "",
+    String deviceName = "",
+    String usageModel = "",
+    String count = "",
+    String price = "",
+    String memoDevice = "",
   }) async {
     Response rsp =
         await client.post("$_baseUrl/fc/customer/application/add", headers: {
@@ -211,18 +206,15 @@ class ApiService {
       "features": function,
       "check_amount": invoiceCount,
       "memo": memo,
-
       "responsibility": responsibility,
       "visit_time": date,
       "visit_progress": projectProgress,
       "requirements": need,
-
       "device_name": deviceName,
       "device_quantity": count,
       "price": price,
       "is_purchase": usageModel,
       "memo_device": memoDevice,
-
       "user": "8",
     });
     print(rsp.body);
