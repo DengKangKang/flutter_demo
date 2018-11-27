@@ -29,10 +29,10 @@ class HomePageState extends State<StatefulWidget> {
   @override
   void initState() {
     new Persistence().getUsername().then((username) {
-      _username = username??'';
+      _username = username ?? '';
     });
     new Persistence().getUserAccount().then((userAccount) {
-      _userAccount = userAccount??'';
+      _userAccount = userAccount ?? '';
     });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -97,7 +97,8 @@ class HomePageState extends State<StatefulWidget> {
                 child: new Column(
                   children: <Widget>[
                     new Container(
-                      margin: EdgeInsets.only(right: 16.0,left: 16.0,bottom: 24.0),
+                      margin: EdgeInsets.only(
+                          right: 16.0, left: 16.0, bottom: 24.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -119,12 +120,12 @@ class HomePageState extends State<StatefulWidget> {
                     new ListTile(
                       leading: new Icon(Icons.note),
                       title: new Text("日报"),
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
                             context,
                             new CommonRoute(
                               builder: (BuildContext context) =>
-                              new DailyPage(),
+                                  new DailyPage(),
                             ));
                       },
                     ),
@@ -245,16 +246,18 @@ class HomePageState extends State<StatefulWidget> {
   }
 
   void _loadMore() {
-    _page += 1;
-    ApiService().clientList((_page + 1).toString(), "15", "").then(
+    ApiService().clientList((_page + 1).toString(), "20", "").then(
       (rsp) {
         if (rsp.code == ApiService.success) {
           var clientListRsp = rsp as ClientListRsp;
-          _clients.addAll(clientListRsp.data.rows);
-          setState(() {
-            _page = (_page + 1);
-            _clients = _clients;
-          });
+          if (clientListRsp?.data?.rows != null &&
+              clientListRsp?.data?.rows?.isNotEmpty == true) {
+            _clients.addAll(clientListRsp.data.rows);
+            setState(() {
+              _page = (_page + 1);
+              _clients = _clients;
+            });
+          }
         }
       },
     );

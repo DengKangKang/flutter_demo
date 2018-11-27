@@ -329,18 +329,49 @@ class ApiService {
       int size,
       ) async {
     Response rsp = await client.post(
-      "$_baseUrl/app/fc/daily/list",
-      headers: {
-        "Authorization": "Bearer ${await new Persistence().getToken()}"
-      },
-      body: {
-        "page": page.toString(),
-        "size": size.toString(),
-      }
+        "$_baseUrl/app/fc/daily/list",
+        headers: {
+          "Authorization": "Bearer ${await new Persistence().getToken()}"
+        },
+        body: {
+          "page": page.toString(),
+          "size": size.toString(),
+        }
     );
     print(rsp.body);
     if (rsp.statusCode == 200) {
       return DailiesRsp.fromJson(json.decode(rsp.body));
+    } else {
+      return new BaseRsp(illicit, "网络异常，请稍后再试。");
+    }
+  }
+
+
+  Future<BaseRsp> newDaily(
+      String date,
+      String todayWorkContent,
+      String todayVisitClient,
+      String todaySolution,
+      String tomorrowPlane,
+      String tomorrowVisitClient,
+      ) async {
+    Response rsp = await client.post(
+        "$_baseUrl/app/fc/daily/add",
+        headers: {
+          "Authorization": "Bearer ${await new Persistence().getToken()}"
+        },
+        body: {
+          "daily_time": date,
+          "today_content": todayWorkContent,
+          "today_customer_visit": todayVisitClient,
+          "today_solution": todaySolution,
+          "next_plan": tomorrowPlane,
+          "next_customer_visit": tomorrowVisitClient,
+        }
+    );
+    print(rsp.body);
+    if (rsp.statusCode == 200) {
+      return BaseRsp.fromJson(json.decode(rsp.body));
     } else {
       return new BaseRsp(illicit, "网络异常，请稍后再试。");
     }

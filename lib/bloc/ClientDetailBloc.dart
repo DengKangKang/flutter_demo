@@ -5,7 +5,7 @@ import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 
-class ClientDetailBloc extends CommonBloc {
+class  ClientDetailBloc extends CommonBloc {
   int _id;
   String _clientName;
   RadioBean _company;
@@ -146,7 +146,7 @@ class ClientDetailBloc extends CommonBloc {
     );
     pageCompleted();
     if (rsp.code == ApiService.success) {
-      finish();
+      finish(result: true);
     } else {
       showTip(rsp.msg);
     }

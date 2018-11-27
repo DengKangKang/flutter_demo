@@ -373,7 +373,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                               ],
                               keyboardType: TextInputType.number,
                               onChanged: (s) {
-                                _bloc.companyIntro = s;
+                                _bloc.invoiceCount = s;
                               },
                             ),
                           ),

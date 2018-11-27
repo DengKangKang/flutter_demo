@@ -3,25 +3,38 @@ import 'dart:async';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
 import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
+import 'package:rxdart/rxdart.dart';
 
 class DailyBloc extends CommonBloc {
-  StreamController<List<String>> _dailies = new StreamController();
+  BehaviorSubject<List<Daily>> _dailies = new BehaviorSubject();
+
+  int page = 1;
 
   @override
-  void initData() async {
-    var rsp = await new ApiService().getDailies(1, 15);
-    if(rsp.code == ApiService.success){
+  Future<void> initData() async {
+    var rsp = await new ApiService().getDailies(1, 10);
+    if (rsp.code == ApiService.success) {
       var dailiesRsp = rsp as DailiesRsp;
-      var list = new List<String>();
-      list.add("");
-      list.add("");
-      list.add("");
-//      _dailies.sink.add(dailiesRsp.code);
+      _dailies.sink.add(dailiesRsp.data.list);
+      page = 1;
     }
-
+    return null;
   }
 
-  Stream<List<String>> get dailies => _dailies.stream;
+  void loadMore() async{
+    var rsp = await new ApiService().getDailies(page+1, 10);
+    if (rsp.code == ApiService.success) {
+      var dailiesRsp = rsp as DailiesRsp;
+      if(dailiesRsp?.data?.list != null && dailiesRsp?.data?.list?.isNotEmpty == true){
+        page++;
+        _dailies.value.addAll(dailiesRsp?.data?.list);
+        _dailies.sink.add(_dailies.value);
+      }
+
+    }
+  }
+
+  Stream<List<Daily>> get dailies => _dailies.stream;
 
   @override
   void onClosed() {

@@ -1,15 +1,14 @@
 import 'package:flutter_app/data/http/rsp/BaseRsp.dart';
-import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
-import 'package:flutter_app/data/http/rsp/data/ClientNeedListData.dart';
-import 'package:flutter_app/data/http/rsp/data/LoginData.dart';
-import 'package:flutter_app/data/http/rsp/data/OperationLogsData.dart';
-import 'package:flutter_app/data/http/rsp/data/VisitLogsData.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 /// This allows the `User` class to access private members in
 /// the generated file. The value for this is *.g.dart, where
 /// the star denotes the source file name.
 part 'package:flutter_app/data/http/rsp/DailiesRsp.g.dart';
+/// This allows the `User` class to access private members in
+/// the generated file. The value for this is *.g.dart, where
+/// the star denotes the source file name.
+
 
 /// This allows the `User` class to access private members in
 /// the generated file. The value for this is *.g.dart, where
@@ -33,9 +32,9 @@ class DailiesRsp extends BaseRsp {
 @JsonSerializable()
 class DailyRspData {
   int count;
-  List<Daily> data;
+  List<Daily> list;
 
-  DailyRspData(this.count, this.data);
+  DailyRspData(this.count, this.list);
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated _$UserFromJson constructor.

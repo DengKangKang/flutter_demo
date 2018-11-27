@@ -170,16 +170,18 @@ class __ResultListState extends State<_ResultList> {
   }
 
   void _loadMore() {
-    _page += 1;
     ApiService().clientList((_page + 1).toString(), "15", query).then(
       (rsp) {
         if (rsp.code == ApiService.success) {
           var clientListRsp = rsp as ClientListRsp;
-          _clients.addAll(clientListRsp.data.rows);
-          setState(() {
-            _page = (_page + 1);
-            _clients = _clients;
-          });
+          if (clientListRsp?.data?.rows != null &&
+              clientListRsp?.data?.rows?.isNotEmpty == true) {
+            _clients.addAll(clientListRsp.data.rows);
+            setState(() {
+              _page = (_page + 1);
+              _clients = _clients;
+            });
+          }
         }
       },
     );

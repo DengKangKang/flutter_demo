@@ -7,23 +7,32 @@ part of 'DailiesRsp.dart';
 // **************************************************************************
 
 DailiesRsp _$DailiesRspFromJson(Map<String, dynamic> json) {
-  return DailiesRsp(json['code'], json['msg']);
+  return DailiesRsp(
+      json['code'],
+      json['msg'],
+      json['data'] == null
+          ? null
+          : DailyRspData.fromJson(json['data'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$DailiesRspToJson(DailiesRsp instance) =>
-    <String, dynamic>{'code': instance.code, 'msg': instance.msg};
+    <String, dynamic>{
+      'code': instance.code,
+      'msg': instance.msg,
+      'data': instance.data
+    };
 
 DailyRspData _$DailyRspDataFromJson(Map<String, dynamic> json) {
   return DailyRspData(
       json['count'] as int,
-      (json['data'] as List)
+      (json['list'] as List)
           ?.map((e) =>
               e == null ? null : Daily.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 
 Map<String, dynamic> _$DailyRspDataToJson(DailyRspData instance) =>
-    <String, dynamic>{'count': instance.count, 'data': instance.data};
+    <String, dynamic>{'count': instance.count, 'list': instance.list};
 
 Daily _$DailyFromJson(Map<String, dynamic> json) {
   return Daily(

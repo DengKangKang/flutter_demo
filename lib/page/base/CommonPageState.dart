@@ -47,7 +47,7 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
             }
           case BLOC_EVENT_NAVIGATION_FINISH:
             {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(event.obj);
               break;
             }
           case BLOC_EVENT_PAGE_LOADING:
