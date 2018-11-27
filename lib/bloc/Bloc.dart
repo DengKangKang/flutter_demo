@@ -7,6 +7,10 @@ abstract class Bloc {
   void onClosed();
 }
 
+abstract class DataInitializer {
+  void initData();
+}
+
 abstract class BlocNavigator {
   void navigate();
 
@@ -48,10 +52,16 @@ class BlocEvent {
 }
 
 class CommonBloc extends Bloc
-    implements BlocNavigator, PageStateController, TipShow {
+    implements BlocNavigator, PageStateController, TipShow ,DataInitializer{
   var _tipController = StreamController<BlocEvent>();
   var _navigatorController = StreamController<BlocEvent>();
   var _pageStateController = StreamController<BlocEvent>();
+
+
+  @override
+  void initData(){
+
+  }
 
   @override
   void showTip(String tip) {
@@ -80,6 +90,7 @@ class CommonBloc extends Bloc
   void onClosed() {
     _tipController.close();
     _navigatorController.close();
+    _pageStateController.close();
   }
 
   Observable<BlocEvent> asObservable() {

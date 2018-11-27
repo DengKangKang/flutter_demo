@@ -16,7 +16,7 @@ import 'package:http/http.dart';
 
 class ApiService {
   static final ApiService _singleton = new ApiService._internal();
-  static final String _baseUrl = "http://192.168.1.192:3000/op";
+  static final String _baseUrl = "http://192.168.1.192:3000/op/api";
 //  static final String _baseUrl = "http://www.ideallinker.com/op";
   static final int success = 0;
   static final int illicit = -1;
@@ -329,14 +329,14 @@ class ApiService {
       int size,
       ) async {
     Response rsp = await client.post(
-      "$_baseUrl/api/app/fc/daily/list",
+      "$_baseUrl/app/fc/daily/list",
       headers: {
         "Authorization": "Bearer ${await new Persistence().getToken()}"
       },
       body: {
-        "page": page,
-        "size": size,
-      },
+        "page": page.toString(),
+        "size": size.toString(),
+      }
     );
     print(rsp.body);
     if (rsp.statusCode == 200) {

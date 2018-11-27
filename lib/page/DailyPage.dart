@@ -14,11 +14,13 @@ class DailyPage extends StatefulWidget {
 }
 
 class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
+  ScrollController _scrollController = new ScrollController();
+
   @override
   void initState() {
     if (bloc == null) {
       bloc = new DailyBloc();
-      bloc.dailies.add("");
+      bloc.initData();
     }
     super.initState();
   }
@@ -32,29 +34,34 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
         onPressed: () async {
-          Navigator.push(context, new CommonRoute(
-            builder: (c)=> new NewDailyPage()
-          ));
+          Navigator.push(
+              context, new CommonRoute(builder: (c) => new NewDailyPage()));
         },
       ),
-      body: new ListView.builder(
-        physics: new BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: bloc.dailies.length,
-        itemBuilder: (context, i) {
-          return _buildItem(i);
+      body: StreamBuilder<List<String>>(
+        initialData: new List<String>(),
+        stream: bloc.dailies,
+        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+          return new ListView.builder(
+            physics: AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, i) {
+              return _buildItem(i, snapshot.data);
+            },
+          );
         },
       ),
     );
   }
 
-  Widget _buildItem(int i) {
+  Widget _buildItem(int i, List<String> itemBeans) {
     return new Card(
         margin: EdgeInsets.only(
           left: 16.0,
           right: 16.0,
           top: 12.0,
-          bottom: i == bloc.dailies.length - 1 ? 12.0 : 0.0,
+          bottom: i == itemBeans.length - 1 ? 12.0 : 0.0,
         ),
         elevation: 2.0,
         child: new Container(
