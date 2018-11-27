@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/ClientDetailBloc.dart';
 import 'package:flutter_app/data/Constant.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
 import 'package:flutter_app/data/http/rsp/ClientSupportListRsp.dart';
@@ -11,26 +13,21 @@ import 'package:flutter_app/page/clientdetails/NewPreSaleSupport.dart';
 import 'package:flutter_app/page/clientdetails/NewReleaseAccSupport.dart';
 
 class ClientSupportPage extends StatefulWidget {
-  final int _leadId;
-
-  ClientSupportPage(this._leadId);
-
   @override
   State<StatefulWidget> createState() {
-    return ClientSupportPageState(_leadId);
+    return ClientSupportPageState();
   }
 }
 
 class ClientSupportPageState extends State {
-  final int _leadId;
-
   List<ClientSupport> _clientSupports = new List();
 
-  ClientSupportPageState(this._leadId);
+  ClientDetailBloc _bloc;
 
   @override
   void initState() {
-    if (_leadId != null) {
+    if (_bloc == null) _bloc = BlocProvider.of(context);
+    if (_bloc.id != null) {
       _initData();
     }
     super.initState();
@@ -71,7 +68,7 @@ class ClientSupportPageState extends State {
                           Image.asset("assets/images/ic_empty.png"),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 12.0),
-                            child: Text(_leadId == null ? "新建商机无法添加" : "暂无数据"),
+                            child: Text(_bloc.id == null ? "新建商机无法添加" : "暂无数据"),
                           )
                         ],
                       ),
@@ -90,10 +87,10 @@ class ClientSupportPageState extends State {
               child: new Text(
                 '新增申请支持',
                 style: Theme.of(context).textTheme.body1.merge(TextStyle(
-                      color: _leadId != null ? Colors.blue : Colors.grey,
+                      color: _bloc.id != null ? Colors.blue : Colors.grey,
                     )),
               ),
-              onTap: _leadId != null
+              onTap: _bloc.id != null
                   ? () {
                       newSupport(context);
                     }
@@ -139,7 +136,8 @@ class ClientSupportPageState extends State {
         needRefresh = await Navigator.push(
             context,
             new CommonRoute(
-              builder: (BuildContext context) => new NewPreSaleSupport(_leadId),
+              builder: (BuildContext context) =>
+                  new NewPreSaleSupport(_bloc.id),
             ));
         break;
       case SUPPORT_TYPE_HARDWARE:
@@ -147,7 +145,7 @@ class ClientSupportPageState extends State {
             context,
             new CommonRoute(
               builder: (BuildContext context) =>
-                  new NewHardWareSupport(_leadId),
+                  new NewHardWareSupport(_bloc.id),
             ));
         break;
       case SUPPORT_TYPE_DEBUG_ACCOUNT:
@@ -155,7 +153,7 @@ class ClientSupportPageState extends State {
             context,
             new CommonRoute(
               builder: (BuildContext context) =>
-                  new NewDebugAccSupport(_leadId),
+                  new NewDebugAccSupport(_bloc.id),
             ));
         break;
       case SUPPORT_TYPE_RELEASE_ACCOUNT:
@@ -163,7 +161,7 @@ class ClientSupportPageState extends State {
             context,
             new CommonRoute(
               builder: (BuildContext context) =>
-                  new NewReleaseAccSupport(_leadId),
+                  new NewReleaseAccSupport(_bloc.id),
             ));
         break;
     }
@@ -636,7 +634,7 @@ class ClientSupportPageState extends State {
   }
 
   void _initData() {
-    ApiService().clientSupports(_leadId.toString()).then(
+    ApiService().clientSupports(_bloc.id.toString()).then(
       (rsp) {
         if (rsp.code == ApiService.success) {
           var clientSupports = rsp as ClientSupportListRsp;

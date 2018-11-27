@@ -1,6 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/ClientDetailBloc.dart';
 import 'package:flutter_app/data/Constant.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
 import 'package:flutter_app/data/http/rsp/VisitLogsRsp.dart';
@@ -11,26 +12,21 @@ import 'package:flutter_app/page/clientdetails/NewPlainVisit.dart';
 import 'package:flutter_app/page/clientdetails/NewSpecialVisit.dart';
 
 class VisitLogsPage extends StatefulWidget {
-  final int _leadId;
-
-  VisitLogsPage(this._leadId);
-
   @override
   State<StatefulWidget> createState() {
-    return VisitLogsPageState(_leadId);
+    return VisitLogsPageState();
   }
 }
 
 class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
-  final int _leadId;
-
   List<VisitLog> _visitLogs = new List();
 
-  VisitLogsPageState(this._leadId);
+  ClientDetailBloc _bloc;
 
   @override
   void initState() {
-    if (_leadId != null) {
+    if (_bloc == null) _bloc = BlocProvider.of(context);
+    if (_bloc.id != null) {
       _initData();
     }
     super.initState();
@@ -71,7 +67,7 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
                           Image.asset("assets/images/ic_empty.png"),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 12.0),
-                            child: Text(_leadId == null ? "新建商机无法添加" : "暂无数据"),
+                            child: Text(_bloc.id == null ? "新建商机无法添加" : "暂无数据"),
                           )
                         ],
                       ),
@@ -90,10 +86,10 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
               child: new Text(
                 '新增拜访',
                 style: Theme.of(context).textTheme.body1.merge(TextStyle(
-                      color: _leadId != null ? Colors.blue : Colors.grey,
+                      color: _bloc.id != null ? Colors.blue : Colors.grey,
                     )),
               ),
-              onTap: _leadId != null
+              onTap: _bloc.id != null
                   ? () {
                       _newVisit(context);
                     }
@@ -121,7 +117,7 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
         var needRefresh = await Navigator.push(
             context,
             new CommonRoute(
-              builder: (BuildContext context) => new NewPlainVisit(_leadId),
+              builder: (BuildContext context) => new NewPlainVisit(_bloc.id),
             ));
         if (needRefresh == true) {
           _initData();
@@ -133,7 +129,7 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
             context,
             new CommonRoute(
               builder: (BuildContext context) =>
-                  new NewSpecialVisit(_leadId, result.id),
+                  new NewSpecialVisit(_bloc.id, result.id),
             ));
         if (needRefresh == true) {
           _initData();
@@ -328,7 +324,7 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
   }
 
   void _initData() {
-    ApiService().visitLogs(_leadId.toString()).then(
+    ApiService().visitLogs(_bloc.id.toString()).then(
       (rsp) {
         if (rsp.code == ApiService.success) {
           var visitLogsRsp = rsp as VisitLogsRsp;

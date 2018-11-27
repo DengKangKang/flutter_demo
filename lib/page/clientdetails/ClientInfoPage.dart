@@ -1,87 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
-import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
+import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/ClientDetailBloc.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:intl/intl.dart';
 
 class ClientInfoPage extends StatefulWidget {
-  final Client _client;
-
-  ClientInfoPage(
-    this._client, {
+  ClientInfoPage({
     Key key,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new ClientInfoPageState(_client);
+    return new ClientInfoPageState();
   }
 }
 
 class ClientInfoPageState extends State<ClientInfoPage>
     with AutomaticKeepAliveClientMixin<ClientInfoPage> {
-  final Client _client;
+  ClientDetailBloc _bloc;
 
-  RadioBean _company = companyTypes[0];
-  RadioBean _industry = industries[0];
-  RadioBean _source = sourceTypes[0];
-  RadioBean _location = locations[0];
-
-  var _invoiceCountController = TextEditingController.fromValue(
-    new TextEditingValue(
-      text: "",
-    ),
-  );
-
-  String _invoiceCountError = "";
-
-  RadioBean _startTarget = booleans[0];
-  RadioBean _secondaryDevelopment = booleans[0];
-  RadioBean _progress = progresses[0];
-  String _expectedContractAmount = "";
-  String _expectedSignDate = "";
-  String _lnsize = "";
-  String _companyIntro = "";
-
-  ClientInfoPageState(this._client) {
-    if (_client != null) {
-      if (_client.company_type != null)
-        _company = companyTypes.firstWhere((e) => e.id == _client.company_type);
-
-      if (_client.industry != null)
-        _industry = industries.firstWhere((e) => e.id == _client.industry);
-
-      if (_client.source_id != null)
-        _source = sourceTypes.firstWhere((e) => e.id == _client.source_id);
-
-      if (_client.location != null)
-        _location = locations.firstWhere((e) => e.id == _client.location);
-
-      if (_client.annual_invoice != null)
-        _invoiceCountController.text = _client.annual_invoice.toString();
-
-      if (_client.is_important != null)
-        _startTarget = booleans.firstWhere((e) => e.id == _client.is_important);
-
-      if (_client.on_premise != null)
-        _secondaryDevelopment =
-            booleans.firstWhere((e) => e.id == _client.on_premise);
-
-      if (_client.progress_percent != null)
-        _progress =
-            progresses.firstWhere((e) => e.id == _client.progress_percent);
-
-      if (_client.anticipated_amount != null)
-        _expectedContractAmount = _client.anticipated_amount;
-
-      if (_client.anticipated_date != null)
-        _expectedSignDate = _client.anticipated_date;
-
-      if (_client.company_size != null) _lnsize = _client.company_size;
-
-      if (_client.memo != null) _companyIntro = _client.memo;
-    }
+  @override
+  void initState() {
+    if (_bloc == null) _bloc = BlocProvider.of(context);
+    super.initState();
   }
 
   @override
@@ -122,12 +64,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         context: context,
                         builder: (context) {
                           return RadioListPage.companyType(
-                              groupValue: _company);
+                            groupValue: _bloc.company,
+                          );
                         },
                       );
                       if (company != null) {
                         setState(() {
-                          _company = company;
+                          _bloc.company = company;
                         });
                       }
                     },
@@ -136,7 +79,10 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       children: [
                         new Container(
                           margin: EdgeInsets.only(
-                              right: 16.0, top: 12.0, bottom: 12.0),
+                            right: 16.0,
+                            top: 12.0,
+                            bottom: 12.0,
+                          ),
                           child: new Text(
                             "*公司类型",
                             style: Theme.of(context).textTheme.body1.merge(
@@ -152,12 +98,14 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _company.name,
+                                _bloc.company.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
-                                        color: _company.id == 0
+                                      new TextStyle(
+                                        color: _bloc.company.id == 0
                                             ? Colors.grey
-                                            : Colors.black)),
+                                            : Colors.black,
+                                      ),
+                                    ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -187,12 +135,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       var industry = await showDialog(
                         context: context,
                         builder: (context) {
-                          return RadioListPage.industry(groupValue: _industry);
+                          return RadioListPage.industry(
+                              groupValue: _bloc.industry);
                         },
                       );
                       if (industry != null) {
                         setState(() {
-                          _industry = industry;
+                          _bloc.industry = industry;
                         });
                       }
                     },
@@ -201,7 +150,10 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       children: [
                         new Container(
                           margin: EdgeInsets.only(
-                              right: 16.0, top: 12.0, bottom: 12.0),
+                            right: 16.0,
+                            top: 12.0,
+                            bottom: 12.0,
+                          ),
                           child: new Text(
                             "*所属行业",
                             style: Theme.of(context).textTheme.body1.merge(
@@ -217,12 +169,14 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _industry.name,
+                                _bloc.industry.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
-                                        color: _industry.id == 0
+                                      new TextStyle(
+                                        color: _bloc.industry.id == 0
                                             ? Colors.grey
-                                            : Colors.black)),
+                                            : Colors.black,
+                                      ),
+                                    ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -252,12 +206,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       var industry = await showDialog(
                         context: context,
                         builder: (context) {
-                          return RadioListPage.sourceType(groupValue: _source);
+                          return RadioListPage.sourceType(
+                              groupValue: _bloc.source);
                         },
                       );
                       if (industry != null) {
                         setState(() {
-                          _source = industry;
+                          _bloc.source = industry;
                         });
                       }
                     },
@@ -266,7 +221,10 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       children: [
                         new Container(
                           margin: EdgeInsets.only(
-                              right: 16.0, top: 12.0, bottom: 12.0),
+                            right: 16.0,
+                            top: 12.0,
+                            bottom: 12.0,
+                          ),
                           child: new Text(
                             "*来源类型",
                             style: Theme.of(context).textTheme.body1.merge(
@@ -282,12 +240,14 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _source.name,
+                                _bloc.source.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
-                                        color: _source.id == 0
+                                      new TextStyle(
+                                        color: _bloc.source.id == 0
                                             ? Colors.grey
-                                            : Colors.black)),
+                                            : Colors.black,
+                                      ),
+                                    ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -317,12 +277,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       var location = await showDialog(
                         context: context,
                         builder: (context) {
-                          return RadioListPage.location(groupValue: _company);
+                          return RadioListPage.location(
+                              groupValue: _bloc.company);
                         },
                       );
                       if (location != null) {
                         setState(() {
-                          _location = location;
+                          _bloc.location = location;
                         });
                       }
                     },
@@ -347,10 +308,10 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _location.name,
+                                _bloc.location.name,
                                 style: Theme.of(context).textTheme.body1.merge(
                                     new TextStyle(
-                                        color: _location.id == 0
+                                        color: _bloc.location.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
                                 overflow: TextOverflow.ellipsis,
@@ -396,7 +357,11 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           ),
                           new Flexible(
                             child: TextField(
-                              controller: _invoiceCountController,
+                              controller: TextEditingController.fromValue(
+                                new TextEditingValue(
+                                  text: _bloc.invoiceCount,
+                                ),
+                              ),
                               textAlign: TextAlign.end,
                               decoration: new InputDecoration(
                                 hintText: "请输入企业年度发票量",
@@ -407,6 +372,9 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 WhitelistingTextInputFormatter.digitsOnly
                               ],
                               keyboardType: TextInputType.number,
+                              onChanged: (s) {
+                                _bloc.companyIntro = s;
+                              },
                             ),
                           ),
                         ],
@@ -433,13 +401,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         context: context,
                         builder: (context) {
                           return RadioListPage.boolean(
-                            groupValue: _startTarget,
+                            groupValue: _bloc.startTarget,
                           );
                         },
                       );
                       if (secondaryDevelopment != null) {
                         setState(() {
-                          _startTarget = secondaryDevelopment;
+                          _bloc.startTarget = secondaryDevelopment;
                         });
                       }
                     },
@@ -464,10 +432,10 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _startTarget.name,
+                                _bloc.startTarget.name,
                                 style: Theme.of(context).textTheme.body1.merge(
                                     new TextStyle(
-                                        color: _startTarget.id == 0
+                                        color: _bloc.startTarget.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
                                 overflow: TextOverflow.ellipsis,
@@ -500,13 +468,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         context: context,
                         builder: (context) {
                           return RadioListPage.boolean(
-                            groupValue: _secondaryDevelopment,
+                            groupValue: _bloc.secondaryDevelopment,
                           );
                         },
                       );
                       if (secondaryDevelopment != null) {
                         setState(() {
-                          _secondaryDevelopment = secondaryDevelopment;
+                          _bloc.secondaryDevelopment = secondaryDevelopment;
                         });
                       }
                     },
@@ -531,12 +499,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _secondaryDevelopment.name,
+                                _bloc.secondaryDevelopment.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
-                                        color: _secondaryDevelopment.id == 0
-                                            ? Colors.grey
-                                            : Colors.black)),
+                                      new TextStyle(
+                                        color:
+                                            _bloc.secondaryDevelopment.id == 0
+                                                ? Colors.grey
+                                                : Colors.black,
+                                      ),
+                                    ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -566,12 +537,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       var progress = await showDialog(
                         context: context,
                         builder: (context) {
-                          return RadioListPage.progress(groupValue: _progress);
+                          return RadioListPage.progress(
+                              groupValue: _bloc.progress);
                         },
                       );
                       if (progress != null) {
                         setState(() {
-                          _progress = progress;
+                          _bloc.progress = progress;
                         });
                       }
                     },
@@ -596,10 +568,10 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _progress.name,
+                                _bloc.progress.name,
                                 style: Theme.of(context).textTheme.body1.merge(
                                     new TextStyle(
-                                        color: _progress.id == 0
+                                        color: _bloc.progress.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
                                 overflow: TextOverflow.ellipsis,
@@ -648,7 +620,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                               keyboardType: TextInputType.number,
                               controller: TextEditingController.fromValue(
                                 new TextEditingValue(
-                                  text: _expectedContractAmount,
+                                  text: _bloc.expectedContractAmount,
                                 ),
                               ),
                               textAlign: TextAlign.end,
@@ -658,7 +630,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                               ),
                               style: Theme.of(context).textTheme.body1,
                               onChanged: (s) {
-                                _expectedContractAmount = s;
+                                _bloc.expectedContractAmount = s;
                               },
                             ),
                           ),
@@ -690,7 +662,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       );
                       if (date != null) {
                         setState(() {
-                          _expectedSignDate =
+                          _bloc.expectedSignDate =
                               new DateFormat('yyyy-MM-dd').format(date);
                         });
                       }
@@ -716,9 +688,9 @@ class ClientInfoPageState extends State<ClientInfoPage>
                           children: <Widget>[
                             new Flexible(
                               child: new Text(
-                                _expectedSignDate.isEmpty
+                                _bloc.expectedSignDate.isEmpty
                                     ? "请选择预计签约日"
-                                    : _expectedSignDate,
+                                    : _bloc.expectedSignDate,
                                 style: Theme.of(context)
                                     .textTheme
                                     .body1
@@ -768,7 +740,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                             child: TextField(
                               controller: TextEditingController.fromValue(
                                 new TextEditingValue(
-                                  text: _lnsize,
+                                  text: _bloc.lnsize,
                                 ),
                               ),
                               textAlign: TextAlign.end,
@@ -778,7 +750,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                               ),
                               style: Theme.of(context).textTheme.body1,
                               onChanged: (s) {
-                                _lnsize = s;
+                                _bloc.lnsize = s;
                               },
                             ),
                           ),
@@ -821,7 +793,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                               maxLines: null,
                               controller: TextEditingController.fromValue(
                                 new TextEditingValue(
-                                  text: _companyIntro,
+                                  text: _bloc.companyIntro,
                                 ),
                               ),
                               textAlign: TextAlign.end,
@@ -834,7 +806,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                   .body1
                                   .merge(new TextStyle()),
                               onChanged: (s) {
-                                _companyIntro = s;
+                                _bloc.companyIntro = s;
                               },
                             ),
                           ),
@@ -850,30 +822,6 @@ class ClientInfoPageState extends State<ClientInfoPage>
       ],
     );
   }
-
-  String get companyIntro => _companyIntro;
-
-  String get lnsize => _lnsize;
-
-  String get expectedSignDate => _expectedSignDate;
-
-  String get expectedContractAmount => _expectedContractAmount;
-
-  RadioBean get progress => _progress;
-
-  RadioBean get secondaryDevelopment => _secondaryDevelopment;
-
-  RadioBean get startTarget => _startTarget;
-
-  String get invoiceCount => _invoiceCountController.text;
-
-  RadioBean get location => _location;
-
-  RadioBean get source => _source;
-
-  RadioBean get industry => _industry;
-
-  RadioBean get company => _company;
 
   @override
   bool get wantKeepAlive => true;

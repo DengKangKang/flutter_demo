@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/ClientDetailBloc.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
 import 'package:flutter_app/data/http/rsp/ClientNeedListRsp.dart';
 import 'package:flutter_app/data/http/rsp/data/ClientNeedListData.dart';
 import 'package:flutter_app/page/clientdetails/NewNeed.dart';
 
 class ClientNeedPage extends StatefulWidget {
-  final int _leadId;
-
-  ClientNeedPage(this._leadId);
-
   State<StatefulWidget> createState() {
-    return ClientNeedPageState(_leadId);
+    return ClientNeedPageState();
   }
 }
 
 class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
-  final int _leadId;
-
   List<Need> _clientNeeds = new List();
-
-  ClientNeedPageState(this._leadId);
+  ClientDetailBloc _bloc;
 
   @override
   void initState() {
-    if (_leadId != null) {
+    if (_bloc == null) _bloc = BlocProvider.of(context);
+    if (_bloc.id != null) {
       _initData();
     }
     super.initState();
@@ -65,11 +61,11 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
                           Image.asset("assets/images/ic_empty.png"),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 12.0),
-                            child: Text(_leadId == null ? "新建商机无法添加" : "暂无数据"),
+                            child: Text(_bloc.id == null ? "新建商机无法添加" : "暂无数据"),
                           )
                         ],
                       ),
-                      ),
+                    ),
             ],
           ),
         ),
@@ -84,16 +80,16 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
               child: new Text(
                 '新增需求',
                 style: Theme.of(context).textTheme.body1.merge(TextStyle(
-                      color: _leadId != null ? Colors.blue : Colors.grey,
+                      color: _bloc.id != null ? Colors.blue : Colors.grey,
                     )),
               ),
-              onTap: _leadId != null
+              onTap: _bloc.id != null
                   ? () async {
                       var needRefresh = await Navigator.push(
                           context,
                           new CommonRoute(
                             builder: (BuildContext context) =>
-                                new NewNeed(_leadId),
+                                new NewNeed(_bloc.id),
                           ));
                       if (needRefresh == true) {
                         _initData();
@@ -151,7 +147,7 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
   }
 
   void _initData() {
-    ApiService().clientNeedList(_leadId.toString()).then(
+    ApiService().clientNeedList(_bloc.id.toString()).then(
       (rsp) {
         if (rsp.code == ApiService.success) {
           var clientNeedListRsp = rsp as ClientNeedListRsp;

@@ -15,7 +15,8 @@ import 'package:http/http.dart';
 
 class ApiService {
   static final ApiService _singleton = new ApiService._internal();
-  static final String _baseUrl = "http://www.ideallinker.com/op";
+  static final String _baseUrl = "http://192.168.1.192:3000/op";
+//  static final String _baseUrl = "http://www.ideallinker.com/op";
   static final int success = 0;
   static final int illicit = -1;
 
@@ -183,15 +184,20 @@ class ApiService {
     String function = "",
     String invoiceCount = "",
     String memo = "",
-    String responsibility = "",
-    String date = "",
-    String projectProgress = "",
-    String need = "",
-    String deviceName = "",
-    String usageModel = "",
-    String count = "",
-    String price = "",
-    String memoDevice = "",
+
+    String responsibility ="",
+    String date ="",
+    String projectProgress ="",
+    String need ="",
+
+    String deviceName ="",
+    String usageModel ="",
+    String count ="",
+    String price ="",
+    String memoDevice ="",
+
+
+
   }) async {
     Response rsp =
         await client.post("$_baseUrl/fc/customer/application/add", headers: {
@@ -206,15 +212,18 @@ class ApiService {
       "features": function,
       "check_amount": invoiceCount,
       "memo": memo,
+
       "responsibility": responsibility,
       "visit_time": date,
       "visit_progress": projectProgress,
       "requirements": need,
+
       "device_name": deviceName,
       "device_quantity": count,
       "price": price,
       "is_purchase": usageModel,
       "memo_device": memoDevice,
+
       "user": "8",
     });
     print(rsp.body);
@@ -309,6 +318,28 @@ class ApiService {
     print(rsp.body);
     if (rsp.statusCode == 200) {
       return BaseRsp.fromJson(json.decode(rsp.body));
+    } else {
+      return new BaseRsp(illicit, "网络异常，请稍后再试。");
+    }
+  }
+
+  Future<BaseRsp> getDailies(
+      int page,
+      int size,
+      ) async {
+    Response rsp = await client.post(
+      "$_baseUrl/api/app/fc/daily/list",
+      headers: {
+        "Authorization": "Bearer ${await new Persistence().getToken()}"
+      },
+      body: {
+        "page": page,
+        "size": size,
+      },
+    );
+    print(rsp.body);
+    if (rsp.statusCode == 200) {
+      return DailiesRsp.fromJson(json.decode(rsp.body));
     } else {
       return new BaseRsp(illicit, "网络异常，请稍后再试。");
     }
