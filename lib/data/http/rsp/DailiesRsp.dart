@@ -29,9 +29,11 @@ class DailiesRsp extends BaseRsp {
 }
 
 @JsonSerializable()
-class DailyRspData{
+class DailyRspData {
   int count;
-  List<Daily> data ;
+  List<Daily> data;
+
+  DailyRspData(this.count, this.data);
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated _$UserFromJson constructor.
@@ -40,10 +42,8 @@ class DailyRspData{
       _$DailyRspDataFromJson(json);
 }
 
-
 @JsonSerializable()
 class Daily {
-
   String daily_time;
   String today_content;
   String today_customer_visit;
@@ -51,6 +51,14 @@ class Daily {
   String next_plan;
   String next_customer_visit;
 
-  factory Daily.fromJson(Map<String, dynamic> json) =>
-      _$DailyFromJson(json);
+  Daily(
+    this.daily_time,
+    this.today_content,
+    this.today_customer_visit,
+    this.today_solution,
+    this.next_plan,
+    this.next_customer_visit,
+  );
+
+  factory Daily.fromJson(Map<String, dynamic> json) => _$DailyFromJson(json);
 }
