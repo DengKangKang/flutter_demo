@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
 
 class DailyBloc extends CommonBloc {
   StreamController<List<String>> _dailies = new StreamController();
@@ -9,11 +10,15 @@ class DailyBloc extends CommonBloc {
   @override
   void initData() async {
     var rsp = await new ApiService().getDailies(1, 15);
-    var list = new List<String>();
-    list.add("");
-    list.add("");
-    list.add("");
-    _dailies.sink.add(list);
+    if(rsp.code == ApiService.success){
+      var dailiesRsp = rsp as DailiesRsp;
+      var list = new List<String>();
+      list.add("");
+      list.add("");
+      list.add("");
+//      _dailies.sink.add(dailiesRsp.code);
+    }
+
   }
 
   Stream<List<String>> get dailies => _dailies.stream;

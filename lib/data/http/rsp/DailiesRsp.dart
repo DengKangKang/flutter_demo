@@ -19,7 +19,9 @@ part 'package:flutter_app/data/http/rsp/DailiesRsp.g.dart';
 /// JSON serialization logic to be generated.
 @JsonSerializable()
 class DailiesRsp extends BaseRsp {
-  DailiesRsp(code, msg) : super(code, msg);
+  DailiesRsp(code, msg, this.data) : super(code, msg);
+
+  DailyRspData data;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated _$UserFromJson constructor.
