@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/ClientDetailBloc.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
 import 'package:flutter_app/data/http/rsp/OperationLogsRsp.dart';
 import 'package:flutter_app/data/http/rsp/data/OperationLogsData.dart';
 
 class OperationLogPage extends StatefulWidget {
-  final int _leadId;
-
-  OperationLogPage(this._leadId);
-
   @override
   State<StatefulWidget> createState() {
-    return OperationLogPageState(_leadId);
+    return OperationLogPageState();
   }
 }
 
 class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
-  final int _leadId;
 
   List<OperationLog> _operationLogs = new List();
 
-  OperationLogPageState(this._leadId);
+  ClientDetailBloc _bloc;
 
   @override
   void initState() {
-    if(_leadId !=null){
+    if (_bloc == null) _bloc = BlocProvider.of(context);
+    if (_bloc.id != null) {
       _initData();
     }
     super.initState();
@@ -106,7 +104,7 @@ class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
   }
 
   void _initData() {
-    ApiService().operationLogs(_leadId.toString()).then(
+    ApiService().operationLogs(_bloc.id.toString()).then(
           (rsp) {
         if (rsp.code == ApiService.success) {
           setState(() {

@@ -7,6 +7,7 @@ import 'package:flutter_app/data/http/rsp/ClientListRsp.dart';
 import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
 import 'package:flutter_app/data/persistence/Persistence.dart';
 import 'package:flutter_app/page/ClientDetailPage.dart';
+import 'package:flutter_app/page/DailyPage.dart';
 import 'package:flutter_app/page/LoginPage.dart';
 import 'package:flutter_app/page/SearchPage.dart';
 
@@ -87,62 +88,75 @@ class HomePageState extends State<StatefulWidget> {
       drawer: new Drawer(
         child: new Container(
           margin: new EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
             bottom: 12.0,
             top: 36.0,
           ),
-          child: new Stack(
+          child: new Column(
             children: <Widget>[
-              new Align(
-                alignment: Alignment.topLeft,
-                child: new Row(
-                  mainAxisSize: MainAxisSize.max,
+              new Flexible(
+                child: new Column(
                   children: <Widget>[
-                    Image.asset("assets/images/ic_head_big.png"),
                     new Container(
-                      margin: EdgeInsets.only(left: 12.0),
-                      child: new Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      margin: EdgeInsets.only(right: 16.0,left: 16.0,bottom: 24.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
-                          new Text(_username),
-                          new Text(_userAccount),
+                          Image.asset("assets/images/ic_head_big.png"),
+                          new Container(
+                            margin: EdgeInsets.symmetric(horizontal: 12.0),
+                            child: new Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                new Text(_username),
+                                new Text(_userAccount),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    )
+                    ),
+                    new ListTile(
+                      leading: new Icon(Icons.note),
+                      title: new Text("日报"),
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            new CommonRoute(
+                              builder: (BuildContext context) =>
+                              new DailyPage(),
+                            ));
+                      },
+                    ),
                   ],
                 ),
               ),
-              new Align(
-                alignment: Alignment.bottomCenter,
-                child: new IconButton(
-                  icon: new Icon(Icons.power_settings_new),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => new AlertDialog(
-                            title: new Text("提示"),
-                            content: new Text("是否确认退出"),
-                            actions: <Widget>[
-                              new FlatButton(
-                                child: new Text('取消'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              new FlatButton(
-                                child: new Text('确定'),
-                                onPressed: () {
-                                  _onLogout(context);
-                                },
-                              ),
-                            ],
-                          ),
-                    );
-                  },
-                ),
-              )
+              new IconButton(
+                icon: new Icon(Icons.power_settings_new),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => new AlertDialog(
+                          title: new Text("提示"),
+                          content: new Text("是否确认退出"),
+                          actions: <Widget>[
+                            new FlatButton(
+                              child: new Text('取消'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            new FlatButton(
+                              child: new Text('确定'),
+                              onPressed: () {
+                                _onLogout(context);
+                              },
+                            ),
+                          ],
+                        ),
+                  );
+                },
+              ),
             ],
           ),
         ),

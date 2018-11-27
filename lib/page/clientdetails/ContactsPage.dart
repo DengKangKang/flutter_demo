@@ -1,40 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
+import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/ClientDetailBloc.dart';
 
 class ContactsPage extends StatefulWidget {
-  final Client _client;
-
-  ContactsPage(
-    this._client, {
+  ContactsPage({
     Key key,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new ContactsPageState(_client);
+    return new ContactsPageState();
   }
 }
 
 class ContactsPageState extends State<ContactsPage>
     with AutomaticKeepAliveClientMixin<ContactsPage> {
-  final Client _client;
+  ClientDetailBloc _bloc;
 
-  String _firstPartyRepresentatives = "";
-  String _contactWay = "";
-  String _email = "";
-  String _title = "";
-
-  ContactsPageState(this._client) {
-    if (_client != null) {
-      if (_client.leads_contact != null)
-        _firstPartyRepresentatives = _client.leads_contact;
-
-      if (_client.leads_mobile != null) _contactWay = _client.leads_mobile;
-
-      if (_client.leads_email != null) _email = _client.leads_email;
-
-      if (_client.job_title != null) _title = _client.job_title;
-    }
+  @override
+  void initState() {
+    if (_bloc == null) _bloc = BlocProvider.of(context);
+    super.initState();
   }
 
   @override
@@ -79,7 +65,7 @@ class ContactsPageState extends State<ContactsPage>
                       maxLines: null,
                       controller: TextEditingController.fromValue(
                         new TextEditingValue(
-                          text: _firstPartyRepresentatives,
+                          text: _bloc.firstPartyRepresentatives,
                         ),
                       ),
                       textAlign: TextAlign.end,
@@ -92,7 +78,7 @@ class ContactsPageState extends State<ContactsPage>
                           .body1
                           .merge(new TextStyle()),
                       onChanged: (s) {
-                        _firstPartyRepresentatives = s;
+                        _bloc.firstPartyRepresentatives = s;
                       },
                     ),
                   ),
@@ -133,7 +119,7 @@ class ContactsPageState extends State<ContactsPage>
                       maxLines: null,
                       controller: TextEditingController.fromValue(
                         new TextEditingValue(
-                          text: _contactWay,
+                          text: _bloc.contactWay,
                         ),
                       ),
                       textAlign: TextAlign.end,
@@ -146,7 +132,7 @@ class ContactsPageState extends State<ContactsPage>
                           .body1
                           .merge(new TextStyle()),
                       onChanged: (s) {
-                        _contactWay = s;
+                        _bloc.contactWay = s;
                       },
                     ),
                   ),
@@ -187,7 +173,7 @@ class ContactsPageState extends State<ContactsPage>
                       maxLines: null,
                       controller: TextEditingController.fromValue(
                         new TextEditingValue(
-                          text: _email,
+                          text: _bloc.email,
                         ),
                       ),
                       textAlign: TextAlign.end,
@@ -200,7 +186,7 @@ class ContactsPageState extends State<ContactsPage>
                           .body1
                           .merge(new TextStyle()),
                       onChanged: (s) {
-                        _email = s;
+                        _bloc.email = s;
                       },
                     ),
                   ),
@@ -241,7 +227,7 @@ class ContactsPageState extends State<ContactsPage>
                       maxLines: null,
                       controller: TextEditingController.fromValue(
                         new TextEditingValue(
-                          text: _title,
+                          text: _bloc.title,
                         ),
                       ),
                       textAlign: TextAlign.end,
@@ -254,7 +240,7 @@ class ContactsPageState extends State<ContactsPage>
                           .body1
                           .merge(new TextStyle()),
                       onChanged: (s) {
-                        _title = s;
+                        _bloc.title = s;
                       },
                     ),
                   ),
@@ -266,14 +252,6 @@ class ContactsPageState extends State<ContactsPage>
       ],
     );
   }
-
-  String get firstPartyRepresentatives => _firstPartyRepresentatives;
-
-  String get contactWay => _contactWay;
-
-  String get email => _email;
-
-  String get title => _title;
 
   @override
   bool get wantKeepAlive => true;
