@@ -7,26 +7,26 @@ part of 'ClientSupportListRsp.dart';
 // **************************************************************************
 
 ClientSupportListRsp _$ClientSupportListRspFromJson(Map<String, dynamic> json) {
-  return new ClientSupportListRsp(
+  return ClientSupportListRsp(
       json['code'],
       json['msg'],
       (json['data'] as List)
           ?.map((e) => e == null
               ? null
-              : new ClientSupport.fromJson(e as Map<String, dynamic>))
+              : ClientSupport.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 
-abstract class _$ClientSupportListRspSerializerMixin {
-  int get code;
-  String get msg;
-  List<ClientSupport> get data;
-  Map<String, dynamic> toJson() =>
-      <String, dynamic>{'code': code, 'msg': msg, 'data': data};
-}
+Map<String, dynamic> _$ClientSupportListRspToJson(
+        ClientSupportListRsp instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+      'msg': instance.msg,
+      'data': instance.data
+    };
 
 ClientSupport _$ClientSupportFromJson(Map<String, dynamic> json) {
-  return new ClientSupport(
+  return ClientSupport(
       json['check_amount'] as int,
       json['application_type'] as int,
       json['device_name'] as int,
@@ -54,57 +54,31 @@ ClientSupport _$ClientSupportFromJson(Map<String, dynamic> json) {
       json['fc_company_id_test'] as int);
 }
 
-abstract class _$ClientSupportSerializerMixin {
-  int get check_amount;
-  int get application_type;
-  int get device_name;
-  int get device_quantity;
-  String get fc_admin_name;
-  String get email;
-  String get features;
-  int get id;
-  String get realname;
-  int get responsibility;
-  String get initial_password;
-  int get is_purchase;
-  int get leads_id;
-  String get memo;
-  String get price;
-  String get requirements;
-  int get state;
-  String get prename;
-  int get visit_progress;
-  String get visit_time;
-  String get time_limit;
-  String get create_time;
-  String get agree_time;
-  String get fc_company_id;
-  int get fc_company_id_test;
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'check_amount': check_amount,
-        'application_type': application_type,
-        'device_name': device_name,
-        'device_quantity': device_quantity,
-        'fc_admin_name': fc_admin_name,
-        'email': email,
-        'features': features,
-        'id': id,
-        'realname': realname,
-        'responsibility': responsibility,
-        'initial_password': initial_password,
-        'is_purchase': is_purchase,
-        'leads_id': leads_id,
-        'memo': memo,
-        'price': price,
-        'requirements': requirements,
-        'state': state,
-        'prename': prename,
-        'visit_progress': visit_progress,
-        'visit_time': visit_time,
-        'time_limit': time_limit,
-        'create_time': create_time,
-        'agree_time': agree_time,
-        'fc_company_id': fc_company_id,
-        'fc_company_id_test': fc_company_id_test
-      };
-}
+Map<String, dynamic> _$ClientSupportToJson(ClientSupport instance) =>
+    <String, dynamic>{
+      'check_amount': instance.check_amount,
+      'application_type': instance.application_type,
+      'device_name': instance.device_name,
+      'device_quantity': instance.device_quantity,
+      'fc_admin_name': instance.fc_admin_name,
+      'email': instance.email,
+      'features': instance.features,
+      'id': instance.id,
+      'realname': instance.realname,
+      'responsibility': instance.responsibility,
+      'initial_password': instance.initial_password,
+      'is_purchase': instance.is_purchase,
+      'leads_id': instance.leads_id,
+      'memo': instance.memo,
+      'price': instance.price,
+      'requirements': instance.requirements,
+      'state': instance.state,
+      'prename': instance.prename,
+      'visit_progress': instance.visit_progress,
+      'visit_time': instance.visit_time,
+      'time_limit': instance.time_limit,
+      'create_time': instance.create_time,
+      'agree_time': instance.agree_time,
+      'fc_company_id': instance.fc_company_id,
+      'fc_company_id_test': instance.fc_company_id_test
+    };

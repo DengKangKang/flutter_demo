@@ -7,19 +7,16 @@ part of 'ClientNeedListData.dart';
 // **************************************************************************
 
 ClientNeedListData _$ClientNeedListDataFromJson(Map<String, dynamic> json) {
-  return new ClientNeedListData((json['list'] as List)
-      ?.map((e) =>
-          e == null ? null : new Need.fromJson(e as Map<String, dynamic>))
+  return ClientNeedListData((json['list'] as List)
+      ?.map((e) => e == null ? null : Need.fromJson(e as Map<String, dynamic>))
       ?.toList());
 }
 
-abstract class _$ClientNeedListDataSerializerMixin {
-  List<Need> get list;
-  Map<String, dynamic> toJson() => <String, dynamic>{'list': list};
-}
+Map<String, dynamic> _$ClientNeedListDataToJson(ClientNeedListData instance) =>
+    <String, dynamic>{'list': instance.list};
 
 Need _$NeedFromJson(Map<String, dynamic> json) {
-  return new Need(
+  return Need(
       json['leads_id'] as int,
       json['create_time'] as String,
       json['creator_id'] as int,
@@ -27,17 +24,10 @@ Need _$NeedFromJson(Map<String, dynamic> json) {
       json['requirement'] as String);
 }
 
-abstract class _$NeedSerializerMixin {
-  int get leads_id;
-  String get create_time;
-  int get creator_id;
-  String get creator_realname;
-  String get requirement;
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'leads_id': leads_id,
-        'create_time': create_time,
-        'creator_id': creator_id,
-        'creator_realname': creator_realname,
-        'requirement': requirement
-      };
-}
+Map<String, dynamic> _$NeedToJson(Need instance) => <String, dynamic>{
+      'leads_id': instance.leads_id,
+      'create_time': instance.create_time,
+      'creator_id': instance.creator_id,
+      'creator_realname': instance.creator_realname,
+      'requirement': instance.requirement
+    };

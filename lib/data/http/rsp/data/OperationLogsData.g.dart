@@ -7,20 +7,17 @@ part of 'OperationLogsData.dart';
 // **************************************************************************
 
 OperationLogsData _$OperationLogsDataFromJson(Map<String, dynamic> json) {
-  return new OperationLogsData((json['list'] as List)
-      ?.map((e) => e == null
-          ? null
-          : new OperationLog.fromJson(e as Map<String, dynamic>))
+  return OperationLogsData((json['list'] as List)
+      ?.map((e) =>
+          e == null ? null : OperationLog.fromJson(e as Map<String, dynamic>))
       ?.toList());
 }
 
-abstract class _$OperationLogsDataSerializerMixin {
-  List<OperationLog> get list;
-  Map<String, dynamic> toJson() => <String, dynamic>{'list': list};
-}
+Map<String, dynamic> _$OperationLogsDataToJson(OperationLogsData instance) =>
+    <String, dynamic>{'list': instance.list};
 
 OperationLog _$OperationLogFromJson(Map<String, dynamic> json) {
-  return new OperationLog(
+  return OperationLog(
       json['leads_id'] as String,
       json['create_time'] as String,
       json['user_realname'] as String,
@@ -28,17 +25,11 @@ OperationLog _$OperationLogFromJson(Map<String, dynamic> json) {
       json['category'] as int);
 }
 
-abstract class _$OperationLogSerializerMixin {
-  String get leads_id;
-  String get create_time;
-  String get user_realname;
-  String get system_log;
-  int get category;
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'leads_id': leads_id,
-        'create_time': create_time,
-        'user_realname': user_realname,
-        'system_log': system_log,
-        'category': category
-      };
-}
+Map<String, dynamic> _$OperationLogToJson(OperationLog instance) =>
+    <String, dynamic>{
+      'leads_id': instance.leads_id,
+      'create_time': instance.create_time,
+      'user_realname': instance.user_realname,
+      'system_log': instance.system_log,
+      'category': instance.category
+    };

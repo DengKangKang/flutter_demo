@@ -7,18 +7,17 @@ part of 'VisitLogsRsp.dart';
 // **************************************************************************
 
 VisitLogsRsp _$VisitLogsRspFromJson(Map<String, dynamic> json) {
-  return new VisitLogsRsp(
+  return VisitLogsRsp(
       json['code'],
       json['msg'],
       json['data'] == null
           ? null
-          : new VisitLogsData.fromJson(json['data'] as Map<String, dynamic>));
+          : VisitLogsData.fromJson(json['data'] as Map<String, dynamic>));
 }
 
-abstract class _$VisitLogsRspSerializerMixin {
-  int get code;
-  String get msg;
-  VisitLogsData get data;
-  Map<String, dynamic> toJson() =>
-      <String, dynamic>{'code': code, 'msg': msg, 'data': data};
-}
+Map<String, dynamic> _$VisitLogsRspToJson(VisitLogsRsp instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+      'msg': instance.msg,
+      'data': instance.data
+    };

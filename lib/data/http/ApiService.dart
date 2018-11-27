@@ -9,6 +9,7 @@ import 'package:flutter_app/data/http/rsp/LoginRsp.dart';
 import 'package:flutter_app/data/http/rsp/OperationLogsRsp.dart';
 import 'package:flutter_app/data/http/rsp/SourceTypesRsp.dart';
 import 'package:flutter_app/data/http/rsp/VisitLogsRsp.dart';
+import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
 import 'package:flutter_app/data/persistence/Persistence.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';

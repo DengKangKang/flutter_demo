@@ -12,7 +12,7 @@ part 'ClientNeedListData.g.dart';
 /// Every json_serializable class must have the serializer mixin.
 /// It makes the generated toJson() method to be usable for the class.
 /// The mixin's name follows the source class, in this case, User.
-class ClientNeedListData extends Object with _$ClientNeedListDataSerializerMixin {
+class ClientNeedListData extends Object {
   ClientNeedListData(this.list);
 
   List<Need> list;
@@ -25,7 +25,7 @@ class ClientNeedListData extends Object with _$ClientNeedListDataSerializerMixin
 }
 
 @JsonSerializable()
-class Need extends Object with _$NeedSerializerMixin {
+class Need extends Object   {
 
 
 //    leads_id : 7093

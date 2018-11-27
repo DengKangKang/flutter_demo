@@ -18,7 +18,7 @@ part 'VisitLogsRsp.g.dart';
 /// Every json_serializable class must have the serializer mixin.
 /// It makes the generated toJson() method to be usable for the class.
 /// The mixin's name follows the source class, in this case, User.
-class VisitLogsRsp extends BaseRsp with _$VisitLogsRspSerializerMixin {
+class VisitLogsRsp extends BaseRsp  {
   VisitLogsRsp(code, msg,this.data) : super(code, msg);
 
   VisitLogsData data;

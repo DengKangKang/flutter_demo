@@ -7,12 +7,8 @@ part of 'LoginData.dart';
 // **************************************************************************
 
 LoginData _$LoginDataFromJson(Map<String, dynamic> json) {
-  return new LoginData(json['auth'] as String, json['realname'] as String);
+  return LoginData(json['auth'] as String, json['realname'] as String);
 }
 
-abstract class _$LoginDataSerializerMixin {
-  String get auth;
-  String get realname;
-  Map<String, dynamic> toJson() =>
-      <String, dynamic>{'auth': auth, 'realname': realname};
-}
+Map<String, dynamic> _$LoginDataToJson(LoginData instance) =>
+    <String, dynamic>{'auth': instance.auth, 'realname': instance.realname};

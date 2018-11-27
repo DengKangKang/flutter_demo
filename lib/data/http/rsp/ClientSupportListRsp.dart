@@ -13,7 +13,7 @@ part 'ClientSupportListRsp.g.dart';
 /// JSON serialization logic to be generated.
 @JsonSerializable()
 class ClientSupportListRsp extends BaseRsp
-    with _$ClientSupportListRspSerializerMixin {
+   {
   ClientSupportListRsp(code, msg, this.data) : super(code, msg);
 
   List<ClientSupport> data;
@@ -26,7 +26,7 @@ class ClientSupportListRsp extends BaseRsp
 }
 
 @JsonSerializable()
-class ClientSupport extends Object with _$ClientSupportSerializerMixin {
+class ClientSupport extends Object {
 //    leads_id : 7093
 //    create_time : 2018-09-29 17:51:03
 //    creator_id : 12

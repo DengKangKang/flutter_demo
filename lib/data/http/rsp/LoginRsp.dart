@@ -15,7 +15,7 @@ part 'LoginRsp.g.dart';
 /// Every json_serializable class must have the serializer mixin.
 /// It makes the generated toJson() method to be usable for the class.
 /// The mixin's name follows the source class, in this case, User.
-class LoginRsp extends BaseRsp with _$LoginRspSerializerMixin {
+class LoginRsp extends BaseRsp  {
   LoginRsp(code, msg,this.data) : super(code, msg);
 
   LoginData data;

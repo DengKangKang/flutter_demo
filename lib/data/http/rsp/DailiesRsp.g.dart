@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'BaseRsp.dart';
+part of 'DailiesRsp.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-BaseRsp _$BaseRspFromJson(Map<String, dynamic> json) {
-  return BaseRsp(json['code'] as int, json['msg'] as String);
+DailiesRsp _$DailiesRspFromJson(Map<String, dynamic> json) {
+  return DailiesRsp(json['code'], json['msg']);
 }
 
-Map<String, dynamic> _$BaseRspToJson(BaseRsp instance) =>
+Map<String, dynamic> _$DailiesRspToJson(DailiesRsp instance) =>
     <String, dynamic>{'code': instance.code, 'msg': instance.msg};

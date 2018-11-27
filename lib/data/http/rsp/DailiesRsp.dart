@@ -10,7 +10,7 @@ import 'package:json_annotation/json_annotation.dart';
 /// This allows the `User` class to access private members in
 /// the generated file. The value for this is *.g.dart, where
 /// the star denotes the source file name.
-part 'DailiesRsp.g.dart';
+part 'package:flutter_app/data/http/rsp/DailiesRsp.g.dart';
 /// This allows the `User` class to access private members in
 /// the generated file. The value for this is *.g.dart, where
 /// the star denotes the source file name.
@@ -23,7 +23,7 @@ part 'DailiesRsp.g.dart';
 /// Every json_serializable class must have the serializer mixin.
 /// It makes the generated toJson() method to be usable for the class.
 /// The mixin's name follows the source class, in this case, User.
-class DailiesRsp extends BaseRsp with _$DailiesRspSerializerMixin {
+class DailiesRsp extends BaseRsp {
   DailiesRsp(code, msg) : super(code, msg);
 
 

@@ -7,19 +7,17 @@ part of 'VisitLogsData.dart';
 // **************************************************************************
 
 VisitLogsData _$VisitLogsDataFromJson(Map<String, dynamic> json) {
-  return new VisitLogsData((json['list'] as List)
+  return VisitLogsData((json['list'] as List)
       ?.map((e) =>
-          e == null ? null : new VisitLog.fromJson(e as Map<String, dynamic>))
+          e == null ? null : VisitLog.fromJson(e as Map<String, dynamic>))
       ?.toList());
 }
 
-abstract class _$VisitLogsDataSerializerMixin {
-  List<VisitLog> get list;
-  Map<String, dynamic> toJson() => <String, dynamic>{'list': list};
-}
+Map<String, dynamic> _$VisitLogsDataToJson(VisitLogsData instance) =>
+    <String, dynamic>{'list': instance.list};
 
 VisitLog _$VisitLogFromJson(Map<String, dynamic> json) {
-  return new VisitLog(
+  return VisitLog(
       json['leads_id'] as String,
       json['create_time'] as String,
       json['user_id'] as int,
@@ -34,31 +32,17 @@ VisitLog _$VisitLogFromJson(Map<String, dynamic> json) {
       json['visit_goal'] as String);
 }
 
-abstract class _$VisitLogSerializerMixin {
-  String get leads_id;
-  String get create_time;
-  int get user_id;
-  String get user_realname;
-  int get category;
-  String get sale_visit_time;
-  int get sale_visit_form;
-  String get sale_feedback;
-  String get sale_solution;
-  String get expense;
-  String get visitor;
-  String get visit_goal;
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'leads_id': leads_id,
-        'create_time': create_time,
-        'user_id': user_id,
-        'user_realname': user_realname,
-        'category': category,
-        'sale_visit_time': sale_visit_time,
-        'sale_visit_form': sale_visit_form,
-        'sale_feedback': sale_feedback,
-        'sale_solution': sale_solution,
-        'expense': expense,
-        'visitor': visitor,
-        'visit_goal': visit_goal
-      };
-}
+Map<String, dynamic> _$VisitLogToJson(VisitLog instance) => <String, dynamic>{
+      'leads_id': instance.leads_id,
+      'create_time': instance.create_time,
+      'user_id': instance.user_id,
+      'user_realname': instance.user_realname,
+      'category': instance.category,
+      'sale_visit_time': instance.sale_visit_time,
+      'sale_visit_form': instance.sale_visit_form,
+      'sale_feedback': instance.sale_feedback,
+      'sale_solution': instance.sale_solution,
+      'expense': instance.expense,
+      'visitor': instance.visitor,
+      'visit_goal': instance.visit_goal
+    };

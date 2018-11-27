@@ -4,7 +4,7 @@ part 'RadioBean.g.dart';
 
 
 @JsonSerializable()
-class RadioBean  extends Object with _$RadioBeanSerializerMixin  {
+class RadioBean  extends Object   {
   RadioBean(this.id, this.name);
 
   int id;

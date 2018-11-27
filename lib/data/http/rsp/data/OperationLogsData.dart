@@ -8,7 +8,7 @@ part 'OperationLogsData.g.dart';
 /// An annotation for the code generator to know that this class needs the
 /// JSON serialization logic to be generated.
 @JsonSerializable()
-class OperationLogsData extends Object with _$OperationLogsDataSerializerMixin {
+class OperationLogsData extends Object  {
   OperationLogsData(this.list);
 
   List<OperationLog> list;
@@ -21,7 +21,7 @@ class OperationLogsData extends Object with _$OperationLogsDataSerializerMixin {
 }
 
 @JsonSerializable()
-class OperationLog extends Object with _$OperationLogSerializerMixin {
+class OperationLog extends Object  {
   OperationLog(this.leads_id, this.create_time, this.user_realname,
       this.system_log, this.category);
 

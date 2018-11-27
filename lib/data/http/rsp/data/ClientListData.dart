@@ -8,7 +8,7 @@ part 'ClientListData.g.dart';
 /// An annotation for the code generator to know that this class needs the
 /// JSON serialization logic to be generated.
 @JsonSerializable()
-class ClientListData extends Object with _$ClientListDataSerializerMixin {
+class ClientListData extends Object{
   ClientListData(this.count, this.rows);
 
   int count;
@@ -22,7 +22,7 @@ class ClientListData extends Object with _$ClientListDataSerializerMixin {
 }
 
 @JsonSerializable()
-class Client extends Object with _$ClientSerializerMixin {
+class Client extends Object{
   Client(
     this.is_important,
     this.userid_sale_ct,

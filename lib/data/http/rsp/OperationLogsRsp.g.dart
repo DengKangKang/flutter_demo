@@ -7,19 +7,17 @@ part of 'OperationLogsRsp.dart';
 // **************************************************************************
 
 OperationLogsRsp _$OperationLogsRspFromJson(Map<String, dynamic> json) {
-  return new OperationLogsRsp(
+  return OperationLogsRsp(
       json['code'],
       json['msg'],
       json['data'] == null
           ? null
-          : new OperationLogsData.fromJson(
-              json['data'] as Map<String, dynamic>));
+          : OperationLogsData.fromJson(json['data'] as Map<String, dynamic>));
 }
 
-abstract class _$OperationLogsRspSerializerMixin {
-  int get code;
-  String get msg;
-  OperationLogsData get data;
-  Map<String, dynamic> toJson() =>
-      <String, dynamic>{'code': code, 'msg': msg, 'data': data};
-}
+Map<String, dynamic> _$OperationLogsRspToJson(OperationLogsRsp instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+      'msg': instance.msg,
+      'data': instance.data
+    };
