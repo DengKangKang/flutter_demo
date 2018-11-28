@@ -34,38 +34,40 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("日报"),
-      ),
-      floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add),
-        onPressed: () async {
-          var needRefresh = await Navigator.push(
-              context, new CommonRoute(builder: (c) => new NewDailyPage()));
-          if (needRefresh == true) {
-            bloc.initData();
-          }
-        },
-      ),
-      body: new RefreshIndicator(
-          child: StreamBuilder<List<Daily>>(
-            initialData: new List<Daily>(),
-            stream: bloc.dailies,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Daily>> snapshot) {
-              return new ListView.builder(
-                physics: AlwaysScrollableScrollPhysics(),
-                controller: _scrollController,
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, i) {
-                  return _buildItem(i, snapshot.data);
-                },
-              );
+    return new WillPopScope(
+        child: new Scaffold(
+          appBar: new AppBar(
+            title: new Text("日报"),
+          ),
+          floatingActionButton: new FloatingActionButton(
+            child: new Icon(Icons.add),
+            onPressed: () async {
+              var needRefresh = await Navigator.push(
+                  context, new CommonRoute(builder: (c) => new NewDailyPage()));
+              if (needRefresh == true) {
+                bloc.initData();
+              }
             },
           ),
-          onRefresh: () => bloc.initData()),
-    );
+          body: new RefreshIndicator(
+              child: StreamBuilder<List<Daily>>(
+                initialData: new List<Daily>(),
+                stream: bloc.dailies,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Daily>> snapshot) {
+                  return new ListView.builder(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    controller: _scrollController,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, i) {
+                      return _buildItem(i, snapshot.data);
+                    },
+                  );
+                },
+              ),
+              onRefresh: () => bloc.initData()),
+        ),
+        onWillPop: _onWillPop);
   }
 
   Widget _buildItem(int i, List<Daily> dailies) {
@@ -108,7 +110,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
               ),
               new Text(
                 daily.today_content,
-                style: Theme.of(context).textTheme.body2,
+                style: Theme.of(context).textTheme.body1,
               ),
               new Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
@@ -123,7 +125,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
               ),
               new Text(
                 daily.today_customer_visit,
-                style: Theme.of(context).textTheme.body2,
+                style: Theme.of(context).textTheme.body1,
               ),
               new Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
@@ -138,7 +140,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
               ),
               new Text(
                 daily.today_solution,
-                style: Theme.of(context).textTheme.body2,
+                style: Theme.of(context).textTheme.body1,
               ),
               new Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
@@ -153,7 +155,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
               ),
               new Text(
                 daily.next_plan,
-                style: Theme.of(context).textTheme.body2,
+                style: Theme.of(context).textTheme.body1,
               ),
               new Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
@@ -168,10 +170,32 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
               ),
               new Text(
                 daily.next_customer_visit,
-                style: Theme.of(context).textTheme.body2,
+                style: Theme.of(context).textTheme.body1,
               ),
             ],
           ),
         ));
+  }
+
+  Future<bool> _onWillPop() {
+    print("_onWillPop");
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+                title: new Text('Are you sure?'),
+                content: new Text('Unsaved data will be lost.'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: new Text('Yes'),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
   }
 }
