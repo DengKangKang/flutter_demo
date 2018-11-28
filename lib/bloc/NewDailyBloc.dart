@@ -48,6 +48,14 @@ class NewDailyBloc extends CommonBloc {
   }
 
   void save() async {
+    if (_todayWorkContent.isEmpty &&
+        _todayVisitClient.isEmpty &&
+        _todaySolution.isEmpty &&
+        _tomorrowPlane.isEmpty &&
+        _tomorrowVisitClient.isEmpty) {
+      showTip("请至少输入一项！");
+      return;
+    }
     pageLoading();
     var rsp = await new ApiService().newDaily(
       _date.value,

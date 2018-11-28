@@ -49,22 +49,22 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
         },
       ),
       body: new RefreshIndicator(
-        child: StreamBuilder<List<Daily>>(
-          initialData: new List<Daily>(),
-          stream: bloc.dailies,
-          builder: (BuildContext context, AsyncSnapshot<List<Daily>> snapshot) {
-            return new ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
-              controller: _scrollController,
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, i) {
-                return _buildItem(i, snapshot.data);
-              },
-            );
-          },
-        ),
-        onRefresh: ()=> bloc.initData()
-      ),
+          child: StreamBuilder<List<Daily>>(
+            initialData: new List<Daily>(),
+            stream: bloc.dailies,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Daily>> snapshot) {
+              return new ListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
+                controller: _scrollController,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, i) {
+                  return _buildItem(i, snapshot.data);
+                },
+              );
+            },
+          ),
+          onRefresh: () => bloc.initData()),
     );
   }
 
@@ -89,13 +89,21 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
             children: <Widget>[
               new Text(
                 daily.daily_time,
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.title.merge(
+                      new TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
               ),
               new Container(
-                margin: EdgeInsets.only(top: 12.0),
+                margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
                 child: new Text(
                   "今日工作内容",
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subhead.merge(
+                        new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                 ),
               ),
               new Text(
@@ -103,10 +111,14 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
                 style: Theme.of(context).textTheme.body2,
               ),
               new Container(
-                margin: EdgeInsets.only(top: 12.0),
+                margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
                 child: new Text(
                   "今日拜访/跟进用户",
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subhead.merge(
+                        new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                 ),
               ),
               new Text(
@@ -114,10 +126,14 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
                 style: Theme.of(context).textTheme.body2,
               ),
               new Container(
-                margin: EdgeInsets.only(top: 12.0),
+                margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
                 child: new Text(
                   "今日所遇到的问题及解决方案",
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subhead.merge(
+                        new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                 ),
               ),
               new Text(
@@ -125,10 +141,14 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
                 style: Theme.of(context).textTheme.body2,
               ),
               new Container(
-                margin: EdgeInsets.only(top: 12.0),
+                margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
                 child: new Text(
                   "明日工作计划",
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subhead.merge(
+                        new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                 ),
               ),
               new Text(
@@ -136,10 +156,14 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
                 style: Theme.of(context).textTheme.body2,
               ),
               new Container(
-                margin: EdgeInsets.only(top: 12.0),
+                margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
                 child: new Text(
                   "明日拜访/跟进用户",
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subhead.merge(
+                        new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                 ),
               ),
               new Text(

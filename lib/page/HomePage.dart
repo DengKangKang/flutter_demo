@@ -118,7 +118,7 @@ class HomePageState extends State<StatefulWidget> {
                       ),
                     ),
                     new ListTile(
-                      leading: new Icon(Icons.note),
+                      leading: Image.asset("assets/images/rili.png"),
                       title: new Text("日报"),
                       onTap: () {
                         Navigator.push(

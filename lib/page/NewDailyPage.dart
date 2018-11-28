@@ -28,7 +28,7 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
         title: new Text("新增日报"),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(Icons.close),
+            icon: new Icon(Icons.check),
             onPressed: () {
               bloc.save();
             },
