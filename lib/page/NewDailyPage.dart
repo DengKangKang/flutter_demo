@@ -43,33 +43,56 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
             ),
             child: new ListView(
               children: <Widget>[
-                new ListTile(
-                  title: new Text("日期"),
-                  subtitle: StreamBuilder<String>(
-                    initialData: "",
-                    stream: bloc.date,
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      return new Text(snapshot.data);
+                new Container(
+                  padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      var date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(DateTime.now().year - 1),
+                        lastDate: DateTime.now(),
+                      );
+                      if (date != null) {
+                        bloc.date = new DateFormat('yyyy-MM-dd').format(date);
+                      }
                     },
+                    child: AbsorbPointer(
+                      child: StreamBuilder<String>(
+                        initialData: "",
+                        stream: bloc.date,
+                        builder: (
+                          BuildContext context,
+                          AsyncSnapshot<String> snapshot,
+                        ) {
+                          return new TextField(
+                            controller: new TextEditingController(
+                              text: snapshot.data,
+                            ),
+                            decoration: new InputDecoration(
+                              fillColor: Color(0xFFf6f6f9),
+                              filled: true,
+                              suffixIcon: new Icon(Icons.keyboard_arrow_down),
+                              border: UnderlineInputBorder(),
+                              labelStyle:
+                                  TextStyle(decorationColor: Colors.blue),
+                              labelText: "日期",
+                            ),
+                            keyboardType: TextInputType.multiline,
+                            maxLengthEnforced: true,
+                            maxLines: null,
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                  trailing: new Icon(Icons.keyboard_arrow_down),
-                  onTap: () async {
-                    var date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(DateTime.now().year - 1),
-                      lastDate: DateTime.now(),
-                    );
-                    if (date != null) {
-                      bloc.date = new DateFormat('yyyy-MM-dd').format(date);
-                    }
-                  },
                 ),
                 new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
                   child: new TextField(
                     decoration: new InputDecoration(
+                      fillColor: Theme.of(context).primaryColor,
+                      filled: true,
                       border: UnderlineInputBorder(),
                       labelStyle: TextStyle(decorationColor: Colors.blue),
                       labelText: "今日工作内容",
@@ -83,9 +106,11 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                   ),
                 ),
                 new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
                   child: new TextField(
                     decoration: new InputDecoration(
+                      fillColor: Theme.of(context).primaryColor,
+                      filled: true,
                       border: UnderlineInputBorder(),
                       labelStyle: TextStyle(decorationColor: Colors.blue),
                       labelText: "今日拜访/跟进客户",
@@ -99,9 +124,11 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                   ),
                 ),
                 new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
                   child: new TextField(
                     decoration: new InputDecoration(
+                      fillColor: Theme.of(context).primaryColor,
+                      filled: true,
                       border: UnderlineInputBorder(),
                       labelStyle: TextStyle(decorationColor: Colors.blue),
                       labelText: "今日所遇到的问题及解决方案",
@@ -115,9 +142,11 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                   ),
                 ),
                 new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
                   child: new TextField(
                     decoration: new InputDecoration(
+                      fillColor: Theme.of(context).primaryColor,
+                      filled: true,
                       border: UnderlineInputBorder(),
                       labelStyle: TextStyle(decorationColor: Colors.blue),
                       labelText: "明日工作计划",
@@ -131,9 +160,11 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                   ),
                 ),
                 new Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
                   child: new TextField(
                     decoration: new InputDecoration(
+                      fillColor: Theme.of(context).primaryColor,
+                      filled: true,
                       border: UnderlineInputBorder(),
                       labelStyle: TextStyle(decorationColor: Colors.blue),
                       labelText: "明日拜访/跟进用户",

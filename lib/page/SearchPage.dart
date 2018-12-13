@@ -153,7 +153,7 @@ class __ResultListState extends State<_ResultList> {
         bottom: index == _clients.length - 1 ? 12.0 : 0.0,
       ),
       child: new RawMaterialButton(
-        fillColor: Theme.of(context).primaryColor,
+        fillColor: Theme.of(context).splashColor,
         padding: new EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         shape: new RoundedRectangleBorder(
           borderRadius: new BorderRadius.all(new Radius.circular(4.0)),
