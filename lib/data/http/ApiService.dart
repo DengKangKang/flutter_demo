@@ -17,7 +17,7 @@ import 'package:http/http.dart';
 class ApiService {
   static final ApiService _singleton = new ApiService._internal();
 //  static final String _baseUrl = "http://192.168.1.192:3000/op/api";
-  static final String _baseUrl = "http://www.ideallinker.com/op";
+  static final String _baseUrl = "http://op.deallinker.com/op";
   static final int success = 0;
   static final int illicit = -1;
 
