@@ -12,3 +12,5 @@ packages
 app/Lightningkey
 app/src/main/java/io/
 gen/
+*.iml
+pubspec.lock
