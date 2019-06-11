@@ -12,26 +12,26 @@ import 'package:flutter_app/page/clientdetails/VisitLogPage.dart';
 import 'package:flutter_app/weight/DotsIndicator.dart';
 
 class ClientDetailPage extends StatefulWidget {
-  final Client _client;
-
   ClientDetailPage(this._client);
+
+  final Client _client;
 
   @override
   State<StatefulWidget> createState() {
-    return new ClientDetailPageState();
+    return ClientDetailPageState();
   }
 }
 
-class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetailBloc> {
-  final _controller = new PageController();
+class ClientDetailPageState
+    extends CommonPageState<ClientDetailPage, ClientDetailBloc> {
+  final _controller = PageController();
 
   List<Widget> _page;
-
 
   @override
   void initState() {
     if (bloc == null) {
-      bloc = new ClientDetailBloc(widget._client);
+      bloc = ClientDetailBloc(widget._client);
     }
     super.initState();
   }
@@ -39,29 +39,28 @@ class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetai
   @override
   Widget build(BuildContext context) {
     if (_page == null) {
-      _page = new List<Widget>();
-      _page.add(new ClientInfoPage());
-      _page.add(new ContactsPage());
-      _page.add(new ClientNeedPage());
-      _page.add(new VisitLogsPage());
-      _page.add(new ClientSupportPage());
-      _page.add(new OperationLogPage());
+      _page = List<Widget>();
+      _page.add(ClientInfoPage());
+      _page.add(ContactsPage());
+      _page.add(ClientNeedPage());
+      _page.add(VisitLogsPage());
+      _page.add(ClientSupportPage());
+      _page.add(OperationLogPage());
     }
 
     return BlocProvider<ClientDetailBloc>(
       bloc: bloc,
-      child: new Scaffold(
+      child: Scaffold(
         key: scaffoldKey,
-        appBar: new AppBar(
-          title: new Row(
+        appBar: AppBar(
+          title: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              new Text(
-                  widget._client == null ? "新建客户" : "ID：${widget._client.id}"),
-              new Offstage(
+              Text(widget._client == null ? "新建客户" : "ID：${widget._client.id}"),
+              Offstage(
                 offstage:
                     widget._client == null || widget._client.is_important != 1,
-                child: new Container(
+                child: Container(
                   margin: EdgeInsets.only(left: 8.0),
                   child: Icon(
                     Icons.star,
@@ -72,8 +71,8 @@ class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetai
             ],
           ),
           actions: <Widget>[
-            new IconButton(
-              icon: new Icon(
+            IconButton(
+              icon: Icon(
                 Icons.check,
                 color: Colors.black,
               ),
@@ -83,17 +82,16 @@ class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetai
             )
           ],
         ),
-        body: new Container(
+        body: Container(
           padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-          child: new Column(
+          child: Column(
             children: <Widget>[
-              new Expanded(
-                child: new Column(
+              Expanded(
+                child: Column(
                   children: <Widget>[
                     TextField(
-                      controller:
-                          new TextEditingController(text: bloc.clientName),
-                      decoration: new InputDecoration(
+                      controller: TextEditingController(text: bloc.clientName),
+                      decoration: InputDecoration(
                         hintText: "请输入客户名称",
                         border: InputBorder.none,
                       ),
@@ -102,21 +100,21 @@ class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetai
                         bloc.clientName = s;
                       },
                     ),
-                    new Expanded(
-                      child: new Container(
+                    Expanded(
+                      child: Container(
                         margin: EdgeInsets.symmetric(
                           vertical: 12.0,
                         ),
-                        child: new PageView.builder(
-                          physics: new BouncingScrollPhysics(),
+                        child: PageView.builder(
+                          physics: BouncingScrollPhysics(),
                           controller: _controller,
                           itemCount: _page.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return new Card(
+                            return Card(
                               elevation: 2.0,
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.all(
-                                    new Radius.circular(4.0)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0)),
                               ),
                               color: Theme.of(context).primaryColor,
                               child: _page[index],
@@ -125,7 +123,7 @@ class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetai
                         ),
                       ),
                     ),
-                    new DotsIndicator(
+                    DotsIndicator(
                       controller: _controller,
                       itemCount: _page.length,
                       onPageSelected: (int page) {
@@ -149,48 +147,48 @@ class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetai
 //  void _onNewOrSave(BuildContext context) async {
 //    if (bloc.clientName.isEmpty) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("请输入客户名称"),
+//        SnackBar(
+//          content: Text("请输入客户名称"),
 //        ),
 //      );
 //      return;
 //    }
 //    if (bloc.company.id == 0) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("请选择公司类型"),
+//        SnackBar(
+//          content: Text("请选择公司类型"),
 //        ),
 //      );
 //      return;
 //    }
 //    if (bloc.industry.id == 0) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("请选择所属行业"),
+//        SnackBar(
+//          content: Text("请选择所属行业"),
 //        ),
 //      );
 //      return;
 //    }
 //    if (bloc.source.id == 0) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("请选择来源类型"),
+//        SnackBar(
+//          content: Text("请选择来源类型"),
 //        ),
 //      );
 //      return;
 //    }
 //    if (bloc.location.id == 0) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("请选择所在地"),
+//        SnackBar(
+//          content: Text("请选择所在地"),
 //        ),
 //      );
 //      return;
 //    }
 //    if (bloc.invoiceCount.isEmpty) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("请输入年发票量"),
+//        SnackBar(
+//          content: Text("请输入年发票量"),
 //        ),
 //      );
 //      return;
@@ -199,24 +197,24 @@ class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetai
 //        bloc.email.isNotEmpty &&
 //        !EmailValidator.validate(bloc.email)) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("邮箱格式不正确"),
+//        SnackBar(
+//          content: Text("邮箱格式不正确"),
 //        ),
 //      );
 //      return;
 //    }
 //    if (bloc.contactWay == null || bloc.contactWay.isEmpty) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("请输入联系方式"),
+//        SnackBar(
+//          content: Text("请输入联系方式"),
 //        ),
 //      );
 //      return;
 //    }
 //    if (bloc.title == null || bloc.title.isEmpty) {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text("请输入职务"),
+//        SnackBar(
+//          content: Text("请输入职务"),
 //        ),
 //      );
 //      return;
@@ -247,8 +245,8 @@ class ClientDetailPageState extends CommonPageState<ClientDetailPage,ClientDetai
 //      Navigator.of(context).pop(true);
 //    } else {
 //      _key.currentState.showSnackBar(
-//        new SnackBar(
-//          content: new Text(rsp.msg),
+//        SnackBar(
+//          content: Text(rsp.msg),
 //        ),
 //      );
 //    }

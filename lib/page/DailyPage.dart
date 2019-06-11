@@ -10,17 +10,17 @@ class DailyPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new DailyPageState();
+    return DailyPageState();
   }
 }
 
 class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     if (bloc == null) {
-      bloc = new DailyBloc();
+      bloc = DailyBloc();
       bloc.initData();
     }
     _scrollController.addListener(() {
@@ -34,27 +34,27 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("日报"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("日报"),
       ),
-      floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: () async {
           var needRefresh = await Navigator.push(
-              context, new CommonRoute(builder: (c) => new NewDailyPage()));
+              context, CommonRoute(builder: (c) => NewDailyPage()));
           if (needRefresh == true) {
-            bloc.initData();
+            await bloc.initData();
           }
         },
       ),
-      body: new RefreshIndicator(
+      body: RefreshIndicator(
           child: StreamBuilder<List<Daily>>(
-            initialData: new List<Daily>(),
+            initialData: List<Daily>(),
             stream: bloc.dailies,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<Daily>> snapshot) {
-              return new ListView.builder(
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Daily>> snapshot) {
+              return ListView.builder(
                 physics: AlwaysScrollableScrollPhysics(),
                 controller: _scrollController,
                 itemCount: snapshot.data.length,
@@ -70,7 +70,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
 
   Widget _buildItem(int i, List<Daily> dailies) {
     var daily = dailies[i];
-    return new Card(
+    return Card(
         margin: EdgeInsets.only(
           left: 16.0,
           right: 16.0,
@@ -78,95 +78,95 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
           bottom: i == dailies.length - 1 ? 12.0 : 0.0,
         ),
         elevation: 2.0,
-        child: new Container(
+        child: Container(
           margin: EdgeInsets.symmetric(
             vertical: 12.0,
             horizontal: 16.0,
           ),
-          child: new Column(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new Text(
+              Text(
                 daily.daily_time,
                 style: Theme.of(context).textTheme.title.merge(
-                      new TextStyle(
+                      TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
               ),
-              new Container(
+              Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
-                child: new Text(
+                child: Text(
                   "今日工作内容",
                   style: Theme.of(context).textTheme.subhead.merge(
-                        new TextStyle(
+                        TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                 ),
               ),
-              new Text(
+              Text(
                 daily.today_content,
                 style: Theme.of(context).textTheme.body1,
               ),
-              new Container(
+              Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
-                child: new Text(
+                child: Text(
                   "今日拜访/跟进用户",
                   style: Theme.of(context).textTheme.subhead.merge(
-                        new TextStyle(
+                        TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                 ),
               ),
-              new Text(
+              Text(
                 daily.today_customer_visit,
                 style: Theme.of(context).textTheme.body1,
               ),
-              new Container(
+              Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
-                child: new Text(
+                child: Text(
                   "今日所遇到的问题及解决方案",
                   style: Theme.of(context).textTheme.subhead.merge(
-                        new TextStyle(
+                        TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                 ),
               ),
-              new Text(
+              Text(
                 daily.today_solution,
                 style: Theme.of(context).textTheme.body1,
               ),
-              new Container(
+              Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
-                child: new Text(
+                child: Text(
                   "明日工作计划",
                   style: Theme.of(context).textTheme.subhead.merge(
-                        new TextStyle(
+                        TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                 ),
               ),
-              new Text(
+              Text(
                 daily.next_plan,
                 style: Theme.of(context).textTheme.body1,
               ),
-              new Container(
+              Container(
                 margin: EdgeInsets.only(top: 12.0, bottom: 4.0),
-                child: new Text(
+                child: Text(
                   "明日拜访/跟进用户",
                   style: Theme.of(context).textTheme.subhead.merge(
-                        new TextStyle(
+                        TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                 ),
               ),
-              new Text(
+              Text(
                 daily.next_customer_visit,
                 style: Theme.of(context).textTheme.body1,
               ),
@@ -174,5 +174,4 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
           ),
         ));
   }
-
 }

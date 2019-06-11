@@ -12,7 +12,7 @@ class NewReleaseAccSupport extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new NewReleaseAccSupportState(_leadId);
+    return NewReleaseAccSupportState(_leadId);
   }
 }
 
@@ -20,7 +20,7 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
   NewReleaseAccSupportState(this._leadId);
 
   final int _leadId;
-  final _key = new GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
 
   String _account = "";
   String _email = "";
@@ -37,13 +37,13 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _key,
-      appBar: new AppBar(
-        title: new Text("新增正式账号"),
+      appBar: AppBar(
+        title: Text("新增正式账号"),
         actions: <Widget>[
-          new IconButton(
-            icon: new Icon(
+          IconButton(
+            icon: Icon(
               Icons.check,
               color: Colors.black,
             ),
@@ -54,30 +54,29 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
         ],
       ),
       body: Builder(
-        builder: (context) => new Column(
+        builder: (context) => Column(
               children: <Widget>[
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*用户名",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -86,15 +85,15 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _account,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入用户名",
                                 border: InputBorder.none,
                               ),
@@ -109,28 +108,27 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*注册邮箱",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -139,15 +137,15 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _email,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入注册邮箱",
                                 border: InputBorder.none,
                               ),
@@ -163,28 +161,27 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*初始密码",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -193,15 +190,15 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _password,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入初始密码",
                                 border: InputBorder.none,
                               ),
@@ -217,28 +214,27 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*功能模块",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -247,15 +243,15 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _function,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入功能模块",
                                 border: InputBorder.none,
                               ),
@@ -270,28 +266,27 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*开通票量",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -300,15 +295,15 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _invoiceCount,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入开通票量",
                                 border: InputBorder.none,
                               ),
@@ -327,28 +322,27 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "备注",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -357,15 +351,15 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _memo,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入备注",
                                 border: InputBorder.none,
                               ),
@@ -389,8 +383,8 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
   void _onAdd(BuildContext context) async {
     if (_account == null || _account.isEmpty) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请输入用户名"),
+        SnackBar(
+          content: Text("请输入用户名"),
         ),
       );
       return;
@@ -398,8 +392,8 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
 
     if (_email == null || _email.isEmpty) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请输入注册邮箱"),
+        SnackBar(
+          content: Text("请输入注册邮箱"),
         ),
       );
       return;
@@ -407,8 +401,8 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
 
     if (!EmailValidator.validate(_email)) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("邮箱格式不正确"),
+        SnackBar(
+          content: Text("邮箱格式不正确"),
         ),
       );
       return;
@@ -416,8 +410,8 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
 
     if (_password == null || _password.isEmpty) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请输入密码"),
+        SnackBar(
+          content: Text("请输入密码"),
         ),
       );
       return;
@@ -425,8 +419,8 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
 
     if (_function == null || _function.isEmpty) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请输入功能模块"),
+        SnackBar(
+          content: Text("请输入功能模块"),
         ),
       );
       return;
@@ -434,8 +428,8 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
 
     if (_invoiceCount == null || _invoiceCount.isEmpty) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请输入票量"),
+        SnackBar(
+          content: Text("请输入票量"),
         ),
       );
       return;
@@ -444,7 +438,7 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
     onLoading(context);
     var rsp = await ApiService().newSupport(
       _leadId.toString(),
-      SUPPORT_TYPE_RELEASE_ACCOUNT.toString(),
+      supportTypeReleaseAccount.toString(),
       account: _account,
       email: _email,
       password: _password,
@@ -457,8 +451,8 @@ class NewReleaseAccSupportState extends State<StatefulWidget> {
       Navigator.of(context).pop(true);
     } else {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text(rsp.msg),
+        SnackBar(
+          content: Text(rsp.msg),
         ),
       );
     }

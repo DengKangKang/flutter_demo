@@ -20,7 +20,7 @@ class ClientSupportPage extends StatefulWidget {
 }
 
 class ClientSupportPageState extends State {
-  List<ClientSupport> _clientSupports = new List();
+  List<ClientSupport> _clientSupports = List();
 
   ClientDetailBloc _bloc;
 
@@ -35,34 +35,34 @@ class ClientSupportPageState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Container(
+        Container(
           padding: EdgeInsets.only(top: 12.0, right: 16.0, left: 16.0),
-          child: new Text("申请支持"),
+          child: Text("申请支持"),
         ),
-        new Flexible(
-          child: new Stack(
+        Flexible(
+          child: Stack(
             children: <Widget>[
               _clientSupports.isNotEmpty
-                  ? new Container(
+                  ? Container(
                       margin: EdgeInsets.only(
                         top: 12.0,
                         bottom: 12.0,
                         right: 12.0,
                         left: 12.0,
                       ),
-                      child: new ListView.builder(
-                        physics: new BouncingScrollPhysics(),
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
                         itemCount: _clientSupports.length,
                         itemBuilder: (context, index) {
                           return _renderVisitLogItem(_clientSupports[index]);
                         },
                       ),
                     )
-                  : new Center(
-                      child: new Column(
+                  : Center(
+                      child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Image.asset("assets/images/ic_empty.png"),
@@ -76,15 +76,15 @@ class ClientSupportPageState extends State {
             ],
           ),
         ),
-        new Center(
-          child: new Container(
+        Center(
+          child: Container(
             padding: EdgeInsets.only(
               bottom: 12.0,
               right: 16.0,
               left: 16.0,
             ),
-            child: new InkWell(
-              child: new Text(
+            child: InkWell(
+              child: Text(
                 '新增申请支持',
                 style: Theme.of(context).textTheme.body1.merge(TextStyle(
                       color: _bloc.id != null ? Colors.blue : Colors.grey,
@@ -103,65 +103,61 @@ class ClientSupportPageState extends State {
   }
 
   void newSupport(BuildContext context) async {
-    var supportList = new List<RadioBean>();
-    supportList.add(RadioBean(SUPPORT_TYPE_PRE_SALES, "售前支持"));
+    var supportList = List<RadioBean>();
+    supportList.add(RadioBean(supportTypePreSales, "售前支持"));
     var hasHardWare = _clientSupports.firstWhere(
-        ((e) => e.application_type == SUPPORT_TYPE_HARDWARE),
+        ((e) => e.application_type == supportTypeHardware),
         orElse: () => null);
     if (hasHardWare == null) {
-      supportList.add(RadioBean(SUPPORT_TYPE_HARDWARE, "硬件设备"));
+      supportList.add(RadioBean(supportTypeHardware, "硬件设备"));
     }
     var hasDebugAccount = _clientSupports.firstWhere(
-        ((e) => e.application_type == SUPPORT_TYPE_DEBUG_ACCOUNT),
+        ((e) => e.application_type == supportTypeDebugAccount),
         orElse: () => null);
     if (hasDebugAccount == null) {
-      supportList.add(RadioBean(SUPPORT_TYPE_DEBUG_ACCOUNT, "测试账号"));
+      supportList.add(RadioBean(supportTypeDebugAccount, "测试账号"));
     }
     var hasReleaseAccount = _clientSupports.firstWhere(
-        ((e) => e.application_type == SUPPORT_TYPE_RELEASE_ACCOUNT),
+        ((e) => e.application_type == supportTypeReleaseAccount),
         orElse: () => null);
     if (hasReleaseAccount == null) {
-      supportList.add(RadioBean(SUPPORT_TYPE_RELEASE_ACCOUNT, "正式账号"));
+      supportList.add(RadioBean(supportTypeReleaseAccount, "正式账号"));
     }
 
     RadioBean result = await showDialog(
       context: context,
       builder: (context) {
-        return new RadioListPage(supportList);
+        return RadioListPage(supportList);
       },
     );
     bool needRefresh;
     switch (result?.id) {
-      case SUPPORT_TYPE_PRE_SALES:
+      case supportTypePreSales:
         needRefresh = await Navigator.push(
             context,
-            new CommonRoute(
-              builder: (BuildContext context) =>
-                  new NewPreSaleSupport(_bloc.id),
+            CommonRoute(
+              builder: (BuildContext context) => NewPreSaleSupport(_bloc.id),
             ));
         break;
-      case SUPPORT_TYPE_HARDWARE:
+      case supportTypeHardware:
         needRefresh = await Navigator.push(
             context,
-            new CommonRoute(
-              builder: (BuildContext context) =>
-                  new NewHardWareSupport(_bloc.id),
+            CommonRoute(
+              builder: (BuildContext context) => NewHardWareSupport(_bloc.id),
             ));
         break;
-      case SUPPORT_TYPE_DEBUG_ACCOUNT:
+      case supportTypeDebugAccount:
         needRefresh = await Navigator.push(
             context,
-            new CommonRoute(
-              builder: (BuildContext context) =>
-                  new NewDebugAccSupport(_bloc.id),
+            CommonRoute(
+              builder: (BuildContext context) => NewDebugAccSupport(_bloc.id),
             ));
         break;
-      case SUPPORT_TYPE_RELEASE_ACCOUNT:
+      case supportTypeReleaseAccount:
         needRefresh = await Navigator.push(
             context,
-            new CommonRoute(
-              builder: (BuildContext context) =>
-                  new NewReleaseAccSupport(_bloc.id),
+            CommonRoute(
+              builder: (BuildContext context) => NewReleaseAccSupport(_bloc.id),
             ));
         break;
     }
@@ -171,18 +167,18 @@ class ClientSupportPageState extends State {
   }
 
   Widget _renderVisitLogItem(ClientSupport clientSupport) {
-    final children = new List<Widget>();
+    final children = List<Widget>();
     switch (clientSupport.application_type) {
-      case SUPPORT_TYPE_PRE_SALES:
+      case supportTypePreSales:
         _initPreSalesContent(clientSupport, children);
         break;
-      case SUPPORT_TYPE_HARDWARE:
+      case supportTypeHardware:
         _initHardWareContent(clientSupport, children);
 
         break;
-      case SUPPORT_TYPE_DEBUG_ACCOUNT:
+      case supportTypeDebugAccount:
 
-      case SUPPORT_TYPE_RELEASE_ACCOUNT:
+      case supportTypeReleaseAccount:
         //正式 测试
         _initApplyAccountContent(clientSupport, children);
         break;
@@ -190,12 +186,12 @@ class ClientSupportPageState extends State {
 
     return Card(
       elevation: 2.0,
-      child: new Container(
+      child: Container(
         padding: EdgeInsets.symmetric(
           vertical: 12.0,
           horizontal: 16.0,
         ),
-        child: new Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: children,
         ),
@@ -206,17 +202,17 @@ class ClientSupportPageState extends State {
   void _initHardWareContent(
       ClientSupport clientSupport, List<Widget> children) {
     //硬件
-    children.add(new Row(
+    children.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        new Text(
+        Text(
           "硬件申请",
           style: Theme.of(context)
               .textTheme
               .body2
               .merge(TextStyle(color: Colors.blue)),
         ),
-        new Text(
+        Text(
           clientSupport.create_time,
           style: Theme.of(context)
               .textTheme
@@ -227,20 +223,20 @@ class ClientSupportPageState extends State {
     ));
 
     if (clientSupport.device_name != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 12.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Row(
+            Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                new Text(
+                Text(
                   '设备名称：',
                   style: Theme.of(context).textTheme.body1,
                 ),
-                new Text(
+                Text(
                   devices
                       .firstWhere((e) => e.id == clientSupport.device_name)
                       .name,
@@ -248,7 +244,7 @@ class ClientSupportPageState extends State {
                 ),
               ],
             ),
-            new Text(
+            Text(
               clientSupport.state.toInt() == 1 ? "申请中" : "已通过",
               style: TextStyle(
                   color: clientSupport.state.toInt() == 1
@@ -261,16 +257,16 @@ class ClientSupportPageState extends State {
     }
 
     if (clientSupport.is_purchase != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '购买/押金：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Text(
+            Text(
               usageModel
                   .firstWhere((e) => e.id == clientSupport.is_purchase)
                   .name,
@@ -282,16 +278,16 @@ class ClientSupportPageState extends State {
     }
 
     if (clientSupport.device_quantity != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '数量：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Text(
+            Text(
               clientSupport.device_quantity.toString(),
               style: Theme.of(context).textTheme.body1,
             ),
@@ -301,17 +297,17 @@ class ClientSupportPageState extends State {
     }
 
     if (clientSupport.price != null && clientSupport.price.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '价格：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 clientSupport.price,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -323,17 +319,17 @@ class ClientSupportPageState extends State {
     }
 
     if (clientSupport.memo != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '备注：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 clientSupport.memo,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -347,17 +343,17 @@ class ClientSupportPageState extends State {
 
   void _initPreSalesContent(
       ClientSupport clientSupport, List<Widget> children) {
-    children.add(new Row(
+    children.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        new Text(
+        Text(
           "售前支持",
           style: Theme.of(context)
               .textTheme
               .body2
               .merge(TextStyle(color: Colors.blue)),
         ),
-        new Text(
+        Text(
           clientSupport.create_time,
           style: Theme.of(context)
               .textTheme
@@ -369,19 +365,19 @@ class ClientSupportPageState extends State {
 
     //售前
     if (clientSupport.responsibility != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 12.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                new Text(
+                Text(
                   '对象职责：',
                   style: Theme.of(context).textTheme.body1,
                 ),
-                new Text(
+                Text(
                   responsibilities
                       .firstWhere((e) => e.id == clientSupport.responsibility)
                       .name,
@@ -389,7 +385,7 @@ class ClientSupportPageState extends State {
                 ),
               ],
             ),
-            new Text(
+            Text(
               clientSupport.state.toInt() == 1 ? "申请中" : "已通过",
               style: TextStyle(
                   color: clientSupport.state.toInt() == 1
@@ -403,16 +399,16 @@ class ClientSupportPageState extends State {
 
     if (clientSupport.visit_time != null &&
         clientSupport.visit_time.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '拜访时间：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Text(
+            Text(
               clientSupport.visit_time,
               style: Theme.of(context).textTheme.body1,
             ),
@@ -422,16 +418,16 @@ class ClientSupportPageState extends State {
     }
 
     if (clientSupport.visit_progress != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '项目进度：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Text(
+            Text(
               projectProgresses
                   .firstWhere((e) => e.id == clientSupport.visit_progress)
                   .name,
@@ -444,17 +440,17 @@ class ClientSupportPageState extends State {
 
     if (clientSupport.requirements != null &&
         clientSupport.requirements.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '功能需求：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 clientSupport.requirements,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -468,11 +464,11 @@ class ClientSupportPageState extends State {
 
   void _initApplyAccountContent(
       ClientSupport clientSupport, List<Widget> children) {
-    children.add(new Row(
+    children.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        new Text(
-          clientSupport.application_type == SUPPORT_TYPE_DEBUG_ACCOUNT
+        Text(
+          clientSupport.application_type == supportTypeDebugAccount
               ? "测试账号"
               : "正式账号",
           style: Theme.of(context)
@@ -480,7 +476,7 @@ class ClientSupportPageState extends State {
               .body2
               .merge(TextStyle(color: Colors.blue)),
         ),
-        new Text(
+        Text(
           clientSupport.create_time,
           style: Theme.of(context)
               .textTheme
@@ -493,21 +489,23 @@ class ClientSupportPageState extends State {
     //正式 测试
     if (clientSupport.fc_admin_name != null &&
         clientSupport.fc_admin_name.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 12.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Flexible(child:new Container(
+            Flexible(
+                child: Container(
               margin: EdgeInsets.only(right: 16.0),
-              child:  new Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  new Text(
+                  Text(
                     '用户名：',
                     style: Theme.of(context).textTheme.body1,
                   ),
-                  new Flexible(child: new Text(
+                  Flexible(
+                      child: Text(
                     clientSupport.fc_admin_name,
                     style: Theme.of(context).textTheme.body1,
                     overflow: TextOverflow.ellipsis,
@@ -515,7 +513,7 @@ class ClientSupportPageState extends State {
                 ],
               ),
             )),
-            new Text(
+            Text(
               clientSupport.state.toInt() == 1 ? "申请中" : "已通过",
               style: TextStyle(
                   color: clientSupport.state.toInt() == 1
@@ -527,17 +525,17 @@ class ClientSupportPageState extends State {
       ));
     }
     if (clientSupport.email != null && clientSupport.email.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '注册邮箱：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 clientSupport.email,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -549,17 +547,17 @@ class ClientSupportPageState extends State {
     }
     if (clientSupport.initial_password != null &&
         clientSupport.initial_password.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '初始密码：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 clientSupport.initial_password,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -572,16 +570,16 @@ class ClientSupportPageState extends State {
 
     if (clientSupport.time_limit != null &&
         clientSupport.time_limit.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '使用期限：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Text(
+            Text(
               clientSupport.time_limit,
               style: Theme.of(context).textTheme.body1,
             ),
@@ -591,16 +589,16 @@ class ClientSupportPageState extends State {
     }
 
     if (clientSupport.check_amount != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '开通票量：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Text(
+            Text(
               clientSupport.check_amount.toString(),
               style: Theme.of(context).textTheme.body1,
             ),
@@ -610,18 +608,18 @@ class ClientSupportPageState extends State {
     }
 
     if (clientSupport.memo != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '备注：',
               style: Theme.of(context).textTheme.body1,
               maxLines: null,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 clientSupport.memo,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,

@@ -12,7 +12,7 @@ class ClientInfoPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new ClientInfoPageState();
+    return ClientInfoPageState();
   }
 }
 
@@ -28,36 +28,36 @@ class ClientInfoPageState extends State<ClientInfoPage>
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
+    super.build(context);
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Container(
+        Container(
           padding: EdgeInsets.only(top: 12.0, right: 16.0, left: 16.0),
-          child: new Text("客户信息"),
+          child: Text("客户信息"),
         ),
-        new Flexible(
-          child: new Container(
+        Flexible(
+          child: Container(
             margin: EdgeInsets.only(
               top: 12.0,
               bottom: 12.0,
               right: 12.0,
               left: 12.0,
             ),
-            child: new ListView(
-              physics: new BouncingScrollPhysics(),
+            child: ListView(
+              physics: BouncingScrollPhysics(),
               children: <Widget>[
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var company = await showDialog(
@@ -74,16 +74,16 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                             right: 16.0,
                             top: 12.0,
                             bottom: 12.0,
                           ),
-                          child: new Text(
+                          child: Text(
                             "*公司类型",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -92,15 +92,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _bloc.company.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                      new TextStyle(
+                                      TextStyle(
                                         color: _bloc.company.id == 0
                                             ? Colors.grey
                                             : Colors.black,
@@ -110,26 +110,25 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var industry = await showDialog(
@@ -145,16 +144,16 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                             right: 16.0,
                             top: 12.0,
                             bottom: 12.0,
                           ),
-                          child: new Text(
+                          child: Text(
                             "*所属行业",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -163,15 +162,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _bloc.industry.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                      new TextStyle(
+                                      TextStyle(
                                         color: _bloc.industry.id == 0
                                             ? Colors.grey
                                             : Colors.black,
@@ -181,26 +180,25 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var industry = await showDialog(
@@ -216,16 +214,16 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                             right: 16.0,
                             top: 12.0,
                             bottom: 12.0,
                           ),
-                          child: new Text(
+                          child: Text(
                             "*来源类型",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -234,15 +232,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _bloc.source.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                      new TextStyle(
+                                      TextStyle(
                                         color: _bloc.source.id == 0
                                             ? Colors.grey
                                             : Colors.black,
@@ -252,26 +250,25 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var location = await showDialog(
@@ -287,13 +284,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "*所在地",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -302,15 +299,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _bloc.location.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
+                                    TextStyle(
                                         color: _bloc.location.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
@@ -318,35 +315,34 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*年发票量",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -355,15 +351,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _bloc.invoiceCount,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入企业年度发票量",
                                 border: InputBorder.none,
                               ),
@@ -382,19 +378,18 @@ class ClientInfoPageState extends State<ClientInfoPage>
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var secondaryDevelopment = await showDialog(
@@ -411,13 +406,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "是否为重点",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -426,15 +421,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _bloc.startTarget.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
+                                    TextStyle(
                                         color: _bloc.startTarget.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
@@ -442,26 +437,25 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var secondaryDevelopment = await showDialog(
@@ -478,13 +472,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "是否为二次开发",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -493,15 +487,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _bloc.secondaryDevelopment.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                      new TextStyle(
+                                      TextStyle(
                                         color:
                                             _bloc.secondaryDevelopment.id == 0
                                                 ? Colors.grey
@@ -512,26 +506,25 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var progress = await showDialog(
@@ -547,13 +540,13 @@ class ClientInfoPageState extends State<ClientInfoPage>
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "执行比例",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -562,15 +555,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _bloc.progress.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
+                                    TextStyle(
                                         color: _bloc.progress.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
@@ -578,35 +571,34 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "预计签约额",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -615,16 +607,16 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               keyboardType: TextInputType.number,
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _bloc.expectedContractAmount,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入预计签约额",
                                 border: InputBorder.none,
                               ),
@@ -639,19 +631,18 @@ class ClientInfoPageState extends State<ClientInfoPage>
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var date = await showDatePicker(
@@ -663,17 +654,17 @@ class ClientInfoPageState extends State<ClientInfoPage>
                       if (date != null) {
                         setState(() {
                           _bloc.expectedSignDate =
-                              new DateFormat('yyyy-MM-dd').format(date);
+                              DateFormat('yyyy-MM-dd').format(date);
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "预计签约日",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -682,52 +673,51 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _bloc.expectedSignDate.isEmpty
                                     ? "请选择预计签约日"
                                     : _bloc.expectedSignDate,
                                 style: Theme.of(context)
                                     .textTheme
                                     .body1
-                                    .merge(new TextStyle(color: Colors.grey)),
+                                    .merge(TextStyle(color: Colors.grey)),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 4.0,
                     left: 4.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "公司规模",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -736,15 +726,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _bloc.lnsize,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入公司规模",
                                 border: InputBorder.none,
                               ),
@@ -759,25 +749,24 @@ class ClientInfoPageState extends State<ClientInfoPage>
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                       top: 12.0, right: 4.0, left: 4.0, bottom: 4.0),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "公司简介",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -786,25 +775,25 @@ class ClientInfoPageState extends State<ClientInfoPage>
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               keyboardType: TextInputType.multiline,
                               maxLengthEnforced: true,
                               maxLines: null,
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _bloc.companyIntro,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入公司简介",
                                 border: InputBorder.none,
                               ),
                               style: Theme.of(context)
                                   .textTheme
                                   .body1
-                                  .merge(new TextStyle()),
+                                  .merge(TextStyle()),
                               onChanged: (s) {
                                 _bloc.companyIntro = s;
                               },

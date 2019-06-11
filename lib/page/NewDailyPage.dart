@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 class NewDailyPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new NewDailyPageState();
+    return NewDailyPageState();
   }
 }
 
@@ -14,7 +14,7 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
   @override
   void initState() {
     if (bloc == null) {
-      bloc = new NewDailyBloc();
+      bloc = NewDailyBloc();
       bloc.initData();
     }
     super.initState();
@@ -22,28 +22,28 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      child: new Scaffold(
+    return WillPopScope(
+      child: Scaffold(
         key: scaffoldKey,
-        appBar: new AppBar(
-          title: new Text("新增日报"),
+        appBar: AppBar(
+          title: Text("新增日报"),
           actions: <Widget>[
-            new IconButton(
-              icon: new Icon(Icons.check),
+            IconButton(
+              icon: Icon(Icons.check),
               onPressed: () {
                 bloc.save();
               },
             )
           ],
         ),
-        body: new Container(
-          child: new Theme(
+        body: Container(
+          child: Theme(
             data: Theme.of(context).copyWith(
               primaryColor: Colors.blue,
             ),
-            child: new ListView(
+            child: ListView(
               children: <Widget>[
-                new Container(
+                Container(
                   padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
                   child: GestureDetector(
                     onTap: () async {
@@ -54,7 +54,7 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                         lastDate: DateTime.now(),
                       );
                       if (date != null) {
-                        bloc.date = new DateFormat('yyyy-MM-dd').format(date);
+                        bloc.date = DateFormat('yyyy-MM-dd').format(date);
                       }
                     },
                     child: AbsorbPointer(
@@ -65,14 +65,14 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                           BuildContext context,
                           AsyncSnapshot<String> snapshot,
                         ) {
-                          return new TextField(
-                            controller: new TextEditingController(
+                          return TextField(
+                            controller: TextEditingController(
                               text: snapshot.data,
                             ),
-                            decoration: new InputDecoration(
+                            decoration: InputDecoration(
                               fillColor: Color(0xFFf6f6f9),
                               filled: true,
-                              suffixIcon: new Icon(Icons.keyboard_arrow_down),
+                              suffixIcon: Icon(Icons.keyboard_arrow_down),
                               border: UnderlineInputBorder(),
                               labelStyle:
                                   TextStyle(decorationColor: Colors.blue),
@@ -87,10 +87,10 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
-                  child: new TextField(
-                    decoration: new InputDecoration(
+                  child: TextField(
+                    decoration: InputDecoration(
                       fillColor: Theme.of(context).primaryColor,
                       filled: true,
                       border: UnderlineInputBorder(),
@@ -105,10 +105,10 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                     },
                   ),
                 ),
-                new Container(
+                Container(
                   padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
-                  child: new TextField(
-                    decoration: new InputDecoration(
+                  child: TextField(
+                    decoration: InputDecoration(
                       fillColor: Theme.of(context).primaryColor,
                       filled: true,
                       border: UnderlineInputBorder(),
@@ -123,10 +123,10 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                     },
                   ),
                 ),
-                new Container(
+                Container(
                   padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
-                  child: new TextField(
-                    decoration: new InputDecoration(
+                  child: TextField(
+                    decoration: InputDecoration(
                       fillColor: Theme.of(context).primaryColor,
                       filled: true,
                       border: UnderlineInputBorder(),
@@ -141,10 +141,10 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                     },
                   ),
                 ),
-                new Container(
+                Container(
                   padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
-                  child: new TextField(
-                    decoration: new InputDecoration(
+                  child: TextField(
+                    decoration: InputDecoration(
                       fillColor: Theme.of(context).primaryColor,
                       filled: true,
                       border: UnderlineInputBorder(),
@@ -159,10 +159,10 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                     },
                   ),
                 ),
-                new Container(
+                Container(
                   padding: EdgeInsets.only(right: 16.0, left: 16.0, top: 12.0),
-                  child: new TextField(
-                    decoration: new InputDecoration(
+                  child: TextField(
+                    decoration: InputDecoration(
                       fillColor: Theme.of(context).primaryColor,
                       filled: true,
                       border: UnderlineInputBorder(),
@@ -189,17 +189,17 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
   Future<bool> _onWillPop() {
     return showDialog(
           context: context,
-          builder: (context) => new AlertDialog(
-                title: new Text('Are you sure?'),
-                content: new Text('Unsaved data will be lost.'),
+          builder: (context) => AlertDialog(
+                title: Text('Are you sure?'),
+                content: Text('Unsaved data will be lost.'),
                 actions: <Widget>[
-                  new FlatButton(
+                  FlatButton(
                     onPressed: () => Navigator.of(context).pop(false),
-                    child: new Text('No'),
+                    child: Text('No'),
                   ),
-                  new FlatButton(
+                  FlatButton(
                     onPressed: () => Navigator.of(context).pop(true),
-                    child: new Text('Yes'),
+                    child: Text('Yes'),
                   ),
                 ],
               ),

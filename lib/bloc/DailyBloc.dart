@@ -6,13 +6,13 @@ import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DailyBloc extends CommonBloc {
-  BehaviorSubject<List<Daily>> _dailies = new BehaviorSubject();
+  BehaviorSubject<List<Daily>> _dailies = BehaviorSubject();
 
   int page = 1;
 
   @override
   Future<void> initData() async {
-    var rsp = await new ApiService().getDailies(1, 10);
+    var rsp = await ApiService().getDailies(1, 10);
     if (rsp.code == ApiService.success) {
       var dailiesRsp = rsp as DailiesRsp;
       _dailies.sink.add(dailiesRsp.data.list);
@@ -22,7 +22,7 @@ class DailyBloc extends CommonBloc {
   }
 
   void loadMore() async{
-    var rsp = await new ApiService().getDailies(page+1, 10);
+    var rsp = await ApiService().getDailies(page+1, 10);
     if (rsp.code == ApiService.success) {
       var dailiesRsp = rsp as DailiesRsp;
       if(dailiesRsp?.data?.list != null && dailiesRsp?.data?.list?.isNotEmpty == true){

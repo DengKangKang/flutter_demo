@@ -19,7 +19,7 @@ class VisitLogsPage extends StatefulWidget {
 }
 
 class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
-  List<VisitLog> _visitLogs = new List();
+  List<VisitLog> _visitLogs = List();
 
   ClientDetailBloc _bloc;
 
@@ -34,34 +34,35 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
+    super.build(context);
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Container(
+        Container(
           padding: EdgeInsets.only(top: 12.0, right: 16.0, left: 16.0),
-          child: new Text("拜访记录"),
+          child: Text("拜访记录"),
         ),
-        new Flexible(
-          child: new Stack(
+        Flexible(
+          child: Stack(
             children: <Widget>[
               _visitLogs.isNotEmpty
-                  ? new Container(
+                  ? Container(
                       margin: EdgeInsets.only(
                         top: 12.0,
                         bottom: 12.0,
                         right: 12.0,
                         left: 12.0,
                       ),
-                      child: new ListView.builder(
-                        physics: new BouncingScrollPhysics(),
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
                         itemCount: _visitLogs.length,
                         itemBuilder: (context, index) {
                           return _renderVisitLogItem(_visitLogs[index]);
                         },
                       ),
                     )
-                  : new Center(
-                      child: new Column(
+                  : Center(
+                      child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Image.asset("assets/images/ic_empty.png"),
@@ -75,15 +76,15 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
             ],
           ),
         ),
-        new Center(
-          child: new Container(
+        Center(
+          child: Container(
             padding: EdgeInsets.only(
               bottom: 12.0,
               right: 16.0,
               left: 16.0,
             ),
-            child: new InkWell(
-              child: new Text(
+            child: InkWell(
+              child: Text(
                 '新增拜访',
                 style: Theme.of(context).textTheme.body1.merge(TextStyle(
                       color: _bloc.id != null ? Colors.blue : Colors.grey,
@@ -105,31 +106,31 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
     RadioBean result = await showDialog(
       context: context,
       builder: (context) {
-        return new RadioListPage([
-          RadioBean(DAILY_VISIT, "日常拜访"),
-          RadioBean(BUSINESS_VISIT, "商务宴请"),
-          RadioBean(PRESENT_VISIT, "赠送礼品"),
+        return RadioListPage([
+          RadioBean(dailyVisit, "日常拜访"),
+          RadioBean(businessVisit, "商务宴请"),
+          RadioBean(presentVisit, "赠送礼品"),
         ]);
       },
     );
     switch (result?.id) {
-      case DAILY_VISIT:
+      case dailyVisit:
         var needRefresh = await Navigator.push(
             context,
-            new CommonRoute(
-              builder: (BuildContext context) => new NewPlainVisit(_bloc.id),
+            CommonRoute(
+              builder: (BuildContext context) => NewPlainVisit(_bloc.id),
             ));
         if (needRefresh == true) {
           _initData();
         }
         break;
-      case BUSINESS_VISIT:
-      case PRESENT_VISIT:
+      case businessVisit:
+      case presentVisit:
         var needRefresh = await Navigator.push(
             context,
-            new CommonRoute(
+            CommonRoute(
               builder: (BuildContext context) =>
-                  new NewSpecialVisit(_bloc.id, result.id),
+                  NewSpecialVisit(_bloc.id, result.id),
             ));
         if (needRefresh == true) {
           _initData();
@@ -139,18 +140,18 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
   }
 
   Widget _renderVisitLogItem(VisitLog visitLog) {
-    final children = new List<Widget>();
-    children.add(new Row(
+    final children = List<Widget>();
+    children.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        new Text(
+        Text(
           visitLog.user_realname,
           style: Theme.of(context)
               .textTheme
               .body1
               .merge(TextStyle(color: Colors.grey)),
         ),
-        new Text(
+        Text(
           visitLog.create_time,
           style: Theme.of(context)
               .textTheme
@@ -161,16 +162,16 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
     ));
     if (visitLog.sale_visit_time != null &&
         visitLog.sale_visit_time.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 12.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '拜访日期：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Text(
+            Text(
               visitLog.sale_visit_time,
               style: Theme.of(context).textTheme.body1,
             ),
@@ -179,16 +180,16 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
       ));
     }
     if (visitLog.sale_visit_form != null) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '拜访形式：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Text(
+            Text(
               visitWays
                   .firstWhere((e) => e.id == visitLog.sale_visit_form)
                   .name,
@@ -199,17 +200,17 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
       ));
     }
     if (visitLog.sale_feedback != null && visitLog.sale_feedback.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '客户反馈：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 visitLog.sale_feedback,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -221,17 +222,17 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
     }
 
     if (visitLog.sale_solution != null && visitLog.sale_solution.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '解决方案：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 visitLog.sale_solution,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -243,17 +244,17 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
     }
 
     if (visitLog.visitor != null && visitLog.visitor.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '拜访对象：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 visitLog.visitor,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -265,17 +266,17 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
     }
 
     if (visitLog.expense != null && visitLog.expense.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '拜访费用：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 visitLog.expense,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -287,17 +288,17 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
     }
 
     if (visitLog.visit_goal != null && visitLog.visit_goal.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 6.0),
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               '拜访目标：',
               style: Theme.of(context).textTheme.body1,
             ),
-            new Flexible(
-              child: new Text(
+            Flexible(
+              child: Text(
                 visitLog.visit_goal,
                 style: Theme.of(context).textTheme.body1,
                 overflow: TextOverflow.ellipsis,
@@ -310,12 +311,12 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
 
     return Card(
       elevation: 2.0,
-      child: new Container(
+      child: Container(
         padding: EdgeInsets.symmetric(
           vertical: 12.0,
           horizontal: 16.0,
         ),
-        child: new Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: children,
         ),

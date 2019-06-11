@@ -13,8 +13,7 @@ class OperationLogPage extends StatefulWidget {
 }
 
 class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
-
-  List<OperationLog> _operationLogs = new List();
+  List<OperationLog> _operationLogs = List();
 
   ClientDetailBloc _bloc;
 
@@ -29,23 +28,24 @@ class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
+    super.build(context);
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Container(
+        Container(
           padding: EdgeInsets.only(top: 12.0, right: 16.0, left: 16.0),
-          child: new Text("操作记录"),
+          child: Text("操作记录"),
         ),
-        new Flexible(
-          child: new Container(
+        Flexible(
+          child: Container(
             margin: EdgeInsets.only(
               top: 12.0,
               bottom: 12.0,
               right: 12.0,
               left: 12.0,
             ),
-            child: new ListView.builder(
-              physics: new BouncingScrollPhysics(),
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
               itemCount: _operationLogs.length,
               itemBuilder: (context, index) {
                 return _renderOperationLogItem(_operationLogs[index]);
@@ -58,18 +58,18 @@ class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
   }
 
   Widget _renderOperationLogItem(OperationLog operationLog) {
-    final children = new List<Widget>();
-    children.add(new Row(
+    final children = List<Widget>();
+    children.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        new Text(
+        Text(
           operationLog.user_realname,
           style: Theme.of(context)
               .textTheme
               .body1
               .merge(TextStyle(color: Colors.grey)),
         ),
-        new Text(
+        Text(
           operationLog.create_time,
           style: Theme.of(context)
               .textTheme
@@ -79,9 +79,9 @@ class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
       ],
     ));
     if (operationLog.system_log != null && operationLog.system_log.isNotEmpty) {
-      children.add(new Container(
+      children.add(Container(
         margin: EdgeInsets.only(top: 12.0),
-        child: new Text(
+        child: Text(
           operationLog.system_log,
           style: Theme.of(context).textTheme.body1,
         ),
@@ -90,12 +90,12 @@ class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
 
     return Card(
       elevation: 2.0,
-      child: new Container(
+      child: Container(
         padding: EdgeInsets.symmetric(
           vertical: 12.0,
           horizontal: 16.0,
         ),
-        child: new Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: children,
         ),
@@ -105,7 +105,7 @@ class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
 
   void _initData() {
     ApiService().operationLogs(_bloc.id.toString()).then(
-          (rsp) {
+      (rsp) {
         if (rsp.code == ApiService.success) {
           setState(() {
             var operationLogsRsp = rsp as OperationLogsRsp;
@@ -118,5 +118,4 @@ class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
-
 }

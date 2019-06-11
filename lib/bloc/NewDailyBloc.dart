@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NewDailyBloc extends CommonBloc {
-  BehaviorSubject<String> _date = new BehaviorSubject(
-    seedValue: new DateFormat('yyyy-MM-dd').format(
+  BehaviorSubject<String> _date = BehaviorSubject(
+    seedValue: DateFormat('yyyy-MM-dd').format(
       DateTime.now(),
     ),
   );
@@ -15,7 +15,7 @@ class NewDailyBloc extends CommonBloc {
   String _tomorrowPlane = "";
   String _tomorrowVisitClient = "";
 
-  get date => _date.stream;
+  dynamic get date => _date.stream;
 
   set date(String value) {
     _date.sink.add(value);
@@ -57,7 +57,7 @@ class NewDailyBloc extends CommonBloc {
       return;
     }
     pageLoading();
-    var rsp = await new ApiService().newDaily(
+    var rsp = await ApiService().newDaily(
       _date.value,
       _todayWorkContent,
       _todayVisitClient,

@@ -13,7 +13,7 @@ class NewHardWareSupport extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new NewHardWareSupportState(_leadId);
+    return NewHardWareSupportState(_leadId);
   }
 }
 
@@ -21,7 +21,7 @@ class NewHardWareSupportState extends State<StatefulWidget> {
   NewHardWareSupportState(this._leadId);
 
   final int _leadId;
-  final _key = new GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
 
   RadioBean _deviceName = devices[0];
   RadioBean _usageModel = usageModel[0];
@@ -37,13 +37,13 @@ class NewHardWareSupportState extends State<StatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _key,
-      appBar: new AppBar(
-        title: new Text("新增硬件申请"),
+      appBar: AppBar(
+        title: Text("新增硬件申请"),
         actions: <Widget>[
-          new IconButton(
-            icon: new Icon(
+          IconButton(
+            icon: Icon(
               Icons.check,
               color: Colors.black,
             ),
@@ -54,21 +54,20 @@ class NewHardWareSupportState extends State<StatefulWidget> {
         ],
       ),
       body: Builder(
-        builder: (context) => new Column(
+        builder: (context) => Column(
               children: <Widget>[
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var responsibilities = await showDialog(
@@ -84,13 +83,13 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "*设备名称",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -99,15 +98,15 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _deviceName.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
+                                    TextStyle(
                                         color: _deviceName.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
@@ -115,26 +114,25 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var responsibilities = await showDialog(
@@ -150,13 +148,13 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "*购买/押金",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -165,15 +163,15 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _usageModel.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
+                                    TextStyle(
                                         color: _usageModel.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
@@ -181,35 +179,34 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*数量",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -218,15 +215,15 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _count,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入数量",
                                 border: InputBorder.none,
                               ),
@@ -245,28 +242,27 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*价格",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -275,15 +271,15 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _price,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入价格",
                                 border: InputBorder.none,
                               ),
@@ -302,28 +298,27 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
-                      borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*备注",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -332,15 +327,15 @@ class NewHardWareSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _memo,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "请输入备注",
                                 border: InputBorder.none,
                               ),
@@ -364,8 +359,8 @@ class NewHardWareSupportState extends State<StatefulWidget> {
   void _onAdd(BuildContext context) async {
     if (_deviceName.id == 0) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请选择设备名称"),
+        SnackBar(
+          content: Text("请选择设备名称"),
         ),
       );
       return;
@@ -373,8 +368,8 @@ class NewHardWareSupportState extends State<StatefulWidget> {
 
     if (_usageModel == null || _usageModel.id == 0) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请选择购买/押金"),
+        SnackBar(
+          content: Text("请选择购买/押金"),
         ),
       );
       return;
@@ -382,8 +377,8 @@ class NewHardWareSupportState extends State<StatefulWidget> {
 
     if (_count == null || _count.isEmpty) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请输入数量"),
+        SnackBar(
+          content: Text("请输入数量"),
         ),
       );
       return;
@@ -392,8 +387,8 @@ class NewHardWareSupportState extends State<StatefulWidget> {
     var count = int.tryParse(_count);
     if (count == null || count < 0) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("数量只能为正整数"),
+        SnackBar(
+          content: Text("数量只能为正整数"),
         ),
       );
       return;
@@ -401,8 +396,8 @@ class NewHardWareSupportState extends State<StatefulWidget> {
 
     if (_price == null || _price.isEmpty) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请输入价格"),
+        SnackBar(
+          content: Text("请输入价格"),
         ),
       );
       return;
@@ -411,7 +406,7 @@ class NewHardWareSupportState extends State<StatefulWidget> {
     onLoading(context);
     var rsp = await ApiService().newSupport(
       _leadId.toString(),
-      SUPPORT_TYPE_HARDWARE.toString(),
+      supportTypeHardware.toString(),
       deviceName: _deviceName.id.toString(),
       usageModel: _usageModel.id.toString(),
       count: _count,
@@ -423,8 +418,8 @@ class NewHardWareSupportState extends State<StatefulWidget> {
       Navigator.of(context).pop(true);
     } else {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text(rsp.msg),
+        SnackBar(
+          content: Text(rsp.msg),
         ),
       );
     }

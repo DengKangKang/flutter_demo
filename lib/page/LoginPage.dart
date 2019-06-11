@@ -10,23 +10,22 @@ import 'package:flutter_app/weight/Tool.dart';
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new LoginPageState();
+    return LoginPageState();
   }
 }
 
 class LoginPageState extends State<StatefulWidget> {
-  var _usernameController = new TextEditingController();
-  var _passwordController = new TextEditingController();
+  var _usernameController = TextEditingController();
+  var _passwordController = TextEditingController();
 
   var usernameText = "";
   var passwordText = "";
 
   @override
   void initState() {
-    new Persistence().getUsername().then((username){
+    Persistence().getUsername().then((username) {
       _usernameController.text = username;
     });
-
 
     _passwordController.addListener(() {
       setState(() {
@@ -44,21 +43,21 @@ class LoginPageState extends State<StatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Login"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Login"),
       ),
       body: Builder(
-        builder: (context) => new Column(
+        builder: (context) => Column(
               children: <Widget>[
-                new Container(
-                  child: new Theme(
+                Container(
+                  child: Theme(
                     data: Theme.of(context).copyWith(
                       primaryColor: Colors.blue,
                     ),
-                    child: new TextField(
+                    child: TextField(
                       controller: _usernameController,
-                      decoration: new InputDecoration(
+                      decoration: InputDecoration(
                         suffixIcon: usernameText.isNotEmpty
                             ? IconButton(
                                 icon: Icon(
@@ -79,15 +78,15 @@ class LoginPageState extends State<StatefulWidget> {
                   margin:
                       EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 ),
-                new Container(
-                  child: new Theme(
+                Container(
+                  child: Theme(
                     data: Theme.of(context).copyWith(
                       primaryColor: Colors.blue,
                     ),
-                    child: new TextField(
+                    child: TextField(
                       obscureText: true,
                       controller: _passwordController,
-                      decoration: new InputDecoration(
+                      decoration: InputDecoration(
                         suffixIcon: passwordText.isNotEmpty
                             ? IconButton(
                                 icon: Icon(
@@ -110,7 +109,7 @@ class LoginPageState extends State<StatefulWidget> {
                     right: 16.0,
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.symmetric(
                     vertical: 24.0,
                     horizontal: 16.0,
@@ -119,14 +118,14 @@ class LoginPageState extends State<StatefulWidget> {
                   child: MaterialButton(
                     color: Theme.of(context).accentColor,
                     textColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       vertical: 12.0,
                       horizontal: 16.0,
                     ),
                     onPressed: () {
                       _login(context);
                     },
-                    child: new Text('Login'),
+                    child: Text('Login'),
                   ),
                 ),
               ],
@@ -139,8 +138,8 @@ class LoginPageState extends State<StatefulWidget> {
     if (_usernameController.text == null ||
         _usernameController.text.trim().isEmpty) {
       Scaffold.of(context).showSnackBar(
-        new SnackBar(
-          content: new Text("请输入用户名"),
+        SnackBar(
+          content: Text("请输入用户名"),
         ),
       );
       return;
@@ -148,8 +147,8 @@ class LoginPageState extends State<StatefulWidget> {
     if (_passwordController.text == null ||
         _passwordController.text.trim().isEmpty) {
       Scaffold.of(context).showSnackBar(
-        new SnackBar(
-          content: new Text("请输入密码"),
+        SnackBar(
+          content: Text("请输入密码"),
         ),
       );
       return;
@@ -161,28 +160,26 @@ class LoginPageState extends State<StatefulWidget> {
     );
     loadingFinish(context);
     if (rsp.code == ApiService.success) {
-      new Persistence().setUserAccount(_usernameController.text);
-      new Persistence().setUsername((rsp as LoginRsp).data.realname);
-      new Persistence().setToken((rsp as LoginRsp).data.auth).then((value) {
-        print(value);
-        if (value == true) {
-          Navigator.pushReplacement(
-              context,
-              new CommonRoute(
-                builder: (BuildContext context) => new HomePage(),
-              ));
-        } else {
-          Scaffold.of(context).showSnackBar(
-            new SnackBar(
-              content: new Text("登陆失败，请稍后再试"),
-            ),
-          );
-        }
-      });
+      await Persistence().setUserAccount(_usernameController.text);
+      await Persistence().setUsername((rsp as LoginRsp).data.realname);
+      bool result = await Persistence().setToken((rsp as LoginRsp).data.auth);
+      if (result == true) {
+        await Navigator.pushReplacement(
+            context,
+            CommonRoute(
+              builder: (BuildContext context) => HomePage(),
+            ));
+      } else {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text("登陆失败，请稍后再试"),
+          ),
+        );
+      }
     } else {
       Scaffold.of(context).showSnackBar(
-        new SnackBar(
-          content: new Text(rsp.msg),
+        SnackBar(
+          content: Text(rsp.msg),
         ),
       );
     }

@@ -3,34 +3,33 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
-abstract class Bloc {
-  void onClosed();
+class Bloc {
+  void onClosed() {}
 }
 
-abstract class DataInitializer {
-  Future<void> initData();
+class DataInitializer {
+  Future<void> initData() {
+    return null;
+  }
 }
 
-abstract class BlocNavigator {
-  void navigate();
+class BlocNavigator {
+  void navigate() {}
 
-  void finish();
+  void finish() {}
 }
 
-abstract class PageStateController {
-  void pageLoading();
+class PageStateController {
+  void pageLoading() {}
 
-  void pageCompleted();
+  void pageCompleted() {}
 }
 
-abstract class TipShow {
-  void showTip(String tip);
+class TipShow {
+  void showTip(String tip) {}
 }
 
 class BlocEvent {
-  int id;
-  dynamic obj;
-
   BlocEvent(this.id, this.obj);
 
   BlocEvent.tip(String tip) {
@@ -50,6 +49,9 @@ class BlocEvent {
   BlocEvent.pageCompleted() {
     id = BLOC_EVENT_PAGE_COMPLETED;
   }
+
+  int id;
+  dynamic obj;
 }
 
 class CommonBloc extends Bloc
@@ -101,13 +103,13 @@ class CommonBloc extends Bloc
 }
 
 class BlocProvider<T extends CommonBloc> extends InheritedWidget {
-  final T bloc;
-
   BlocProvider({
     Key key,
     @required this.bloc,
     @required Widget child,
   }) : super(key: key, child: child);
+
+  final T bloc;
 
   static T of<T extends CommonBloc>(BuildContext context) {
     final type = _typeOf<BlocProvider<T>>();

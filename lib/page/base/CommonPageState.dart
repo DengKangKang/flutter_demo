@@ -8,7 +8,7 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
     extends State<T> {
   K bloc;
 
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -19,8 +19,8 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
           case BLOC_EVENT_TIP:
             {
               scaffoldKey.currentState.showSnackBar(
-                new SnackBar(
-                  content: new Text(
+                SnackBar(
+                  content: Text(
                     event.obj,
                   ),
                 ),
@@ -30,7 +30,7 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
           case BLOC_EVENT_NAVIGATION_PUSH:
             {
               Navigator.of(context).push(
-                new CommonRoute(
+                CommonRoute(
                   builder: (BuildContext context) => event.obj,
                 ),
               );
@@ -39,7 +39,7 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
           case BLOC_EVENT_NAVIGATION_REPLACE:
             {
               Navigator.of(context).pushReplacement(
-                new CommonRoute(
+                CommonRoute(
                   builder: (BuildContext context) => event.obj,
                 ),
               );

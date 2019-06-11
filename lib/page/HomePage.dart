@@ -13,14 +13,14 @@ import 'package:flutter_app/page/SearchPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  createState() => new HomePageState();
+  State createState() => HomePageState();
 }
 
 class HomePageState extends State<StatefulWidget> {
   final MySearchDelegate _delegate = MySearchDelegate();
 
-  List<Client> _clients = new List();
-  ScrollController _scrollController = new ScrollController();
+  List<Client> _clients = List();
+  ScrollController _scrollController = ScrollController();
   int _page = 1;
 
   String _username = "";
@@ -28,10 +28,10 @@ class HomePageState extends State<StatefulWidget> {
 
   @override
   void initState() {
-    new Persistence().getUsername().then((username) {
+    Persistence().getUsername().then((username) {
       _username = username ?? '';
     });
-    new Persistence().getUserAccount().then((userAccount) {
+    Persistence().getUserAccount().then((userAccount) {
       _userAccount = userAccount ?? '';
     });
     _scrollController.addListener(() {
@@ -47,12 +47,12 @@ class HomePageState extends State<StatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("我的客户"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("我的客户"),
         actions: <Widget>[
-          new IconButton(
-              icon: new Icon(Icons.search),
+          IconButton(
+              icon: Icon(Icons.search),
               onPressed: () async {
                 var selected = await showSearch<Client>(
                   context: context,
@@ -61,94 +61,93 @@ class HomePageState extends State<StatefulWidget> {
                 if (selected != null) {
                   var needRefresh = await Navigator.push(
                       context,
-                      new CommonRoute(
+                      CommonRoute(
                         builder: (BuildContext context) =>
-                            new ClientDetailPage(selected),
+                            ClientDetailPage(selected),
                       ));
                   if (needRefresh == true) {
-                    _initData();
+                    await _initData();
                   }
                 }
               })
         ],
       ),
-      floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: () async {
           var needRefresh = await Navigator.push(
               context,
-              new CommonRoute(
-                builder: (BuildContext context) => new ClientDetailPage(null),
+              CommonRoute(
+                builder: (BuildContext context) => ClientDetailPage(null),
               ));
           if (needRefresh == true) {
-            _initData();
+            await _initData();
           }
         },
       ),
-      drawer: new Drawer(
-        child: new Container(
-          margin: new EdgeInsets.only(
+      drawer: Drawer(
+        child: Container(
+          margin: EdgeInsets.only(
             bottom: 12.0,
             top: 36.0,
           ),
-          child: new Column(
+          child: Column(
             children: <Widget>[
-              new Flexible(
-                child: new Column(
+              Flexible(
+                child: Column(
                   children: <Widget>[
-                    new Container(
+                    Container(
                       margin: EdgeInsets.only(
                           right: 16.0, left: 16.0, bottom: 24.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           Image.asset("assets/images/ic_head_big.png"),
-                          new Container(
+                          Container(
                             margin: EdgeInsets.symmetric(horizontal: 12.0),
-                            child: new Column(
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                new Text(_username),
-                                new Text(_userAccount),
+                                Text(_username),
+                                Text(_userAccount),
                               ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    new ListTile(
+                    ListTile(
                       leading: Image.asset("assets/images/rili.png"),
-                      title: new Text("日报"),
+                      title: Text("日报"),
                       onTap: () {
                         Navigator.push(
                             context,
-                            new CommonRoute(
-                              builder: (BuildContext context) =>
-                                  new DailyPage(),
+                            CommonRoute(
+                              builder: (BuildContext context) => DailyPage(),
                             ));
                       },
                     ),
                   ],
                 ),
               ),
-              new IconButton(
-                icon: new Icon(Icons.power_settings_new),
+              IconButton(
+                icon: Icon(Icons.power_settings_new),
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (context) => new AlertDialog(
-                          title: new Text("提示"),
-                          content: new Text("是否确认退出"),
+                    builder: (context) => AlertDialog(
+                          title: Text("提示"),
+                          content: Text("是否确认退出"),
                           actions: <Widget>[
-                            new FlatButton(
-                              child: new Text('取消'),
+                            FlatButton(
+                              child: Text('取消'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
-                            new FlatButton(
-                              child: new Text('确定'),
+                            FlatButton(
+                              child: Text('确定'),
                               onPressed: () {
                                 _onLogout(context);
                               },
@@ -168,18 +167,18 @@ class HomePageState extends State<StatefulWidget> {
 
   void _onLogout(BuildContext context) {
     Navigator.of(context).pop();
-    new Persistence().setToken("").then((value) {
+    Persistence().setToken("").then((value) {
       Navigator.pushReplacement(
           context,
-          new CommonRoute(
-            builder: (BuildContext context) => new LoginPage(),
+          CommonRoute(
+            builder: (BuildContext context) => LoginPage(),
           ));
     });
   }
 
   Widget _buildSuggestions() {
-    return new RefreshIndicator(
-      child: new ListView.builder(
+    return RefreshIndicator(
+      child: ListView.builder(
           physics: AlwaysScrollableScrollPhysics(),
           controller: _scrollController,
           itemCount: _clients.length,
@@ -192,12 +191,12 @@ class HomePageState extends State<StatefulWidget> {
 
   Widget _buildClient(int index) {
     var client = _clients[index];
-    var content = new List<Widget>();
+    var content = List<Widget>();
     content.add(
-      new Flexible(
-        child: new Text(
+      Flexible(
+        child: Text(
           client.leads_name,
-          style: new TextStyle(
+          style: TextStyle(
             color: Colors.black,
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
@@ -206,38 +205,38 @@ class HomePageState extends State<StatefulWidget> {
       ),
     );
     if (client.is_important == 1) {
-      content.add(new Container(
+      content.add(Container(
         margin: EdgeInsets.only(left: 16.0),
-        child: new Icon(
+        child: Icon(
           Icons.star,
           color: Colors.amber,
         ),
       ));
     }
-    return new Container(
-      margin: new EdgeInsets.only(
+    return Container(
+      margin: EdgeInsets.only(
         left: 16.0,
         right: 16.0,
         top: 12.0,
         bottom: index == _clients.length - 1 ? 12.0 : 0.0,
       ),
-      child: new RawMaterialButton(
+      child: RawMaterialButton(
         fillColor: Theme.of(context).primaryColor,
-        padding: new EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-        shape: new RoundedRectangleBorder(
-          borderRadius: new BorderRadius.all(new Radius.circular(4.0)),
+        padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
         onPressed: () async {
           var needRefresh = await Navigator.push(
               context,
-              new CommonRoute(
-                builder: (BuildContext context) => new ClientDetailPage(client),
+              CommonRoute(
+                builder: (BuildContext context) => ClientDetailPage(client),
               ));
           if (needRefresh == true) {
-            _initData();
+            await _initData();
           }
         },
-        child: new Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: content,
         ),

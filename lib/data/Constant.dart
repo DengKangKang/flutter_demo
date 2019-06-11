@@ -1,15 +1,11 @@
 
 
-const SUPPORT_TYPE_PRE_SALES = 1;
-const SUPPORT_TYPE_HARDWARE = 2;
-const SUPPORT_TYPE_DEBUG_ACCOUNT = 3;
-const SUPPORT_TYPE_RELEASE_ACCOUNT = 4;
+const supportTypePreSales = 1;
+const supportTypeHardware = 2;
+const supportTypeDebugAccount = 3;
+const supportTypeReleaseAccount = 4;
 
 
-const DAILY_VISIT = 6;
-const BUSINESS_VISIT = 7;
-const PRESENT_VISIT = 8;
-
-
-const apply_progress_applying= 1;
-const apply_progress_passed = 2;
+const dailyVisit = 6;
+const businessVisit = 7;
+const presentVisit = 8;

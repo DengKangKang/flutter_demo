@@ -3,78 +3,59 @@ import 'package:flutter_app/data/Constant.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 
 class RadioListPage<T extends RadioBean> extends StatefulWidget {
-  List<T> _radioValues;
-  RadioBean groupValue;
-
   RadioListPage(this._radioValues, {this.groupValue});
 
-  RadioListPage.location({this.groupValue}) {
-    this._radioValues = locations;
-  }
+  RadioListPage.location({this.groupValue}) : this._radioValues = locations;
 
-  RadioListPage.industry({this.groupValue}) {
-    this._radioValues = industries;
-  }
+  RadioListPage.industry({this.groupValue}) : this._radioValues = industries;
 
-  RadioListPage.sourceType({this.groupValue}) {
-    this._radioValues = sourceTypes;
-  }
+  RadioListPage.sourceType({this.groupValue}) : this._radioValues = sourceTypes;
 
-  RadioListPage.title({this.groupValue}) {
-    this._radioValues = titles;
-  }
+  RadioListPage.title({this.groupValue}) : this._radioValues = titles;
 
-  RadioListPage.companyType({this.groupValue}) {
-    this._radioValues = companyTypes;
-  }
+  RadioListPage.companyType({this.groupValue})
+      : this._radioValues = companyTypes;
 
-  RadioListPage.progress({this.groupValue}) {
-    this._radioValues = progresses;
-  }
+  RadioListPage.progress({this.groupValue}) : this._radioValues = progresses;
 
-  RadioListPage.visitWaysDaily({this.groupValue}) {
-    this._radioValues = visitWaysDaily;
-  }
+  RadioListPage.visitWaysDaily({this.groupValue})
+      : this._radioValues = visitWaysDaily;
 
-  RadioListPage.supportTypes({this.groupValue}) {
-    this._radioValues = supportTypes;
-  }
+  RadioListPage.supportTypes({this.groupValue})
+      : this._radioValues = supportTypes;
 
-  RadioListPage.projectProgresses({this.groupValue}) {
-    this._radioValues = projectProgresses;
-  }
+  RadioListPage.projectProgresses({this.groupValue})
+      : this._radioValues = projectProgresses;
 
-  RadioListPage.responsibilities({this.groupValue}) {
-    this._radioValues = responsibilities;
-  }
+  RadioListPage.responsibilities({this.groupValue})
+      : this._radioValues = responsibilities;
 
-  RadioListPage.usageModel({this.groupValue}) {
-    this._radioValues = usageModel;
-  }
+  RadioListPage.usageModel({this.groupValue}) : this._radioValues = usageModel;
 
-  RadioListPage.boolean({this.groupValue}) {
-    this._radioValues = booleans;
-  }
+  RadioListPage.boolean({this.groupValue}) : this._radioValues = booleans;
+
+  final List<T> _radioValues;
+  final RadioBean groupValue;
 
   @override
   State<StatefulWidget> createState() {
-    return new RadioListPageState(_radioValues, groupValue);
+    return RadioListPageState(_radioValues, groupValue);
   }
 }
 
 class RadioListPageState<T extends RadioBean> extends State<StatefulWidget> {
+  RadioListPageState(this._radioValues, this._groupValue);
+
   final List<T> _radioValues;
 
   final RadioBean _groupValue;
 
-  RadioListPageState(this._radioValues, this._groupValue);
-
   @override
   Widget build(BuildContext context) {
-    List<Widget> content = new List();
+    List<Widget> content = List();
     _radioValues.forEach((value) {
-      content.add(new RadioListTile(
-        title: new Text(value.name),
+      content.add(RadioListTile(
+        title: Text(value.name),
         value: value,
         groupValue: _groupValue,
         onChanged: (i) {
@@ -82,9 +63,9 @@ class RadioListPageState<T extends RadioBean> extends State<StatefulWidget> {
         },
       ));
     });
-    return new Dialog(
-      child: new ListView.builder(
-        physics: new BouncingScrollPhysics(),
+    return Dialog(
+      child: ListView.builder(
+        physics: BouncingScrollPhysics(),
         shrinkWrap: true,
         itemCount: content.length,
         itemBuilder: (context, i) {
@@ -94,8 +75,6 @@ class RadioListPageState<T extends RadioBean> extends State<StatefulWidget> {
     );
   }
 }
-
-
 
 final locations = [
   RadioBean(0, "请选择所在地"),
@@ -209,11 +188,11 @@ final visitWays = [
   RadioBean(4, "QQ"),
   RadioBean(5, "邮件"),
   RadioBean(6, "其他"),
-  RadioBean(BUSINESS_VISIT, "商务宴请"),
-  RadioBean(PRESENT_VISIT, "赠送礼品"),
+  RadioBean(businessVisit, "商务宴请"),
+  RadioBean(presentVisit, "赠送礼品"),
 ];
 
-final visitWaysDaily  = [
+final visitWaysDaily = [
   RadioBean(0, "请选择拜访方式"),
   RadioBean(1, "面谈"),
   RadioBean(2, "微信"),
@@ -253,12 +232,11 @@ final usageModel = [
   RadioBean(2, "押金"),
 ];
 
-
 final supportTypes = [
-  RadioBean(SUPPORT_TYPE_PRE_SALES, "售前支持"),
-  RadioBean(SUPPORT_TYPE_HARDWARE, "硬件设备"),
-  RadioBean(SUPPORT_TYPE_DEBUG_ACCOUNT, "测试账号"),
-  RadioBean(SUPPORT_TYPE_RELEASE_ACCOUNT, "正式账号"),
+  RadioBean(supportTypePreSales, "售前支持"),
+  RadioBean(supportTypeHardware, "硬件设备"),
+  RadioBean(supportTypeDebugAccount, "测试账号"),
+  RadioBean(supportTypeReleaseAccount, "正式账号"),
 ];
 
-final sourceTypes = new List<RadioBean>();
+final sourceTypes = List<RadioBean>();

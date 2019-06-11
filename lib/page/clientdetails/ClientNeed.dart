@@ -8,13 +8,14 @@ import 'package:flutter_app/data/http/rsp/data/ClientNeedListData.dart';
 import 'package:flutter_app/page/clientdetails/NewNeed.dart';
 
 class ClientNeedPage extends StatefulWidget {
+  @override
   State<StatefulWidget> createState() {
     return ClientNeedPageState();
   }
 }
 
 class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
-  List<Need> _clientNeeds = new List();
+  List<Need> _clientNeeds = List();
   ClientDetailBloc _bloc;
 
   @override
@@ -28,34 +29,34 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Container(
+        Container(
           padding: EdgeInsets.only(top: 12.0, right: 16.0, left: 16.0),
-          child: new Text("客户需求"),
+          child: Text("客户需求"),
         ),
-        new Flexible(
-          child: new Stack(
+        Flexible(
+          child: Stack(
             children: <Widget>[
               _clientNeeds.isNotEmpty
-                  ? new Container(
+                  ? Container(
                       margin: EdgeInsets.only(
                         top: 12.0,
                         bottom: 12.0,
                         right: 12.0,
                         left: 12.0,
                       ),
-                      child: new ListView.builder(
-                        physics: new BouncingScrollPhysics(),
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
                         itemCount: _clientNeeds.length,
                         itemBuilder: (context, index) {
                           return _renderClientNeedItem(_clientNeeds[index]);
                         },
                       ),
                     )
-                  : new Center(
-                      child: new Column(
+                  : Center(
+                      child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Image.asset("assets/images/ic_empty.png"),
@@ -69,15 +70,15 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
             ],
           ),
         ),
-        new Center(
-          child: new Container(
+        Center(
+          child: Container(
             padding: EdgeInsets.only(
               bottom: 12.0,
               right: 16.0,
               left: 16.0,
             ),
-            child: new InkWell(
-              child: new Text(
+            child: InkWell(
+              child: Text(
                 '新增需求',
                 style: Theme.of(context).textTheme.body1.merge(TextStyle(
                       color: _bloc.id != null ? Colors.blue : Colors.grey,
@@ -87,9 +88,9 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
                   ? () async {
                       var needRefresh = await Navigator.push(
                           context,
-                          new CommonRoute(
+                          CommonRoute(
                             builder: (BuildContext context) =>
-                                new NewNeed(_bloc.id),
+                                NewNeed(_bloc.id),
                           ));
                       if (needRefresh == true) {
                         _initData();
@@ -106,25 +107,25 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
   Widget _renderClientNeedItem(Need clientNeed) {
     return Card(
       elevation: 2.0,
-      child: new Container(
+      child: Container(
         padding: EdgeInsets.symmetric(
           vertical: 12.0,
           horizontal: 16.0,
         ),
-        child: new Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                new Text(
+                Text(
                   clientNeed.creator_realname,
                   style: Theme.of(context)
                       .textTheme
                       .body1
                       .merge(TextStyle(color: Colors.grey)),
                 ),
-                new Text(
+                Text(
                   clientNeed.create_time,
                   style: Theme.of(context)
                       .textTheme
@@ -133,9 +134,9 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
                 ),
               ],
             ),
-            new Container(
+            Container(
               margin: EdgeInsets.only(top: 12.0),
-              child: new Text(
+              child: Text(
                 clientNeed.requirement,
                 style: Theme.of(context).textTheme.body1,
               ),

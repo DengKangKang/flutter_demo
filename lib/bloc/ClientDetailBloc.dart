@@ -5,26 +5,7 @@ import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 
-class  ClientDetailBloc extends CommonBloc {
-  int _id;
-  String _clientName;
-  RadioBean _company;
-  RadioBean _industry;
-  RadioBean _source;
-  RadioBean _location;
-  String _invoiceCount;
-  RadioBean _startTarget;
-  RadioBean _secondaryDevelopment;
-  RadioBean _progress;
-  String _expectedContractAmount;
-  String _expectedSignDate;
-  String _lnsize;
-  String _companyIntro;
-  String _firstPartyRepresentatives;
-  String _contactWay;
-  String _email;
-  String _title;
-
+class ClientDetailBloc extends CommonBloc {
   ClientDetailBloc(Client client) {
     _id = client?.id;
     _clientName = client?.leads_name ?? "";
@@ -83,6 +64,25 @@ class  ClientDetailBloc extends CommonBloc {
     _title = client?.job_title ?? "";
   }
 
+  int _id;
+  String _clientName;
+  RadioBean _company;
+  RadioBean _industry;
+  RadioBean _source;
+  RadioBean _location;
+  String _invoiceCount;
+  RadioBean _startTarget;
+  RadioBean _secondaryDevelopment;
+  RadioBean _progress;
+  String _expectedContractAmount;
+  String _expectedSignDate;
+  String _lnsize;
+  String _companyIntro;
+  String _firstPartyRepresentatives;
+  String _contactWay;
+  String _email;
+  String _title;
+
   void save() async {
     if (_clientName.isEmpty) {
       showTip('请输入客户名称');
@@ -110,7 +110,9 @@ class  ClientDetailBloc extends CommonBloc {
       return;
     }
 
-    if (_email != null && _email.isNotEmpty && !EmailValidator.validate(_email)) {
+    if (_email != null &&
+        _email.isNotEmpty &&
+        !EmailValidator.validate(_email)) {
       showTip('邮箱格式不正确');
       return;
     }
@@ -151,8 +153,6 @@ class  ClientDetailBloc extends CommonBloc {
       showTip(rsp.msg);
     }
   }
-
-
 
   String get title => _title;
 

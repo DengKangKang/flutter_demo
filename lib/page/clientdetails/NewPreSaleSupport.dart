@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/data/Constant.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
-import 'package:flutter_app/data/http/rsp/BaseRsp.dart';
-import 'package:flutter_app/data/http/rsp/LoginRsp.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
-import 'package:flutter_app/page/HomePage.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/weight/Tool.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +13,7 @@ class NewPreSaleSupport extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new NewPreSaleSupportState(_leadId);
+    return NewPreSaleSupportState(_leadId);
   }
 }
 
@@ -26,7 +21,7 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
   NewPreSaleSupportState(this._leadId);
 
   final int _leadId;
-  final _key = new GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
 
   RadioBean _responsibility = responsibilities[0];
   RadioBean _projectProgress = projectProgresses[0];
@@ -41,13 +36,13 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _key,
-      appBar: new AppBar(
-        title: new Text("新增售前支持"),
+      appBar: AppBar(
+        title: Text("新增售前支持"),
         actions: <Widget>[
-          new IconButton(
-            icon: new Icon(
+          IconButton(
+            icon: Icon(
               Icons.check,
               color: Colors.black,
             ),
@@ -58,21 +53,21 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
         ],
       ),
       body: Builder(
-        builder: (context) => new Column(
+        builder: (context) => Column(
               children: <Widget>[
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
                       borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                          BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var responsibilities = await showDialog(
@@ -88,13 +83,13 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "*对象职责",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -103,15 +98,15 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _responsibility.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
+                                    TextStyle(
                                         color: _responsibility.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
@@ -119,26 +114,26 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
                       borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                          BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var date = await showDatePicker(
@@ -149,17 +144,17 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                       );
                       if (date != null) {
                         setState(() {
-                          _date = new DateFormat('yyyy-MM-dd').format(date);
+                          _date = DateFormat('yyyy-MM-dd').format(date);
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "*日期",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -168,41 +163,41 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _date.isEmpty ? "请选择日期" : _date,
                                 style: Theme.of(context)
                                     .textTheme
                                     .body1
-                                    .merge(new TextStyle(color: Colors.grey)),
+                                    .merge(TextStyle(color: Colors.grey)),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new RawMaterialButton(
+                  child: RawMaterialButton(
                     elevation: 2.0,
                     fillColor: Theme.of(context).backgroundColor,
-                    padding: new EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: new RoundedRectangleBorder(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
                       borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                          BorderRadius.all(Radius.circular(4.0)),
                     ),
                     onPressed: () async {
                       var visitWay = await showDialog(
@@ -218,13 +213,13 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                         });
                       }
                     },
-                    child: new Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Container(
+                        Container(
                           margin: EdgeInsets.only(
                               right: 16.0, top: 12.0, bottom: 12.0),
-                          child: new Text(
+                          child: Text(
                             "*项目进度",
                             style: Theme.of(context).textTheme.body1.merge(
                                   TextStyle(
@@ -233,15 +228,15 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                                 ),
                           ),
                         ),
-                        new Flexible(
-                            child: new Row(
+                        Flexible(
+                            child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Flexible(
-                              child: new Text(
+                            Flexible(
+                              child: Text(
                                 _projectProgress.name,
                                 style: Theme.of(context).textTheme.body1.merge(
-                                    new TextStyle(
+                                    TextStyle(
                                         color: _projectProgress.id == 0
                                             ? Colors.grey
                                             : Colors.black)),
@@ -249,35 +244,35 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                                 maxLines: 1,
                               ),
                             ),
-                            new Icon(Icons.arrow_drop_down)
+                            Icon(Icons.arrow_drop_down)
                           ],
                         )),
                       ],
                     ),
                   ),
                 ),
-                new Container(
+                Container(
                   margin: EdgeInsets.only(
                     top: 12.0,
                     right: 16.0,
                     left: 16.0,
                   ),
-                  child: new Card(
+                  child: Card(
                     elevation: 2.0,
                     color: Theme.of(context).backgroundColor,
                     margin: EdgeInsets.all(0.0),
-                    shape: new RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius:
-                          new BorderRadius.all(new Radius.circular(4.0)),
+                          BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    child: new Container(
+                    child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: new Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Container(
+                          Container(
                             margin: EdgeInsets.only(right: 16.0),
-                            child: new Text(
+                            child: Text(
                               "*功能需求",
                               style: Theme.of(context).textTheme.body1.merge(
                                     TextStyle(
@@ -286,15 +281,15 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
                                   ),
                             ),
                           ),
-                          new Flexible(
+                          Flexible(
                             child: TextField(
                               controller: TextEditingController.fromValue(
-                                new TextEditingValue(
+                                TextEditingValue(
                                   text: _need,
                                 ),
                               ),
                               textAlign: TextAlign.end,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "功能需求",
                                 border: InputBorder.none,
                               ),
@@ -318,8 +313,8 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
   void _onAdd(BuildContext context) async {
     if (_responsibility.id == 0) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请选择对象职责"),
+        SnackBar(
+          content: Text("请选择对象职责"),
         ),
       );
       return;
@@ -327,8 +322,8 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
 
     if (_date == null || _date.isEmpty) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请选择日期"),
+        SnackBar(
+          content: Text("请选择日期"),
         ),
       );
       return;
@@ -336,8 +331,8 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
 
     if (_projectProgress.id == 0) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请选择项目进度"),
+        SnackBar(
+          content: Text("请选择项目进度"),
         ),
       );
       return;
@@ -345,8 +340,8 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
 
     if (_need == null) {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("请输入功能需求"),
+        SnackBar(
+          content: Text("请输入功能需求"),
         ),
       );
       return;
@@ -355,7 +350,7 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
     onLoading(context);
     var rsp = await ApiService().newSupport(
       _leadId.toString(),
-      SUPPORT_TYPE_PRE_SALES.toString(),
+      supportTypePreSales.toString(),
       responsibility: _responsibility.id.toString(),
       date: _date,
       projectProgress: _projectProgress.id.toString(),
@@ -366,8 +361,8 @@ class NewPreSaleSupportState extends State<StatefulWidget> {
       Navigator.of(context).pop(true);
     } else {
       _key.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text(rsp.msg),
+        SnackBar(
+          content: Text(rsp.msg),
         ),
       );
     }
