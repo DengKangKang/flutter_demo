@@ -41,7 +41,51 @@ flutter:
     - assets/images/bg_splash.png
     - assets/images/ic_empty.png
     - assets/images/ic_head_big.png
+    - assets/images/ico_cjxx_kg_dis.png
+    - assets/images/ico_cjxx_kg_g.png
+    - assets/images/ico_cjxx_kg_k.png
+    - assets/images/ico_dh.png
+    - assets/images/ico_fh.png
+    - assets/images/ico_htxq_jt_s.png
+    - assets/images/ico_htxq_jt_x.png
+    - assets/images/ico_lb_ry.png
+    - assets/images/ico_lb_tj.png
+    - assets/images/ico_lb_tj_gray.png
+    - assets/images/ico_lb_tjkh.png
+    - assets/images/ico_me_jt.png
+    - assets/images/ico_me_mm.png
+    - assets/images/ico_me_tc.png
+    - assets/images/ico_me_tx.png
+    - assets/images/ico_rb_rq.png
+    - assets/images/ico_rb_tj.png
+    - assets/images/ico_ry.png
+    - assets/images/ico_rz.png
+    - assets/images/ico_rz_xz.png
+    - assets/images/ico_ss.png
+    - assets/images/ico_sx.png
+    - assets/images/ico_sx_jt_s.png
+    - assets/images/ico_sx_jt_x.png
+    - assets/images/ico_sy.png
+    - assets/images/ico_sy_kh.png
+    - assets/images/ico_sy_xs.png
+    - assets/images/ico_sy_xz.png
+    - assets/images/ico_tj.png
+    - assets/images/ico_tk_guanbi.png
+    - assets/images/ico_wd.png
+    - assets/images/ico_wd_xz.png
+    - assets/images/ico_xq_fz.png
+    - assets/images/ico_xq_sc.png
+    - assets/images/ico_xq_tj.png
+    - assets/images/ico_xq_xs_jrsh.png
+    - assets/images/ico_xq_yq.png
+    - assets/images/ico_xq_zd_xz.png
+    - assets/images/ico_xq_zwkh.png
+    - assets/images/ico_zd.png
+    - assets/images/ico_zd_checked.png
+    - assets/images/p_me.png
+    - assets/images/p_sy.png
     - assets/images/rili.png
+    - assets/images/ico_sy_k.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

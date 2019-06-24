@@ -5,17 +5,26 @@ import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/data/http/ApiService.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/data/persistence/Persistence.dart';
-import 'package:flutter_app/page/HomePage.dart';
 import 'package:flutter_app/page/LoginPage.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
+import 'package:flutter_app/page/main_page.dart';
+
+const colorOrigin = Color(0XFFEE7B1C);
+const colorCyan = Color(0XFF37C6C5);
+
+const colorBg = Color(0XFFF7F8FC);
+const colorDivider = Color(0XFFE6E6E6);
+
+const defaultElevation = 8.0;
 
 void main() {
   runApp(MaterialApp(
     theme: ThemeData(
-      hintColor: Colors.grey,
-      primaryColor: Color(0xFFf6f6f9),
-      accentColor: Colors.blue,
+      primaryColor: Colors.white,
+      scaffoldBackgroundColor: Colors.white,
       backgroundColor: Colors.white,
+      hintColor: Colors.grey,
+      dividerColor: colorDivider
     ),
     home: SplashScreen(),
   ));
@@ -38,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
       context,
       CommonRoute(
         builder: (BuildContext context) =>
-            token != null && token.isNotEmpty ? HomePage() : LoginPage(),
+            token != null && token.isNotEmpty ? MainPage() : LoginPage(),
       ),
     );
   }
