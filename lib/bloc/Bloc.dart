@@ -8,8 +8,7 @@ class Bloc {
 }
 
 class DataInitializer {
-  Future<void> initData() {
-    return null;
+  dynamic initData() {
   }
 }
 
@@ -61,7 +60,8 @@ class CommonBloc extends Bloc
   var _pageStateController = StreamController<BlocEvent>();
 
   @override
-  Future<void> initData() {}
+  dynamic initData() {
+  }
 
   @override
   void showTip(String tip) {

@@ -1,66 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/bloc/ClientDetailBloc.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/OperationLogsRsp.dart';
 import 'package:flutter_app/data/http/rsp/data/OperationLogsData.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../main.dart';
 
 class OperationLogPage extends StatefulWidget {
+  const OperationLogPage({Key key, this.id}) : super(key: key);
+
+  final id;
+
   @override
   State<StatefulWidget> createState() {
     return OperationLogPageState();
   }
 }
 
-class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
-  List<OperationLog> _operationLogs = [
-    OperationLog('11','1231','31231','32131',1),
-    OperationLog('11','1231','31231','32131',1),
-    OperationLog('11','1231','31231','32131',1),
-    OperationLog('11','1231','31231','32131',1),
-    OperationLog('11','1231','31231','32131',1),
-    OperationLog('11','1231','31231','32131',1),
-    OperationLog('11','1231','31231','32131',1),
-  ];
-
-  ClientDetailBloc _bloc;
+class OperationLogPageState extends State<OperationLogPage>
+    with AutomaticKeepAliveClientMixin {
+  var _operationLogs = BehaviorSubject<List<OperationLog>>(seedValue: []);
 
   @override
   void initState() {
-    if (_bloc == null) _bloc = BlocProvider.of(context);
-    if (_bloc.id != null) {
-      _initData();
-    }
+    _initData();
+
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return  Stack(
+    return Stack(
       children: <Widget>[
-        _operationLogs.isNotEmpty
-            ? ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemCount: _operationLogs.length,
-          itemBuilder: (context, index) {
-            return _renderOperationLogItem(_operationLogs[index]);
-          },
-        )
-            : Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Image.asset("assets/images/ic_empty.png"),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 12.0),
-                child: Text("暂无数据"),
-              )
-            ],
-          ),
+        StreamBuilder(
+          stream: _operationLogs,
+          builder: (c, s) => s.data?.isNotEmpty == true
+              ? ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: s.data.length,
+                  itemBuilder: (context, index) {
+                    return _renderOperationLogItem(s.data[index]);
+                  },
+                )
+              : Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Image.asset("assets/images/ic_empty.png"),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 12.0),
+                        child: Text("暂无数据"),
+                      )
+                    ],
+                  ),
+                ),
         ),
       ],
     );
@@ -112,13 +106,11 @@ class OperationLogPageState extends State with AutomaticKeepAliveClientMixin {
   }
 
   void _initData() {
-    ApiService().operationLogs(_bloc.id.toString()).then(
+    ApiService().operationLogs(widget.id.toString()).then(
       (rsp) {
         if (rsp.code == ApiService.success) {
-          setState(() {
-            var operationLogsRsp = rsp as OperationLogsRsp;
-            _operationLogs = operationLogsRsp.data.list;
-          });
+          var operationLogsRsp = rsp as OperationLogsRsp;
+          _operationLogs.value = operationLogsRsp.data.list;
         }
       },
     );

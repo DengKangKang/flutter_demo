@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
 import 'package:flutter_app/main.dart';
 import 'package:intl/intl.dart';
@@ -46,225 +46,236 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
             data: Theme.of(context).copyWith(
               primaryColor: Colors.blue,
             ),
-            child: ListView(
+            child: Column(
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Material(
-                    color: Colors.white,
-                    child: InkWell(
-                      onTap: () async {
-                        var date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(DateTime.now().year - 1),
-                          lastDate: DateTime.now(),
-                        );
-                        if (date != null) {
-                          bloc.date = DateFormat('yyyy-MM-dd').format(date);
-                        }
-                      },
-                      child: StreamBuilder<String>(
-                        initialData: "",
-                        stream: bloc.date,
-                        builder: (
-                          BuildContext context,
-                          AsyncSnapshot<String> snapshot,
-                        ) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 15,
-                              horizontal: 20,
+                Flexible(
+                  child: ListView(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Material(
+                          color: Colors.white,
+                          child: InkWell(
+                            onTap: () async {
+                              var date = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(DateTime.now().year + 10),
+                              );
+                              if (date != null) {
+                                bloc.date = DateFormat('yyyy-MM-dd').format(date);
+                              }
+                            },
+                            child: StreamBuilder<String>(
+                              initialData: "",
+                              stream: bloc.date,
+                              builder: (
+                                  BuildContext context,
+                                  AsyncSnapshot<String> snapshot,
+                                  ) {
+                                return Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 15,
+                                    horizontal: 20,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        '日期',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
+                                            snapshot.data,
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                          Icon(Icons.keyboard_arrow_right)
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        color: Colors.white,
+                        margin: EdgeInsets.only(top: 10),
+                        child: Column(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  '日期',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      snapshot.data,
-                                      style: TextStyle(fontSize: 15),
+                                Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    '今日工作内容',
+                                    style: TextStyle(
+                                      color: colorCyan,
                                     ),
-                                    Icon(Icons.keyboard_arrow_right)
-                                  ],
+                                  ),
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.red,
+                                    border: InputBorder.none,
+                                    hintText: "请输入今日工作内容",
+                                  ),
+                                  keyboardType: TextInputType.multiline,
+                                  maxLengthEnforced: true,
+                                  maxLines: null,
+                                  onChanged: (s) {
+                                    bloc.todayWorkContent = s;
+                                  },
+                                ),
+                                Divider(
+                                  height: 1,
                                 )
                               ],
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  color: Colors.white,
-                  margin: EdgeInsets.only(top: 10),
-                  child: Column(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Text(
-                              '今日工作内容',
-                              style: TextStyle(
-                                color: colorCyan,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    '今日拜访/跟进客户',
+                                    style: TextStyle(
+                                      color: colorCyan,
+                                    ),
+                                  ),
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none, hintText: '请输入相关内容'),
+                                  keyboardType: TextInputType.multiline,
+                                  maxLengthEnforced: true,
+                                  maxLines: null,
+                                  onChanged: (s) {
+                                    bloc.todayVisitClient = s;
+                                  },
+                                ),
+                                Divider(
+                                  height: 2,
+                                )
+                              ],
                             ),
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              fillColor: Colors.red,
-                              border: InputBorder.none,
-                              hintText: "请输入今日工作内容",
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    '今日所遇到的问题及解决方案',
+                                    style: TextStyle(
+                                      color: colorCyan,
+                                    ),
+                                  ),
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none, hintText: '请输入相关内容'),
+                                  keyboardType: TextInputType.multiline,
+                                  maxLengthEnforced: true,
+                                  maxLines: null,
+                                  onChanged: (s) {
+                                    bloc.todaySolution = s;
+                                  },
+                                ),
+                                Divider(
+                                  height: 2,
+                                )
+                              ],
                             ),
-                            keyboardType: TextInputType.multiline,
-                            maxLengthEnforced: true,
-                            maxLines: null,
-                            onChanged: (s) {
-                              bloc.todayWorkContent = s;
-                            },
-                          ),
-                          Divider(
-                            height: 1,
-                          )
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Text(
-                              '今日拜访/跟进客户',
-                              style: TextStyle(
-                                color: colorCyan,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    '明日工作计划',
+                                    style: TextStyle(
+                                      color: colorCyan,
+                                    ),
+                                  ),
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    fillColor: Theme.of(context).primaryColor,
+                                    border: InputBorder.none,
+                                    hintText: "请输入明日工作计划",
+                                  ),
+                                  keyboardType: TextInputType.multiline,
+                                  maxLengthEnforced: true,
+                                  maxLines: null,
+                                  onChanged: (s) {
+                                    bloc.tomorrowPlane = s;
+                                  },
+                                ),
+                                Divider(
+                                  height: 2,
+                                )
+                              ],
                             ),
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none, hintText: '请输入相关内容'),
-                            keyboardType: TextInputType.multiline,
-                            maxLengthEnforced: true,
-                            maxLines: null,
-                            onChanged: (s) {
-                              bloc.todayVisitClient = s;
-                            },
-                          ),
-                          Divider(
-                            height: 2,
-                          )
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Text(
-                              '今日所遇到的问题及解决方案',
-                              style: TextStyle(
-                                color: colorCyan,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    '明日拜访/跟进用户',
+                                    style: TextStyle(
+                                      color: colorCyan,
+                                    ),
+                                  ),
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "请输入相关内容",
+                                  ),
+                                  keyboardType: TextInputType.multiline,
+                                  maxLengthEnforced: true,
+                                  maxLines: null,
+                                  onChanged: (s) {
+                                    bloc.tomorrowVisitClient = s;
+                                  },
+                                ),
+                              ],
                             ),
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none, hintText: '请输入相关内容'),
-                            keyboardType: TextInputType.multiline,
-                            maxLengthEnforced: true,
-                            maxLines: null,
-                            onChanged: (s) {
-                              bloc.todaySolution = s;
-                            },
-                          ),
-                          Divider(
-                            height: 2,
-                          )
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Text(
-                              '明日工作计划',
-                              style: TextStyle(
-                                color: colorCyan,
-                              ),
-                            ),
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              fillColor: Theme.of(context).primaryColor,
-                              border: InputBorder.none,
-                              hintText: "请输入明日工作计划",
-                            ),
-                            keyboardType: TextInputType.multiline,
-                            maxLengthEnforced: true,
-                            maxLines: null,
-                            onChanged: (s) {
-                              bloc.tomorrowPlane = s;
-                            },
-                          ),
-                          Divider(
-                            height: 2,
-                          )
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Text(
-                              '明日拜访/跟进用户',
-                              style: TextStyle(
-                                color: colorCyan,
-                              ),
-                            ),
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "请输入相关内容",
-                            ),
-                            keyboardType: TextInputType.multiline,
-                            maxLengthEnforced: true,
-                            maxLines: null,
-                            onChanged: (s) {
-                              bloc.tomorrowVisitClient = s;
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: Material(
-          elevation: defaultElevation,
-          child: Container(
-            height: 60,
-            child: Center(
-              child: Text(
-                '提交',
-                style: TextStyle(
-                  fontSize: 17,
-                  color: colorOrigin,
+                Material(
+                  elevation: defaultElevation,
+                  child:InkWell(
+                    child:  Container(
+                      height: 60,
+                      child: Center(
+                        child: Text(
+                          '提交',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: colorOrigin,
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: (){
+                      bloc.save();
+                    },
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),

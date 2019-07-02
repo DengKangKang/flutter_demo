@@ -2,15 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/CommonRoute.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/data/persistence/Persistence.dart';
-import 'package:flutter_app/page/LoginPage.dart';
+import 'package:flutter_app/page/login_page.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/page/main_page.dart';
+import 'package:flutter_app/page/main_page.dart' as prefix0;
 
 const colorOrigin = Color(0XFFEE7B1C);
 const colorCyan = Color(0XFF37C6C5);
+const colorBlue = Color(0XFF3389FF);
+const colorBlueLight = Color(0X333389FF);
+const colorGrey = Color(0XFFF5F5F5);
+const colorOriginLight = Color(0X33EE7B1C);
 
 const colorBg = Color(0XFFF7F8FC);
 const colorDivider = Color(0XFFE6E6E6);
@@ -20,13 +25,16 @@ const defaultElevation = 8.0;
 void main() {
   runApp(MaterialApp(
     theme: ThemeData(
-      primaryColor: Colors.white,
-      scaffoldBackgroundColor: Colors.white,
-      backgroundColor: Colors.white,
-      hintColor: Colors.grey,
-      dividerColor: colorDivider
-    ),
+        primaryColor: Colors.white,
+        scaffoldBackgroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        hintColor: Colors.grey,
+        dividerColor: colorDivider),
     home: SplashScreen(),
+    routes: <String, WidgetBuilder>{
+      '/main': (BuildContext context) => MainPage(),
+      '/login': (BuildContext context) => LoginPage(),
+    },
   ));
 }
 
@@ -43,27 +51,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigationPage() async {
     String token = await Persistence().getToken();
-    await Navigator.pushReplacement(
+    await Navigator.pushReplacementNamed(
       context,
-      CommonRoute(
-        builder: (BuildContext context) =>
-            token != null && token.isNotEmpty ? MainPage() : LoginPage(),
-      ),
+      token != null && token.isNotEmpty ? '/main' : '/login',
     );
   }
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     final time = DateTime.now().millisecond;
-    var rsp = await ApiService().sourceTypes();
-    if (rsp.code == ApiService.success) {
-      var sourceTypesRsp = rsp;
-      sourceTypes.add(RadioBean(0, "请选择来源类型"));
-      sourceTypes.addAll(sourceTypesRsp.data);
-      var duration = 2000 - time;
-      _goMainDelay(duration > 0 ? duration : 0);
-    }
+    ApiService().sourceTypes().then(
+      (rsp) {
+        if (rsp.code == ApiService.success) {
+          var sourceTypesRsp = rsp;
+          sourceTypes.addAll(sourceTypesRsp.data);
+        }
+        var duration = 2000 - time;
+        _goMainDelay(duration > 0 ? duration : 0);
+      },
+    );
   }
 
   @override

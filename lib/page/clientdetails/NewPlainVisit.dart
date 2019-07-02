@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/weight/Tool.dart';
@@ -331,22 +331,22 @@ class NewPlainVisitState extends State<StatefulWidget> {
     }
 
     onLoading(context);
-    var rsp = await ApiService().newVisitLog(
-      _leadId.toString(),
-      _visitWay.id.toString(),
-      date: _date,
-      clientRsp: _clientRsp,
-      solution: _solution,
-    );
-    loadingFinish(context);
-    if (rsp.code == ApiService.success) {
-      Navigator.of(context).pop(true);
-    } else {
-      _key.currentState.showSnackBar(
-        SnackBar(
-          content: Text(rsp.msg),
-        ),
-      );
-    }
+//    var rsp = await ApiService().newVisitLog(
+//      _leadId.toString(),
+//      _visitWay.id.toString(),
+//      date: _date,
+//      clientRsp: _clientRsp,
+//      solution: _solution,
+//    );
+//    loadingFinish(context);
+//    if (rsp.code == ApiService.success) {
+//      Navigator.of(context).pop(true);
+//    } else {
+//      _key.currentState.showSnackBar(
+//        SnackBar(
+//          content: Text(rsp.msg),
+//        ),
+//      );
+//    }
   }
 }

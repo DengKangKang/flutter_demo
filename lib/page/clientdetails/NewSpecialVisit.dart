@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/data/Constant.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/weight/Tool.dart';
 import 'package:intl/intl.dart';
 
@@ -326,23 +326,23 @@ class NewSpecialVisitState extends State<StatefulWidget> {
     }
 
     onLoading(context);
-    var rsp = await ApiService().newVisitLog(
-      _leadId.toString(),
-      _visitWay.toString(),
-      date: _date,
-      visitTargetPeople: _visitTargetPerson,
-      cost: _cost,
-      visitTarget: _target,
-    );
-    loadingFinish(context);
-    if (rsp.code == ApiService.success) {
-      Navigator.of(context).pop(true);
-    } else {
-      _key.currentState.showSnackBar(
-        SnackBar(
-          content: Text(rsp.msg),
-        ),
-      );
-    }
+//    var rsp = await ApiService().newVisitLog(
+//      _leadId.toString(),
+//      _visitWay.toString(),
+//      date: _date,
+//      visitTargetPeople: _visitTargetPerson,
+//      cost: _cost,
+//      visitTarget: _target,
+//    );
+//    loadingFinish(context);
+//    if (rsp.code == ApiService.success) {
+//      Navigator.of(context).pop(true);
+//    } else {
+//      _key.currentState.showSnackBar(
+//        SnackBar(
+//          content: Text(rsp.msg),
+//        ),
+//      );
+//    }
   }
 }

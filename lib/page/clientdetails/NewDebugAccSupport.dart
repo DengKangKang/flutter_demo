@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/data/Constant.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/weight/Tool.dart';
 import 'package:intl/intl.dart';
 import 'package:email_validator/email_validator.dart';
@@ -372,7 +372,7 @@ class NewDebugAccSupportState extends State<StatefulWidget> {
                               ),
                               textAlign: TextAlign.end,
                               decoration: InputDecoration(
-                                hintText: "请输入备注",
+                                hintText: "请输入备注内容",
                                 border: InputBorder.none,
                               ),
                               style: Theme.of(context).textTheme.body1,

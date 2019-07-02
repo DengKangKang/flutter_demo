@@ -1,40 +1,35 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/bloc/ClientDetailBloc.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/ClientNeedListRsp.dart';
 import 'package:flutter_app/data/http/rsp/data/ClientNeedListData.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/page/clientdetails/NewNeed.dart';
 import 'package:flutter_app/page/clientdetails/create_demand.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ClientNeedPage extends StatefulWidget {
+  const ClientNeedPage({Key key, this.id}) : super(key: key);
+
+  final id;
+
   @override
   State<StatefulWidget> createState() {
     return ClientNeedPageState();
   }
 }
 
-class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
-  List<Need> _clientNeeds = [
-    Need(1, 'xxxx-xx-xx', 1, 'sb', '231231231232131321'),
-    Need(1, 'xxxx-xx-xx', 1, 'sb', '231231231232131321'),
-    Need(1, 'xxxx-xx-xx', 1, 'sb', '231231231232131321'),
-    Need(1, 'xxxx-xx-xx', 1, 'sb', '231231231232131321'),
-    Need(1, 'xxxx-xx-xx', 1, 'sb', '231231231232131321'),
-    Need(1, 'xxxx-xx-xx', 1, 'sb', '231231231232131321'),
-    Need(1, 'xxxx-xx-xx', 1, 'sb', '231231231232131321'),
-    Need(1, 'xxxx-xx-xx', 1, 'sb', '231231231232131321'),
-  ];
-  ClientDetailBloc _bloc;
+class ClientNeedPageState extends State<ClientNeedPage>
+    with AutomaticKeepAliveClientMixin {
+  var _clientNeeds = BehaviorSubject<List<Need>>(seedValue:[]);
 
   @override
   void initState() {
-    if (_bloc == null) _bloc = BlocProvider.of(context);
-    if (_bloc.id != null) {
-      _initData();
-    }
+    _initData();
     super.initState();
   }
 
@@ -71,11 +66,18 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
                         ),
                       ],
                     )),
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  bool needRefresh = await Navigator.push(
                     context,
-                    CommonRoute(builder: (c) => CreateDemandPage()),
+                    CommonRoute(
+                      builder: (c) => CreateDemandPage(
+                            id: widget.id,
+                          ),
+                    ),
                   );
+                  if (needRefresh) {
+                    _initData();
+                  }
                 },
               ),
             ],
@@ -84,26 +86,29 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
         Flexible(
           child: Stack(
             children: <Widget>[
-              _clientNeeds.isNotEmpty
-                  ? ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: _clientNeeds.length,
-                      itemBuilder: (context, index) {
-                        return _renderClientNeedItem(_clientNeeds[index]);
-                      },
-                    )
-                  : Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Image.asset("assets/images/ic_empty.png"),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 12.0),
-                            child: Text("暂无数据"),
-                          )
-                        ],
+              StreamBuilder(
+                stream: _clientNeeds,
+                builder: (c, s) => s.data?.isNotEmpty == true
+                    ? ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: s.data.length,
+                        itemBuilder: (context, index) {
+                          return _renderClientNeedItem(s.data[index]);
+                        },
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Image.asset("assets/images/ic_empty.png"),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 12.0),
+                              child: Text("暂无数据"),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
+              )
             ],
           ),
         ),
@@ -146,7 +151,7 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
             ),
           ),
           Opacity(
-            opacity: _clientNeeds.last == clientNeed ? 0 : 1,
+            opacity: _clientNeeds.value.last == clientNeed ? 0 : 1,
             child: Divider(
               height: 1,
               color: Colors.grey,
@@ -158,13 +163,11 @@ class ClientNeedPageState extends State with AutomaticKeepAliveClientMixin {
   }
 
   void _initData() {
-    ApiService().clientNeedList(_bloc.id.toString()).then(
+    ApiService().clientNeedList(widget.id.toString()).then(
       (rsp) {
         if (rsp.code == ApiService.success) {
           var clientNeedListRsp = rsp as ClientNeedListRsp;
-          setState(() {
-            _clientNeeds = clientNeedListRsp.data.list;
-          });
+          _clientNeeds.add(clientNeedListRsp.data.list);
         }
       },
     );

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/bloc/ClientDetailBloc.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_app/data/http/api_service.dart';
+import 'package:flutter_app/data/http/rsp/data/clients_data.dart';
+
+import '../RadioListPage.dart';
 
 class ClientInfoPage extends StatefulWidget {
   ClientInfoPage({
     Key key,
+    this.client,
   }) : super(key: key);
+
+  final Client client;
 
   @override
   State<StatefulWidget> createState() {
@@ -18,11 +20,8 @@ class ClientInfoPage extends StatefulWidget {
 
 class ClientInfoPageState extends State<ClientInfoPage>
     with AutomaticKeepAliveClientMixin<ClientInfoPage> {
-  ClientDetailBloc _bloc;
-
   @override
   void initState() {
-    if (_bloc == null) _bloc = BlocProvider.of(context);
     super.initState();
   }
 
@@ -32,16 +31,68 @@ class ClientInfoPageState extends State<ClientInfoPage>
     return ListView(
       physics: BouncingScrollPhysics(),
       children: <Widget>[
-        buildItem(context, "*公司类型", _bloc.company.name),
-        buildItem(context, "*所属行业", _bloc.industry.name),
-        buildItem(context, "*所在地", _bloc.location.name),
-        buildItem(context, "*年发票量", _bloc.invoiceCount),
-        buildItem(context, "是否为二次开发", _bloc.secondaryDevelopment.name),
-        buildItem(context, "执行比例", _bloc.progress.name),
-        buildItem(context, "预计签约额", _bloc.expectedContractAmount),
-        buildItem(context, "预计签约日", _bloc.expectedSignDate),
-        buildItem(context, "公司规模", _bloc.lnsize),
-        buildItem(context, "公司简介", _bloc.companyIntro, showLine: false),
+        buildItem(
+          context,
+          '公司类型',
+          widget.client.leads_name??'',
+        ),
+        buildItem(
+          context,
+          '所属行业',
+          industries
+                  .firstWhere((e) => e.id == widget.client.industry,
+                      orElse: () => null)
+                  ?.name ??
+              '',
+        ),
+        buildItem(
+          context,
+          '所在地',
+          locations
+                  .firstWhere((e) => e.id == widget.client.location,
+                      orElse: () => null)
+                  ?.name ??
+              '',
+        ),
+        buildItem(
+          context,
+          '年发票量',
+          widget.client.annual_invoice?.toString() ?? '0',
+        ),
+        buildItem(
+          context,
+          '是否为二次开发',
+          widget.client?.on_premise == yes ? '是' : '否',
+        ),
+        buildItem(
+          context,
+          '执行比例',
+            progresses.firstWhere(
+                  (e) => e.id == widget.client?.progress_percent,
+              orElse: () => null,
+            )?.name??''
+        ),
+        buildItem(
+          context,
+          '预计签约额',
+          widget.client?.anticipated_amount ?? '',
+        ),
+        buildItem(
+          context,
+          '预计签约日',
+          widget.client.anticipated_date??'',
+        ),
+        buildItem(
+          context,
+          '公司规模',
+          widget.client.company_size??'',
+        ),
+        buildItem(
+          context,
+          '公司简介',
+          widget.client.memo??'',
+          showLine: false,
+        ),
       ],
     );
   }
@@ -65,7 +116,7 @@ class ClientInfoPageState extends State<ClientInfoPage>
                 Flexible(
                   child: Text(
                     content,
-                    style: TextStyle(fontSize: 15,color: Colors.grey),
+                    style: TextStyle(fontSize: 15, color: Colors.grey),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),

@@ -1,43 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/CommonRoute.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/bloc/ClientDetailBloc.dart';
-import 'package:flutter_app/data/Constant.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/VisitLogsRsp.dart';
-import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/data/http/rsp/data/VisitLogsData.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
-import 'package:flutter_app/page/clientdetails/NewPlainVisit.dart';
-import 'package:flutter_app/page/clientdetails/NewSpecialVisit.dart';
+import 'package:flutter_app/page/clientdetails/create_visit.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../main.dart';
-import 'create_demand.dart';
 
 class VisitLogsPage extends StatefulWidget {
+  const VisitLogsPage({Key key, this.id}) : super(key: key);
+
+  final int id;
+
   @override
   State<StatefulWidget> createState() {
     return VisitLogsPageState();
   }
 }
 
-class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
-  List<VisitLog> _visitLogs = [
-    VisitLog('xx', 'xx', 1, 'xx', 1, 'xx', 1, 'xx', 'xx', 'xx', 'xx', 'xx'),
-    VisitLog('xx', 'xx', 1, 'xx', 1, 'xx', 1, 'xx', 'xx', 'xx', 'xx', 'xx'),
-    VisitLog('xx', 'xx', 1, 'xx', 1, 'xx', 1, 'xx', 'xx', 'xx', 'xx', 'xx'),
-    VisitLog('xx', 'xx', 1, 'xx', 1, 'xx', 1, 'xx', 'xx', 'xx', 'xx', 'xx'),
-    VisitLog('xx', 'xx', 1, 'xx', 1, 'xx', 1, 'xx', 'xx', 'xx', 'xx', 'xx'),
-  ];
-
-  ClientDetailBloc _bloc;
+class VisitLogsPageState extends State<VisitLogsPage>
+    with AutomaticKeepAliveClientMixin {
+  var _visitLogs = BehaviorSubject<List<VisitLog>>(seedValue: []);
 
   @override
   void initState() {
-    if (_bloc == null) _bloc = BlocProvider.of(context);
-    if (_bloc.id != null) {
-      _initData();
-    }
+    _initData();
     super.initState();
   }
 
@@ -74,11 +62,17 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
                         ),
                       ],
                     )),
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  var result = await Navigator.push(
                     context,
-                    CommonRoute(builder: (c) => CreateDemandPage()),
+                    CommonRoute(
+                        builder: (c) => CreateVisitPage(
+                              id: widget.id,
+                            )),
                   );
+                  if (result) {
+                    _initData();
+                  }
                 },
               ),
             ],
@@ -87,68 +81,34 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
         Flexible(
           child: Stack(
             children: <Widget>[
-              _visitLogs.isNotEmpty
-                  ? ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: _visitLogs.length,
-                      itemBuilder: (context, index) {
-                        return _renderVisitLogItem(_visitLogs[index]);
-                      },
-                    )
-                  : Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Image.asset("assets/images/ic_empty.png"),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 12.0),
-                            child: Text("暂无数据"),
-                          )
-                        ],
-                      ),
-                    ),
+              StreamBuilder(
+                stream: _visitLogs,
+                builder: (c,s)=>s.data?.isNotEmpty==true
+                    ? ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: s.data.length,
+                  itemBuilder: (context, index) {
+                    return _renderVisitLogItem(s.data[index]);
+                  },
+                )
+                    : Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Image.asset("assets/images/ic_empty.png"),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 12.0),
+                        child: Text("暂无数据"),
+                      )
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
       ],
     );
-  }
-
-  void _newVisit(BuildContext context) async {
-    RadioBean result = await showDialog(
-      context: context,
-      builder: (context) {
-        return RadioListPage([
-          RadioBean(dailyVisit, "日常拜访"),
-          RadioBean(businessVisit, "商务宴请"),
-          RadioBean(presentVisit, "赠送礼品"),
-        ]);
-      },
-    );
-    switch (result?.id) {
-      case dailyVisit:
-        var needRefresh = await Navigator.push(
-            context,
-            CommonRoute(
-              builder: (BuildContext context) => NewPlainVisit(_bloc.id),
-            ));
-        if (needRefresh == true) {
-          _initData();
-        }
-        break;
-      case businessVisit:
-      case presentVisit:
-        var needRefresh = await Navigator.push(
-            context,
-            CommonRoute(
-              builder: (BuildContext context) =>
-                  NewSpecialVisit(_bloc.id, result.id),
-            ));
-        if (needRefresh == true) {
-          _initData();
-        }
-        break;
-    }
   }
 
   Widget _renderVisitLogItem(VisitLog visitLog) {
@@ -181,7 +141,7 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
           Container(
             margin: EdgeInsets.only(top: 5.0, bottom: 10),
             child: Text(
-              visitLog.visit_goal,
+              visitLog.cs_log,
               style: TextStyle(fontSize: 14),
             ),
           ),
@@ -197,13 +157,11 @@ class VisitLogsPageState extends State with AutomaticKeepAliveClientMixin {
   }
 
   void _initData() {
-    ApiService().visitLogs(_bloc.id.toString()).then(
+    ApiService().visitLogs(widget.id.toString()).then(
       (rsp) {
         if (rsp.code == ApiService.success) {
           var visitLogsRsp = rsp as VisitLogsRsp;
-          setState(() {
-            _visitLogs = visitLogsRsp.data.list;
-          });
+          _visitLogs.value = visitLogsRsp.data.list;
         }
       },
     );

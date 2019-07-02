@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/bloc/ClientDetailBloc.dart';
-import 'package:flutter_app/data/Constant.dart';
 import 'package:flutter_app/data/http/api_service.dart';
-import 'package:flutter_app/data/http/rsp/VisitLogsRsp.dart';
-import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
-import 'package:flutter_app/data/http/rsp/data/VisitLogsData.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
-import 'package:flutter_app/page/clientdetails/NewPlainVisit.dart';
-import 'package:flutter_app/page/clientdetails/NewSpecialVisit.dart';
 import 'package:flutter_app/weight/Tool.dart';
 
 import '../../main.dart';
 
-class CreateDemandPage extends StatefulWidget {
-  const CreateDemandPage({Key key, this.id}) : super(key: key);
+class CreateVisitPage extends StatefulWidget {
+  const CreateVisitPage({Key key, this.id}) : super(key: key);
 
   final id;
 
   @override
   State<StatefulWidget> createState() {
-    return CreateDemandPageState();
+    return CreateVisitPagePageState();
   }
 }
 
-class CreateDemandPageState extends State<CreateDemandPage> {
+class CreateVisitPagePageState extends State<CreateVisitPage> {
   var _contentController = TextEditingController.fromValue(
     TextEditingValue(
       text: '',
@@ -34,6 +24,7 @@ class CreateDemandPageState extends State<CreateDemandPage> {
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +32,7 @@ class CreateDemandPageState extends State<CreateDemandPage> {
         backgroundColor: colorBg,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('添加需求'),
+          title: Text('添加拜访'),
           actions: <Widget>[
             InkWell(
               child: Container(
@@ -75,7 +66,7 @@ class CreateDemandPageState extends State<CreateDemandPage> {
               controller: _contentController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "请输入需求内容",
+                labelText: "请输入拜访内容",
                 alignLabelWithHint: true,
               ),
               keyboardType: TextInputType.multiline,
@@ -92,13 +83,13 @@ class CreateDemandPageState extends State<CreateDemandPage> {
     if (content == null || content.isEmpty) {
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
-          content: Text("请输入需求"),
+          content: Text("请输入拜访内容"),
         ),
       );
       return;
     }
     onLoading(context);
-    var rsp = await ApiService().newNeed(
+    var rsp = await ApiService().newVisitLog(
       widget.id.toString(),
       content,
     );

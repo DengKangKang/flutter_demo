@@ -77,7 +77,6 @@ class RadioListPageState<T extends RadioBean> extends State<StatefulWidget> {
 }
 
 final locations = [
-  RadioBean(0, "请选择所在地"),
   RadioBean(1, "北京"),
   RadioBean(2, "天津"),
   RadioBean(3, "上海"),
@@ -114,7 +113,6 @@ final locations = [
   RadioBean(34, "台湾"),
 ];
 final industries = [
-  RadioBean(0, "请选择所属行业"),
   RadioBean(1, "农、林、牧、渔业 "),
   RadioBean(2, "采矿业"),
   RadioBean(3, "制造业"),
@@ -137,7 +135,6 @@ final industries = [
   RadioBean(20, "国际组织")
 ];
 final titles = [
-  RadioBean(0, "请选择职务"),
   RadioBean(3, "市场主管"),
   RadioBean(4, "市场专员"),
   RadioBean(5, "客户成功部主管"),
@@ -152,7 +149,6 @@ final titles = [
   RadioBean(14, "售后专员")
 ];
 final companyTypes = [
-  RadioBean(0, "请选择公司类型"),
   RadioBean(1, "有限责任公司"),
   RadioBean(2, "股份有限公司"),
   RadioBean(3, "国有企业"),
@@ -164,7 +160,6 @@ final companyTypes = [
 ];
 
 final progresses = [
-  RadioBean(0, "请选择执行比例"),
   RadioBean(1, "10%项目立项"),
   RadioBean(2, "30%项目商务谈判"),
   RadioBean(3, "60%合同签署"),
@@ -175,13 +170,11 @@ final progresses = [
 ];
 
 final booleans = [
-  RadioBean(0, "请选择"),
-  RadioBean(2, "否"),
   RadioBean(1, "是"),
+  RadioBean(2, "否"),
 ];
 
 final visitWays = [
-  RadioBean(0, "请选择拜访方式"),
   RadioBean(1, "面谈"),
   RadioBean(2, "微信"),
   RadioBean(3, "电话"),
@@ -193,7 +186,6 @@ final visitWays = [
 ];
 
 final visitWaysDaily = [
-  RadioBean(0, "请选择拜访方式"),
   RadioBean(1, "面谈"),
   RadioBean(2, "微信"),
   RadioBean(3, "电话"),
@@ -203,7 +195,6 @@ final visitWaysDaily = [
 ];
 
 final responsibilities = [
-  RadioBean(0, "请选择对象职责"),
   RadioBean(1, "财务"),
   RadioBean(2, "信息部"),
   RadioBean(3, "企业高管"),
@@ -211,7 +202,6 @@ final responsibilities = [
 ];
 
 final projectProgresses = [
-  RadioBean(0, "请选择项目进度"),
   RadioBean(1, "首次拜访"),
   RadioBean(2, "与财务部沟通具体培训"),
   RadioBean(3, "费耘产品培训"),
@@ -219,7 +209,6 @@ final projectProgresses = [
 ];
 
 final devices = [
-  RadioBean(0, "请选择设备名称"),
   RadioBean(1, "Superlead"),
   RadioBean(2, "霍尼韦尔"),
   RadioBean(3, "德沃"),
@@ -227,7 +216,6 @@ final devices = [
 ];
 
 final usageModel = [
-  RadioBean(0, "请选择购买/押金"),
   RadioBean(1, "购买"),
   RadioBean(2, "押金"),
 ];
@@ -239,4 +227,20 @@ final supportTypes = [
   RadioBean(supportTypeReleaseAccount, "正式账号"),
 ];
 
+final signTypes = [
+  RadioBean(1, "新签"),
+  RadioBean(2, "续签"),
+];
+
+const billTypeClassify =1 ;
+const billTypeCommon =2 ;
+final billingTypes = [
+  RadioBean(billTypeClassify, "分类计费"),
+  RadioBean(billTypeCommon, "通用计费"),
+];
+
+
 final sourceTypes = List<RadioBean>();
+
+
+

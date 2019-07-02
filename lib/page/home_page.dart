@@ -5,14 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/data/http/ApiService.dart';
-import 'package:flutter_app/data/http/rsp/ClientListRsp.dart';
-import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
-import 'package:flutter_app/page/ClientDetailPage.dart';
-import 'package:flutter_app/page/DailyPage.dart';
-import 'package:flutter_app/page/LoginPage.dart';
-import 'package:flutter_app/page/SearchPage.dart';
+import 'package:flutter_app/data/http/api_service.dart';
+import 'package:flutter_app/page/base/CommonPageState.dart';
 import 'package:flutter_app/page/client_list_page.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -23,29 +17,74 @@ class HomePage extends StatefulWidget {
   State createState() => HomePageState();
 }
 
-class HomePageState extends State<StatefulWidget> {
+class HomePageState extends CommonPageState<HomePage, HomeBloc> {
+  @override
+  void initState() {
+    if (bloc == null) {
+      bloc = HomeBloc();
+      bloc.initData();
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
         Image.asset('assets/images/p_sy.png'),
         Container(
-          margin: EdgeInsets.only(top: 182),
+          margin: EdgeInsets.only(top: 170),
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  _item('私海线索', '20', '我的线索', true),
-                  _item('公海线索', '20', '今日新增', true),
+                  StreamBuilder(
+                    initialData: '0',
+                    stream: bloc.privateTrace.stream,
+                    builder: (c, s) => _item(
+                          '私海线索',
+                          s.data,
+                          '我的线索',
+                          typeTrace | statePrivate,
+                        ),
+                  ),
+                  StreamBuilder(
+                    initialData: '0',
+                    stream: bloc.publicTrace.stream,
+                    builder: (c, s) => _item(
+                          '公海线索',
+                          s.data,
+                          '今日新增',
+                          typeTrace | statePublic,
+                        ),
+                  ),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  _item('私海客户', '20', '我的客户', false),
-                  _item('公海客户', '20', '今日新增', false),
+                  StreamBuilder(
+                    initialData: '0',
+                    stream: bloc.privateClient.stream,
+                    builder: (c, s) => _item(
+                          '私海客户',
+                          s.data,
+                          '我的客户',
+                          typeClient | statePrivate,
+                        ),
+                  ),
+                  StreamBuilder(
+                    initialData: '0',
+                    stream: bloc.publicClient.stream,
+                    builder: (c, s) => _item(
+                          '公海客户',
+                          s.data,
+                          '今日新增',
+                          typeClient | statePublic,
+                        ),
+                  ),
                 ],
               ),
             ],
@@ -55,76 +94,97 @@ class HomePageState extends State<StatefulWidget> {
     );
   }
 
-  Widget _item(String title, String count, String description, bool isTrack) =>
-      Container(
-          margin: EdgeInsets.only(left: 20, right: 20, bottom: 45),
-          child: RawMaterialButton(
-            fillColor: Colors.white,
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusDirectional.all(Radius.circular(20))),
-            child: Container(
-              padding: EdgeInsets.all(15),
-              width: 110,
-              height: 170,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      isTrack
-                          ? Image.asset('assets/images/ico_sy_xs.png')
-                          : Image.asset('assets/images/ico_sy_kh.png'),
-                      Container(
-                        margin: EdgeInsets.only(top: 5),
-                        child: Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: isTrack ? colorCyan : colorOrigin,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        count + '条',
+  Widget _item(
+      String title, String count, String description, int businessType) {
+    var type = businessType & 0xF;
+    return Container(
+        margin: EdgeInsets.only(
+            left: 20, right: 20, bottom: type == typeTrace ? 40 : 30),
+        child: RawMaterialButton(
+          fillColor: Colors.white,
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(20))),
+          child: Container(
+            padding: EdgeInsets.all(15),
+            width: 110,
+            height: 165,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    type == typeTrace
+                        ? Image.asset('assets/images/ico_sy_xs.png')
+                        : Image.asset('assets/images/ico_sy_kh.png'),
+                    Container(
+                      margin: EdgeInsets.only(top: 5),
+                      child: Text(
+                        title,
                         style: TextStyle(
                           fontSize: 17,
-                          color: isTrack ? colorCyan : colorOrigin,
+                          color: type == typeTrace ? colorCyan : colorOrigin,
                         ),
                       ),
-                      Text(
-                        description,
-                        style:
-                            TextStyle(fontSize: 10, color: Color(0XFFA2A8B4)),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: isTrack ? colorCyan : colorOrigin,
-                          borderRadius: BorderRadius.all(Radius.circular(3)),
-                        ),
-                        margin: EdgeInsets.only(top: 15),
-                        height: 3,
-                        width: 20,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                CommonRoute(
-                  builder: (c) => ClientListPage(title: title),
+                    ),
+                  ],
                 ),
-              );
-            },
-          ));
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      count + '条',
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: type == typeTrace ? colorCyan : colorOrigin,
+                      ),
+                    ),
+                    Text(
+                      description,
+                      style: TextStyle(fontSize: 10, color: Color(0XFFA2A8B4)),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: type == typeTrace ? colorCyan : colorOrigin,
+                        borderRadius: BorderRadius.all(Radius.circular(3)),
+                      ),
+                      margin: EdgeInsets.only(top: 15),
+                      height: 3,
+                      width: 20,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              CommonRoute(
+                builder: (c) => ClientListPage(title: title,businessType: businessType,),
+              ),
+            );
+          },
+        ));
+  }
+}
+
+class HomeBloc extends CommonBloc {
+  var privateTrace = BehaviorSubject<String>();
+  var publicTrace = BehaviorSubject<String>();
+  var privateClient = BehaviorSubject<String>();
+  var publicClient = BehaviorSubject<String>();
+
+  @override
+  void initData() async {
+    var rsp = await ApiService().home();
+    if (rsp.code == ApiService.success) {
+      privateTrace.add(rsp.data.list?.first?.p_clue?.toString() ?? '0');
+      publicTrace.add(rsp.data.list?.first?.c_clue?.toString() ?? '0');
+      privateClient.add(rsp.data.list?.first?.p_customer?.toString() ?? '0');
+      publicClient.add(rsp.data.list?.first?.c_customer?.toString() ?? '0');
+    }
+  }
 }

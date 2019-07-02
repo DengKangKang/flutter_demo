@@ -39,26 +39,26 @@ class MainPageState extends State<StatefulWidget> {
         initialData: 0,
         stream: bloc.currentIndex.stream,
         builder: (
-            BuildContext context,
-            AsyncSnapshot<int> snapshot,
-            ) {
+          BuildContext context,
+          AsyncSnapshot<int> snapshot,
+        ) {
           return body(snapshot.data);
         },
       ),
-      bottomNavigationBar:  StreamBuilder<int>(
+      bottomNavigationBar: StreamBuilder<int>(
         initialData: 0,
         stream: bloc.currentIndex.stream,
         builder: (
-            BuildContext context,
-            AsyncSnapshot<int> snapshot,
-            ) {
+          BuildContext context,
+          AsyncSnapshot<int> snapshot,
+        ) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Container(
-                width: 80,
-                height: 80,
+                width: 70,
+                height: 70,
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.all(Radius.circular(40)),
@@ -71,8 +71,8 @@ class MainPageState extends State<StatefulWidget> {
                 ),
               ),
               Container(
-                width: 80,
-                height: 80,
+                width: 70,
+                height: 70,
                 child: InkWell(
                   borderRadius: BorderRadius.all(Radius.circular(40)),
                   child: snapshot.data == daily
@@ -84,8 +84,8 @@ class MainPageState extends State<StatefulWidget> {
                 ),
               ),
               Container(
-                width: 80,
-                height: 80,
+                width: 70,
+                height: 70,
                 child: InkWell(
                   borderRadius: BorderRadius.all(Radius.circular(40)),
                   child: snapshot.data == personal

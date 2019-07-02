@@ -10,7 +10,9 @@ import 'account_info_page3.dart';
 import 'account_info_page4.dart';
 
 class ClientDebugAccountPage extends StatefulWidget {
-  ClientDebugAccountPage();
+  const ClientDebugAccountPage({Key key, this.accountType}) : super(key: key);
+
+  final int accountType;
 
   @override
   State<StatefulWidget> createState() {
@@ -87,12 +89,15 @@ class ClientDebugAccountPageState
 
 class ClientDebugAccountBloc extends CommonBloc {}
 
-Widget buildTitle(label) {
+Widget buildTitle(label,{List<TextSpan> spans} ) {
   return Container(
     padding: EdgeInsets.only(right: 20, left: 20, top: 20, bottom: 7),
-    child: Text(
-      label,
-      style: TextStyle(fontSize: 12, color: Colors.grey),
+    child: RichText(
+      text: TextSpan(
+        text: label??'',
+        style: TextStyle(fontSize: 12, color: Colors.grey),
+        children:spans
+      ),
     ),
   );
 }
