@@ -97,6 +97,7 @@ class ClientApplyPageState extends State<ClientApplyPage>
                             CommonRoute(
                               builder: (c) => ClientDebugAccountPage(
                                     accountType: applyTypeDebugAccount,
+                                    clientId: widget.client.id,
                                   ),
                             ),
                           );
@@ -107,6 +108,7 @@ class ClientApplyPageState extends State<ClientApplyPage>
                             CommonRoute(
                               builder: (c) => ClientDebugAccountPage(
                                     accountType: applyTypeDebugAccount,
+                                    clientId: widget.client.id,
                                   ),
                             ),
                           );
@@ -169,6 +171,7 @@ class ClientApplyPageState extends State<ClientApplyPage>
                             CommonRoute(
                               builder: (c) => ClientDebugAccountPage(
                                     accountType: applyTypeReleaseAccount,
+                                    clientId: widget.client.id,
                                   ),
                             ),
                           );
@@ -179,6 +182,7 @@ class ClientApplyPageState extends State<ClientApplyPage>
                             CommonRoute(
                               builder: (c) => ClientDebugAccountPage(
                                     accountType: applyTypeReleaseAccount,
+                                    clientId: widget.client.id,
                                   ),
                             ),
                           );
@@ -219,9 +223,9 @@ class ClientApplyPageState extends State<ClientApplyPage>
                         ],
                       ),
                     ),
-                    onTap: () async{
+                    onTap: () async {
                       if (trainAccountState.value != applyStateApplying) {
-                       var rsp =  await Navigator.push(
+                        var rsp = await Navigator.push(
                           context,
                           CommonRoute(
                             builder: (context) => ClientApplyTrainPage(
@@ -231,9 +235,9 @@ class ClientApplyPageState extends State<ClientApplyPage>
                                 ),
                           ),
                         );
-                       if(rsp == true){
-                         initData();
-                       }
+                        if (rsp == true) {
+                          initData();
+                        }
                       }
                     },
                   ),

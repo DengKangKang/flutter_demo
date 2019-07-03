@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/data/http/rsp/department_info.dart';
 import 'package:flutter_app/main.dart';
 
 import 'client_debug_account_page.dart';
@@ -32,37 +33,39 @@ class AccountInfoPage3State extends State<AccountInfoPage3>
       physics: BouncingScrollPhysics(),
       children: <Widget>[
         buildTitle('部门'),
-        _buildDepartmentItem('xx公司', 'xxxxxxxx'),
-        _buildDepartmentItem('xx公司', 'xxxxxxxx'),
-        _buildDepartmentItem('xx公司', 'xxxxxxxx', showLine: false),
+        StreamBuilder<List<Department>>(
+          initialData: [],
+          stream: _bloc.department,
+          builder: (c, s) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ...s.data.map((e) => _buildDepartmentItem(e))
+                ],
+              ),
+        ),
         buildTitle('用户'),
-        _buildUserItem(
-          'id:23131',
-          'xxxx-xx-xx',
-          'xxxx',
-          true,
-          true,
-        ),
-        _buildUserItem(
-          'id:23131',
-          'xxxx-xx-xx',
-          'xxxx',
-          false,
-          false,
-        ),
-        _buildUserItem(
-          'id:23131',
-          'xxxx-xx-xx',
-          'xxxx',
-          true,
-          false,
+        StreamBuilder<List<User>>(
+          initialData: [],
+          stream: _bloc.user,
+          builder: (c, s) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ...s.data.map((e) => _buildUserItem(
+                        e.user_id.toString(),
+                        e.create_time,
+                        e.username,
+                        e.is_link == 1,
+                        e.is_admin==1,
+                      ))
+                ],
+              ),
         ),
       ],
     );
   }
 
-  Container _buildDepartmentItem(String info1, String info2,
-      {bool showLine = true}) {
+  Container _buildDepartmentItem(Department d, {bool showLine = true}) {
+    var infos = d.name.split('  ');
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(
@@ -74,14 +77,14 @@ class AccountInfoPage3State extends State<AccountInfoPage3>
           Container(
             margin: EdgeInsets.only(top: 10),
             child: Text(
-              info1,
+              infos[0],
               style: TextStyle(fontSize: 15),
             ),
           ),
           Container(
             padding: EdgeInsets.only(top: 5, bottom: 10),
             child: Text(
-              info2,
+              infos[1],
               style: TextStyle(fontSize: 15),
             ),
           ),
@@ -171,6 +174,11 @@ class AccountInfoPage3State extends State<AccountInfoPage3>
     );
   }
 
+
+  int page = 1;
+
+
   @override
   bool get wantKeepAlive => true;
+
 }

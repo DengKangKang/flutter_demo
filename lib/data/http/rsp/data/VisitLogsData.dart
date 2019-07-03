@@ -17,8 +17,23 @@ class VisitLogsData extends Object {
 
 @JsonSerializable()
 class VisitLog extends Object {
-  VisitLog(this.leads_id, this.create_time, this.user_id, this.user_realname,
-      this.category, this.cs_log);
+  VisitLog(
+      this.leads_id,
+      this.create_time,
+      this.user_id,
+      this.user_realname,
+      this.category,
+      this.cs_log,
+      this.sale_visit_time,
+      this.sale_visit_form,
+      this.sale_feedback,
+      this.sale_solution,
+      this.expense,
+      this.visitor,
+      this.visit_goal);
+
+  factory VisitLog.fromJson(Map<String, dynamic> json) =>
+      _$VisitLogFromJson(json);
 
   @JsonKey(name: '_id')
   String leads_id;
@@ -27,10 +42,11 @@ class VisitLog extends Object {
   String user_realname;
   int category;
   String cs_log;
-
-  /// A necessary factory constructor for creating a new User instance
-  /// from a map. Pass the map to the generated _$UserFromJson constructor.
-  /// The constructor is named after the source class, in this case User.
-  factory VisitLog.fromJson(Map<String, dynamic> json) =>
-      _$VisitLogFromJson(json);
+  String sale_visit_time;
+  String sale_visit_form;
+  String sale_feedback;
+  String sale_solution;
+  int expense;
+  String visitor;
+  String visit_goal;
 }

@@ -16,6 +16,11 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
       bloc.asObservable().listen((event) {
         print(event.id);
         switch (event.id) {
+          case BLOC_SHOW_END_DRAWER:
+            {
+              scaffoldKey.currentState.openEndDrawer();
+              break;
+            }
           case BLOC_EVENT_TIP:
             {
               scaffoldKey.currentState.showSnackBar(

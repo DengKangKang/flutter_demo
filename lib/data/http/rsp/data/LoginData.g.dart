@@ -7,8 +7,12 @@ part of 'LoginData.dart';
 // **************************************************************************
 
 LoginData _$LoginDataFromJson(Map<String, dynamic> json) {
-  return LoginData(json['auth'] as String, json['realname'] as String);
+  return LoginData(json['auth'] as String, json['realname'] as String)
+    ..roles = (json['roles'] as List)?.map((e) => e as int)?.toList();
 }
 
-Map<String, dynamic> _$LoginDataToJson(LoginData instance) =>
-    <String, dynamic>{'auth': instance.auth, 'realname': instance.realname};
+Map<String, dynamic> _$LoginDataToJson(LoginData instance) => <String, dynamic>{
+      'auth': instance.auth,
+      'realname': instance.realname,
+      'roles': instance.roles
+    };

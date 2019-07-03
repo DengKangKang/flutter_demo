@@ -10,9 +10,13 @@ import 'package:flutter_app/data/http/rsp/OperationLogsRsp.dart';
 import 'package:flutter_app/data/http/rsp/SourceTypesRsp.dart';
 import 'package:flutter_app/data/http/rsp/VisitLogsRsp.dart';
 import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
+import 'package:flutter_app/data/http/rsp/account_info.dart';
 import 'package:flutter_app/data/http/rsp/applied_plugins_rsp.dart';
 import 'package:flutter_app/data/http/rsp/apply_info.dart';
 import 'package:flutter_app/data/http/rsp/clients_rsp.dart';
+import 'package:flutter_app/data/http/rsp/client_info.dart';
+import 'package:flutter_app/data/http/rsp/count_use.dart';
+import 'package:flutter_app/data/http/rsp/department_info.dart';
 import 'package:flutter_app/data/http/rsp/home_rsp.dart';
 import 'package:flutter_app/data/http/rsp/sign_log_rsp.dart';
 import 'package:flutter_app/data/persistence/Persistence.dart';
@@ -131,7 +135,7 @@ class ApiService {
     }
   }
 
-  Future<BaseRsp> visitLogs(
+  Future<VisitLogsRsp> visitLogs(
     String leadId,
   ) async {
     try {
@@ -149,34 +153,46 @@ class ApiService {
       if (rsp.statusCode == 200) {
         return VisitLogsRsp.fromJson(json.decode(rsp.body));
       } else {
-        return BaseRsp(illicit, '网络异常，请稍后再试。');
+        return VisitLogsRsp.base(illicit, '网络异常，请稍后再试。');
       }
     } catch (e) {
-      return BaseRsp(illicit, '网络异常，请稍后再试。');
+      print(e);
+      return VisitLogsRsp.base(illicit, '网络异常，请稍后再试。');
     }
   }
 
   Future<BaseRsp> newVisitLog(
     String leadId,
-    String content,
-  ) async {
+    String visitWay, {
+    String date = '',
+    String clientRsp = '',
+    String solution = '',
+    String cost = '',
+    String visitTargetPeople = '',
+    String visitTarget = '',
+  }) async {
     try {
-      Response rsp = await client.post(
-        '$_baseUrl/fc/leads/visit/add',
-        headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},
-        body: {
-          'leads_id': leadId,
-          'log': content,
-          'user': '6',
-        },
-      );
+      Response rsp =
+          await client.post("$_baseUrl/app/customer/add/visit", headers: {
+        "Authorization": "Bearer ${await Persistence().getToken()}"
+      }, body: {
+        "leads_id": leadId,
+        "sale_visit_form": visitWay,
+        "sale_visit_time": date,
+        "sale_feedback": clientRsp,
+        "sale_solution": solution,
+        "expense": cost,
+        "visitor": visitTargetPeople,
+        "visit_goal": visitTarget,
+      });
       print(rsp.body);
       if (rsp.statusCode == 200) {
         return SourceTypesRsp.fromJson(json.decode(rsp.body));
       } else {
-        return BaseRsp(illicit, '网络异常，请稍后再试。');
+        return BaseRsp(illicit, "网络异常，请稍后再试。");
       }
     } catch (e) {
+      print(e);
       return BaseRsp(illicit, '网络异常，请稍后再试。');
     }
   }
@@ -358,6 +374,8 @@ class ApiService {
     int page,
     int size,
     String daily_time,
+    String key,
+    String sale_name,
   ) async {
     try {
       Response rsp = await client.post('$_baseUrl/app/fc/daily/list', headers: {
@@ -366,6 +384,8 @@ class ApiService {
         'page': page.toString(),
         'size': size.toString(),
         'daily_time': daily_time,
+        'key': key,
+        'sale_name': sale_name,
       });
       print(rsp.body);
       if (rsp.statusCode == 200) {
@@ -1065,6 +1085,135 @@ class ApiService {
       }
     } catch (e) {
       return ApplyInfoRsp.base(illicit, '网络异常，请稍后再试。');
+    }
+  }
+
+  Future<AccountInfoRsp> accountInfo({
+    application_type, //3测试   4正式
+    leads_id,
+  }) async {
+    var uri = Uri.http(
+      _authority,
+      _basePath + '/fc/customer/application/list',
+    );
+    try {
+      Response rsp = await client.post(
+        uri,
+        headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},
+        body: {
+          'application_type': application_type,
+          'leads_id': leads_id,
+        },
+      );
+      print(rsp.body);
+      if (rsp.statusCode == 200) {
+        return AccountInfoRsp.fromJson(json.decode(rsp.body));
+      } else {
+        return AccountInfoRsp.base(illicit, '网络异常，请稍后再试。');
+      }
+    } catch (e) {
+      return AccountInfoRsp.base(illicit, '网络异常，请稍后再试。');
+    }
+  }
+
+  Future<ClientInfoRsp> clientInfo({
+    id,
+  }) async {
+    var uri = Uri.http(_authority, _basePath + '/fc/company', {'keyword': id});
+    try {
+      Response rsp = await client.get(
+        uri,
+        headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},
+      );
+      print(rsp.body);
+      if (rsp.statusCode == 200) {
+        return ClientInfoRsp.fromJson(json.decode(rsp.body));
+      } else {
+        return ClientInfoRsp.base(illicit, '网络异常，请稍后再试。');
+      }
+    } catch (e) {
+      return ClientInfoRsp.base(illicit, '网络异常，请稍后再试。');
+    }
+  }
+
+  Future<DepartmentInfo> department({
+    id,
+  }) async {
+    var uri = Uri.http(
+      _authority,
+      _basePath + '/app/fc/company/deptUser',
+      {'company_id': id},
+    );
+    try {
+      Response rsp = await client.get(
+        uri,
+        headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},
+      );
+      print(rsp.body);
+      if (rsp.statusCode == 200) {
+        return DepartmentInfo.fromJson(json.decode(rsp.body));
+      } else {
+        return DepartmentInfo.base(illicit, '网络异常，请稍后再试。');
+      }
+    } catch (e) {
+      return DepartmentInfo.base(illicit, '网络异常，请稍后再试。');
+    }
+  }
+
+  Future<BaseRsp> modifyPassword({
+    new_password,
+    old_password,
+  }) async {
+    var uri = Uri.http(
+      _authority,
+      _basePath + '/user/changepassword',
+    );
+    try {
+      Response rsp = await client.post(uri, headers: {
+        'Authorization': 'Bearer ${await Persistence().getToken()}'
+      }, body: {
+        'new_password': new_password,
+        'old_password': old_password,
+      });
+      print(rsp.body);
+      if (rsp.statusCode == 200) {
+        return BaseRsp.fromJson(json.decode(rsp.body));
+      } else {
+        return BaseRsp(illicit, '网络异常，请稍后再试。');
+      }
+    } catch (e) {
+      return BaseRsp(illicit, '网络异常，请稍后再试。');
+    }
+  }
+
+  Future<CountUseRsp> countUseInfo(
+    String page,
+    String size,
+    String company_id,
+  ) async {
+    try {
+//    /app/fc/company/clientQuota
+      var uri = Uri.http(
+        _authority,
+        _basePath + '/app/fc/company/clientQuota',
+        {
+          'page': page,
+          'size': size,
+          'company_id': company_id,
+        },
+      );
+      Response rsp = await client.get(
+        uri,
+        headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},
+      );
+      print(rsp.body);
+      if (rsp.statusCode == 200) {
+        return CountUseRsp.fromJson(json.decode(rsp.body));
+      } else {
+        return CountUseRsp.base(illicit, '网络异常，请稍后再试。');
+      }
+    } catch (e) {
+      return CountUseRsp.base(illicit, '网络异常，请稍后再试。');
     }
   }
 }

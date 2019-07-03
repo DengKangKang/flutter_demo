@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/main.dart';
 
 import 'base/CommonPageState.dart';
@@ -90,17 +91,21 @@ class ResetPasswordState
           ),
           Material(
             elevation: defaultElevation,
-            child: Container(
-              height: 60,
-              child: Center(
-                child: Text(
-                  '确定',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: colorOrigin,
+            color: Colors.white,
+            child: InkWell(
+              child: Container(
+                height: 60,
+                child: Center(
+                  child: Text(
+                    '确定',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: colorOrigin,
+                    ),
                   ),
                 ),
               ),
+              onTap:bloc.confirm,
             ),
           ),
         ],
@@ -113,4 +118,33 @@ class ResetPassword extends CommonBloc {
   var oldPassword = '';
   var newPassword = '';
   var newPasswordAgain = '';
+
+
+  void confirm()async {
+    if(oldPassword.isEmpty) {
+      showTip('请输入旧密码');
+      return;
+    }
+    if(newPassword.isEmpty) {
+     showTip('请输入新密码');
+      return;
+    }
+    if(newPasswordAgain.isEmpty) {
+      showTip('请再次输入新密码');
+      return;
+    }
+    if(newPassword== newPasswordAgain){
+      showTip('两次密码不一致');
+      return;
+    }
+    var rsp = await ApiService().modifyPassword(
+      new_password: newPassword,
+      old_password: oldPassword,
+    );
+    if(rsp.code == ApiService.success){
+      finish();
+    }else{
+      showTip(rsp.msg);
+    }
+  }
 }

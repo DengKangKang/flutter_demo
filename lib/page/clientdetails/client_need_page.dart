@@ -75,7 +75,7 @@ class ClientNeedPageState extends State<ClientNeedPage>
                           ),
                     ),
                   );
-                  if (needRefresh) {
+                  if (needRefresh == true) {
                     _initData();
                   }
                 },

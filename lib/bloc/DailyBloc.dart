@@ -12,26 +12,26 @@ class DailyBloc extends CommonBloc {
 
   @override
   Future<void> initData() async {
-    var rsp = await ApiService().getDailies(1, 10,'');
-    if (rsp.code == ApiService.success) {
-      var dailiesRsp = rsp as DailiesRsp;
-      _dailies.sink.add(dailiesRsp.data.list);
-      page = 1;
-    }
+//    var rsp = await ApiService().getDailies(1, 10,'');
+//    if (rsp.code == ApiService.success) {
+//      var dailiesRsp = rsp as DailiesRsp;
+//      _dailies.sink.add(dailiesRsp.data.list);
+//      page = 1;
+//    }
     return null;
   }
 
   void loadMore() async{
-    var rsp = await ApiService().getDailies(page+1, 10,'');
-    if (rsp.code == ApiService.success) {
-      var dailiesRsp = rsp as DailiesRsp;
-      if(dailiesRsp?.data?.list != null && dailiesRsp?.data?.list?.isNotEmpty == true){
-        page++;
-        _dailies.value.addAll(dailiesRsp?.data?.list);
-        _dailies.sink.add(_dailies.value);
-      }
-
-    }
+//    var rsp = await ApiService().getDailies(page+1, 10,'');
+//    if (rsp.code == ApiService.success) {
+//      var dailiesRsp = rsp as DailiesRsp;
+//      if(dailiesRsp?.data?.list != null && dailiesRsp?.data?.list?.isNotEmpty == true){
+//        page++;
+//        _dailies.value.addAll(dailiesRsp?.data?.list);
+//        _dailies.sink.add(_dailies.value);
+//      }
+//
+//    }
   }
 
   Stream<List<Daily>> get dailies => _dailies.stream;

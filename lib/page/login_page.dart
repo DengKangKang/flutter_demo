@@ -131,6 +131,12 @@ class LoginPageState extends State<StatefulWidget> {
     if (rsp.code == ApiService.success) {
       await Persistence().setUserAccount(_usernameController.text);
       await Persistence().setUsername((rsp as LoginRsp).data.realname);
+      await Persistence().setUserAuthority(
+        (rsp as LoginRsp).data.roles?.contains(31) == true,
+      );
+      Persistence().userAuthority.add(
+            (rsp as LoginRsp).data.roles?.contains(31) == true,
+          );
       bool result = await Persistence().setToken((rsp as LoginRsp).data.auth);
       if (result == true) {
         await Navigator.pushReplacement(

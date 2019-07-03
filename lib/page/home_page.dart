@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
   State createState() => HomePageState();
 }
 
-class HomePageState extends CommonPageState<HomePage, HomeBloc> {
+class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKeepAliveClientMixin<HomePage>{
   @override
   void initState() {
     if (bloc == null) {
@@ -169,6 +169,9 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> {
           },
         ));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class HomeBloc extends CommonBloc {

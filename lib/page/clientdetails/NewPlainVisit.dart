@@ -4,6 +4,10 @@ import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/weight/Tool.dart';
 import 'package:intl/intl.dart';
+import 'package:rxdart/rxdart.dart';
+
+import '../../main.dart';
+import 'apply_account/client_apply_debug_account_page.dart';
 
 class NewPlainVisit extends StatefulWidget {
   NewPlainVisit(this._leadId, {Key key}) : super(key: key);
@@ -22,13 +26,13 @@ class NewPlainVisitState extends State<StatefulWidget> {
   final int _leadId;
   final _key = GlobalKey<ScaffoldState>();
 
-  String _date = "";
+  var _date = BehaviorSubject<String>();
 
-  RadioBean _visitWay = visitWaysDaily[0];
+  var _visitWay = BehaviorSubject<RadioBean>();
 
-  String _clientRsp = "";
+  var _clientRsp = StringBuffer();
 
-  String _solution = "";
+  var _solution = StringBuffer();
 
   @override
   void initState() {
@@ -39,37 +43,41 @@ class NewPlainVisitState extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
+      backgroundColor: colorBg,
       appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
         title: Text("新增日常拜访"),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.check,
-              color: Colors.black,
+          InkWell(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                child: Text(
+                  '确定',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: colorOrigin,
+                  ),
+                ),
+              ),
             ),
-            onPressed: () {
+            onTap: () {
               _onAdd(context);
             },
           )
+
         ],
       ),
       body: Builder(
         builder: (context) => Column(
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 12.0,
-                    right: 16.0,
-                    left: 16.0,
-                  ),
-                  child: RawMaterialButton(
-                    elevation: 2.0,
-                    fillColor: Theme.of(context).backgroundColor,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    onPressed: () async {
+                Divider(height: 10,color: colorBg,),
+                buildClickableItem(
+                    label: '日期',
+                    hint: '请选择日期',
+                    content: _date,
+                    onClick: () async {
                       var date = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
@@ -77,216 +85,46 @@ class NewPlainVisitState extends State<StatefulWidget> {
                         lastDate: DateTime(DateTime.now().year + 1, 12, 31),
                       );
                       if (date != null) {
-                        setState(() {
-                          _date = DateFormat('yyyy-MM-dd').format(date);
-                        });
+                        _date.value = DateFormat('yyyy-MM-dd').format(date);
                       }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                              right: 16.0, top: 12.0, bottom: 12.0),
-                          child: Text(
-                            "*日期",
-                            style: Theme.of(context).textTheme.body1.merge(
-                                  TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                          ),
+                    }),
+                buildClickableItem(
+                    spans: [
+                      TextSpan(
+                        text: '*',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: colorOrigin,
                         ),
-                        Flexible(
-                            child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Flexible(
-                              child: Text(
-                                _date.isEmpty ? "请选择日期" : _date,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .body1
-                                    .merge(TextStyle(color: Colors.grey)),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            Icon(Icons.arrow_drop_down)
-                          ],
-                        )),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 12.0,
-                    right: 16.0,
-                    left: 16.0,
-                  ),
-                  child: RawMaterialButton(
-                    elevation: 2.0,
-                    fillColor: Theme.of(context).backgroundColor,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    onPressed: () async {
+                      ),
+                      TextSpan(
+                        text: '形式',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                    hint: '请选择形式',
+                    content: _visitWay,
+                    onClick: () async {
                       var visitWay = await showDialog(
                         context: context,
                         builder: (context) {
                           return RadioListPage.visitWaysDaily(
-                              groupValue: _visitWay);
+                              groupValue: _visitWay.value);
                         },
                       );
                       if (visitWay != null) {
-                        setState(() {
-                          _visitWay = visitWay;
-                        });
+                        _visitWay.value = visitWay;
                       }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                              right: 16.0, top: 12.0, bottom: 12.0),
-                          child: Text(
-                            "*形式",
-                            style: Theme.of(context).textTheme.body1.merge(
-                                  TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                          ),
-                        ),
-                        Flexible(
-                            child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Flexible(
-                              child: Text(
-                                _visitWay.name,
-                                style: Theme.of(context).textTheme.body1.merge(
-                                    TextStyle(
-                                        color: _visitWay.id == 0
-                                            ? Colors.grey
-                                            : Colors.black)),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            Icon(Icons.arrow_drop_down)
-                          ],
-                        )),
-                      ],
-                    ),
-                  ),
+                    }),
+                buildInputItem(
+                  label: '客户反馈',
+                  hint: '请输入客户反馈',
+                  content: _clientRsp,
                 ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 12.0,
-                    right: 16.0,
-                    left: 16.0,
-                  ),
-                  child: Card(
-                    elevation: 2.0,
-                    color: Theme.of(context).backgroundColor,
-                    margin: EdgeInsets.all(0.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 16.0),
-                            child: Text(
-                              "*客户反馈",
-                              style: Theme.of(context).textTheme.body1.merge(
-                                    TextStyle(
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                            ),
-                          ),
-                          Flexible(
-                            child: TextField(
-                              controller: TextEditingController.fromValue(
-                                TextEditingValue(
-                                  text: _clientRsp,
-                                ),
-                              ),
-                              textAlign: TextAlign.end,
-                              decoration: InputDecoration(
-                                hintText: "请输入客户反馈",
-                                border: InputBorder.none,
-                              ),
-                              style: Theme.of(context).textTheme.body1,
-                              onChanged: (s) {
-                                _clientRsp = s;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 12.0,
-                    right: 16.0,
-                    left: 16.0,
-                  ),
-                  child: Card(
-                    elevation: 2.0,
-                    color: Theme.of(context).backgroundColor,
-                    margin: EdgeInsets.all(0.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 16.0),
-                            child: Text(
-                              "*解决方案",
-                              style: Theme.of(context).textTheme.body1.merge(
-                                    TextStyle(
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                            ),
-                          ),
-                          Flexible(
-                            child: TextField(
-                              controller: TextEditingController.fromValue(
-                                TextEditingValue(
-                                  text: _solution,
-                                ),
-                              ),
-                              textAlign: TextAlign.end,
-                              decoration: InputDecoration(
-                                hintText: "请输入解决方案",
-                                border: InputBorder.none,
-                              ),
-                              style: Theme.of(context).textTheme.body1,
-                              onChanged: (s) {
-                                _solution = s;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                buildInputItem(
+                  label: '解决方案',
+                  hint: '请输入解决方案',
+                  content: _solution,
                 ),
               ],
             ),
@@ -295,7 +133,7 @@ class NewPlainVisitState extends State<StatefulWidget> {
   }
 
   void _onAdd(BuildContext context) async {
-    if (_date == null || _date.isEmpty) {
+    if (_date.value == null || _date.value.isEmpty) {
       _key.currentState.showSnackBar(
         SnackBar(
           content: Text("请选择日期"),
@@ -303,7 +141,7 @@ class NewPlainVisitState extends State<StatefulWidget> {
       );
       return;
     }
-    if (_visitWay == null || _visitWay.id == 0) {
+    if (_visitWay.value == null || _visitWay.value.id == 0) {
       _key.currentState.showSnackBar(
         SnackBar(
           content: Text("请选择形式"),
@@ -331,22 +169,22 @@ class NewPlainVisitState extends State<StatefulWidget> {
     }
 
     onLoading(context);
-//    var rsp = await ApiService().newVisitLog(
-//      _leadId.toString(),
-//      _visitWay.id.toString(),
-//      date: _date,
-//      clientRsp: _clientRsp,
-//      solution: _solution,
-//    );
-//    loadingFinish(context);
-//    if (rsp.code == ApiService.success) {
-//      Navigator.of(context).pop(true);
-//    } else {
-//      _key.currentState.showSnackBar(
-//        SnackBar(
-//          content: Text(rsp.msg),
-//        ),
-//      );
-//    }
+    var rsp = await ApiService().newVisitLog(
+      _leadId.toString(),
+      _visitWay.value.id.toString(),
+      date: _date.value,
+      clientRsp: _clientRsp.toString(),
+      solution: _solution.toString(),
+    );
+    loadingFinish(context);
+    if (rsp.code == ApiService.success) {
+      Navigator.of(context).pop(true);
+    } else {
+      _key.currentState.showSnackBar(
+        SnackBar(
+          content: Text(rsp.msg),
+        ),
+      );
+    }
   }
 }

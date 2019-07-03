@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/bloc/ClientDetailBloc.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_app/data/http/api_service.dart';
+import 'package:flutter_app/data/http/rsp/count_use.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'client_debug_account_page.dart';
 
@@ -21,58 +20,102 @@ class AccountInfoPage4 extends StatefulWidget {
 class AccountInfoPage4State extends State<AccountInfoPage4>
     with AutomaticKeepAliveClientMixin<AccountInfoPage4> {
   ClientDebugAccountBloc _bloc;
+  ScrollController _scrollController = ScrollController();
+  var page = 1;
+  BehaviorSubject<List<CountUse>> data = BehaviorSubject();
+  BehaviorSubject<String> total = BehaviorSubject();
 
   @override
   void initState() {
     if (_bloc == null) _bloc = BlocProvider.of(context);
+    initData();
+    _scrollController.addListener(
+      () {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          loadMore();
+        }
+      },
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      children: <Widget>[
-        buildItem('发票余量', '1000',showLine: false),
-        buildTitle('每日查验量'),
-        buildItem('xxxx-xx-xx', '1000张',),
-        buildItem('xxxx-xx-xx', '1000张',),
-        buildItem('xxxx-xx-xx', '1000张',),
-        buildItem('xxxx-xx-xx', '1000张',showLine: false),
-
-      ],
+    return StreamBuilder<List<CountUse>>(
+      initialData: [],
+      stream: data,
+      builder: (c, s) => ListView(
+            physics: BouncingScrollPhysics(),
+            controller: _scrollController,
+            children: <Widget>[
+              buildItem(
+                '发票余量',
+                total,
+                showLine: false,
+              ),
+              buildTitle('每日查验量'),
+              ...s.data.map((e) => _buildItem(e.dt, e.count.toString()))
+            ],
+          ),
     );
   }
 
-  Container _buildKeySecretItem(String name, String timeLimit, {bool showLine = true}) {
+  Widget _buildItem(String title, String content, {bool showLine = true}) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(bottom: 15),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            name,
-            style: TextStyle(fontSize: 15),
-          ),
           Container(
-            padding: EdgeInsets.only(top: 5),
+            padding: EdgeInsets.symmetric(vertical: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
+              children: [
                 Text(
-                  timeLimit,
-                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                  title,
+                  style: TextStyle(fontSize: 15),
                 ),
-                Image.asset('assets/images/ico_xq_fz.png')
+                Text(
+                  content,
+                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ],
             ),
+          ),
+          Opacity(
+            child: Divider(
+              height: 1,
+            ),
+            opacity: showLine ? 1 : 0,
           ),
         ],
       ),
     );
+  }
+
+  Future<void> initData() async {
+    print('initData');
+    var rsp = await ApiService().countUseInfo('1', '10', _bloc.id.value);
+    if (rsp.code == ApiService.success) {
+      data.value = rsp.data.rows;
+      total.value = rsp.data.quota?.toString() ?? '0';
+      page = 1;
+    }
+  }
+
+  void loadMore() async {
+    var rsp = await ApiService()
+        .countUseInfo((page + 1).toString(), '10', _bloc.id.value);
+    if (rsp.code == ApiService.success) {
+      data.value.addAll(rsp.data.rows);
+      data.value = data.value;
+      total.value = rsp.data.quota?.toString() ?? '0';
+      page++;
+    }
   }
 
   @override

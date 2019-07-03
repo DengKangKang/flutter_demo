@@ -1,33 +1,81 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/CommonRoute.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/data/http/api_service.dart';
-import 'package:flutter_app/data/http/rsp/ClientListRsp.dart';
-import 'package:flutter_app/data/http/rsp/data/ClientListData.dart';
 import 'package:flutter_app/data/persistence/Persistence.dart';
 import 'package:flutter_app/main.dart';
-import 'package:flutter_app/page/ClientDetailPage.dart';
-import 'package:flutter_app/page/DailyPage.dart';
 import 'package:flutter_app/page/login_page.dart';
-import 'package:flutter_app/page/SearchPage.dart';
 import 'package:flutter_app/page/reset_password.dart';
-import 'package:rxdart/rxdart.dart';
 
 class PersonalPage extends StatefulWidget {
   @override
   State createState() => PersonalPageState();
 }
 
-class PersonalPageState extends State<StatefulWidget> {
+class PersonalPageState extends State<PersonalPage> with AutomaticKeepAliveClientMixin<PersonalPage> {
+  String userName;
+
+  var userAccount = '';
+
+  @override
+  void initState() {
+    Persistence().getUserAccount().then(
+      (s) {
+        setState(() {
+          userAccount = s;
+        });
+      },
+    );
+    Persistence().getUsername().then(
+      (s) {
+        setState(() {
+          userName = s;
+        });
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Image.asset('assets/images/p_me.png'),
+        Stack(
+          alignment: AlignmentDirectional.center,
+          children: <Widget>[
+            Image.asset('assets/images/p_me.png'),
+            Column(
+              children: <Widget>[
+                Container(
+                  width: 75,
+                  height: 75,
+                  margin: EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(37.5)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      userName == null ? '' : userName[0],
+                      style: TextStyle(
+                          color: colorOrigin,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                Text(
+                  userName ?? '',
+                  style: TextStyle(color: Colors.white, fontSize: 22),
+                ),
+                Text(
+                  userAccount ?? '',
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                )
+              ],
+            ),
+          ],
+        ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
@@ -51,23 +99,23 @@ class PersonalPageState extends State<StatefulWidget> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text("提示"),
-                        content: Text("是否确认退出"),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('取消'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
+                            title: Text("提示"),
+                            content: Text("是否确认退出"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('取消'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('确定'),
+                                onPressed: () {
+                                  _onLogout(context);
+                                },
+                              ),
+                            ],
                           ),
-                          FlatButton(
-                            child: Text('确定'),
-                            onPressed: () {
-                              _onLogout(context);
-                            },
-                          ),
-                        ],
-                      ),
                     );
                   },
                 ),
@@ -106,15 +154,18 @@ class PersonalPageState extends State<StatefulWidget> {
     );
   }
 
-  void _onLogout(BuildContext context) {
+  void _onLogout(BuildContext context) async {
     Navigator.of(context).pop();
-    Persistence().setToken("").then((value) {
-      Navigator.pushReplacement(
-          context,
-          CommonRoute(
-            builder: (BuildContext context) => LoginPage(),
-          ));
-    });
+    await Persistence().setToken("");
+    await Persistence().userAuthority.add(false);
+    await Persistence().setUserAuthority(false);
+    await Navigator.pushReplacement(
+        context,
+        CommonRoute(
+          builder: (BuildContext context) => LoginPage(),
+        ));
   }
 
+  @override
+  bool get wantKeepAlive => true;
 }

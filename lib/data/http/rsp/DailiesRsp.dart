@@ -51,6 +51,7 @@ class Daily {
   String today_solution;
   String next_plan;
   String next_customer_visit;
+  String user_realname;
 
   Daily(
     this.daily_time,
@@ -59,6 +60,7 @@ class Daily {
     this.today_solution,
     this.next_plan,
     this.next_customer_visit,
+    this.user_realname,
   );
 
   factory Daily.fromJson(Map<String, dynamic> json) => _$DailyFromJson(json);

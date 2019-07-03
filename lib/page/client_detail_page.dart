@@ -18,11 +18,12 @@ import 'clientdetails/client_sign.dart';
 import 'clientdetails/client_visit_log_page.dart';
 
 class ClientDetailPage extends StatefulWidget {
-  const ClientDetailPage({Key key, this.client, this.businessType})
+  const ClientDetailPage({Key key, this.client, this.businessType, this.title})
       : super(key: key);
 
   final Client client;
   final businessType;
+  final title;
 
   @override
   State<StatefulWidget> createState() {
@@ -101,8 +102,9 @@ class ClientDetailPageState
           appBar: AppBar(
             elevation: 0,
             centerTitle: true,
-            title:
-                Text(widget.businessType & 0xF == typeTrace ? '线索详情' : '客户详情'),
+            title: Text(
+              title(),
+            ),
           ),
           body: Column(
             children: <Widget>[
@@ -287,6 +289,11 @@ class ClientDetailPageState
       ),
     );
   }
+
+  String title()=>
+    widget.title == null
+                ? widget.businessType & 0xF == typeTrace ? '线索详情' : '客户详情'
+                : widget.title;
 
   void callPhone() async {
     if (await canLaunch('tel:${widget.client.leads_mobile}')) {

@@ -53,13 +53,13 @@ class ClientApplyDebugAccountPage extends StatefulWidget {
 }
 
 class ClientDebugAccountPageState extends CommonPageState<
-    ClientApplyDebugAccountPage, ClientDebugAccountBloc> {
+    ClientApplyDebugAccountPage, ClientApplyDebugAccountBloc> {
   ScrollController _scrollController;
 
   @override
   void initState() {
     if (bloc == null) {
-      bloc = ClientDebugAccountBloc(widget.accountType, widget.client.id);
+      bloc = ClientApplyDebugAccountBloc(widget.accountType, widget.client.id);
       bloc.initData();
     }
     _scrollController = ScrollController(
@@ -834,8 +834,8 @@ class ClientDebugAccountPageState extends CommonPageState<
   }
 }
 
-class ClientDebugAccountBloc extends CommonBloc {
-  ClientDebugAccountBloc(this.accountType, this.clientId);
+class ClientApplyDebugAccountBloc extends CommonBloc {
+  ClientApplyDebugAccountBloc(this.accountType, this.clientId);
 
   final accountType;
   final clientId;

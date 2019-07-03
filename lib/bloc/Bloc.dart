@@ -61,6 +61,11 @@ class CommonBloc extends Bloc
 
   @override
   dynamic initData() {
+
+  }
+
+  void showEndDrawer(){
+    _navigatorController.sink.add(BlocEvent(BLOC_SHOW_END_DRAWER,null));
   }
 
   @override
@@ -125,6 +130,7 @@ class BlocProvider<T extends CommonBloc> extends InheritedWidget {
   }
 }
 
+const BLOC_SHOW_END_DRAWER = -0x7;
 const BLOC_EVENT_TIP = -0x1;
 const BLOC_EVENT_NAVIGATION_FINISH = -0x2;
 const BLOC_EVENT_NAVIGATION_PUSH = -0x3;

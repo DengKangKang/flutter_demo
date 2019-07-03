@@ -40,40 +40,54 @@ class AccountInfoPage2State extends State<AccountInfoPage2>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                '创建人：xx',
-                style: TextStyle(fontSize: 15),
+              StreamBuilder(
+                initialData: '',
+                stream: _bloc.maker.stream,
+                builder: (c, s) => Text(
+                      '创建人：${s.data}',
+                      style: TextStyle(fontSize: 15),
+                    ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 5),
-                child: Text(
-                  '申请时间：xxxx-xx-xx xx:xx:xx',
-                  style: TextStyle(fontSize: 15),
+                child: StreamBuilder(
+                  initialData: '',
+                  stream: _bloc.applyTime.stream,
+                  builder: (c, s) => Text(
+                        '申请时间：${s.data}',
+                        style: TextStyle(fontSize: 15),
+                      ),
                 ),
               ),
             ],
           ),
         ),
         buildTitle('基本信息'),
-        buildItem('企业名称', 'xxxx'),
-        buildItem('注册地址', ''),
-        buildItem('代理商', ''),
-        buildItem('开户行', ''),
-        buildItem('账户', ''),
-        buildItem('手机号', '',showLine: false),
+        buildItem('企业名称', _bloc.companyName.stream),
+        buildItem('注册地址', _bloc.address.stream),
+        buildItem('代理商', _bloc.proxy.stream),
+        buildItem('开户行', _bloc.bank.stream),
+        buildItem('账户', _bloc.account.stream),
+        buildItem('手机号', _bloc.phoneNumber.stream, showLine: false),
         buildTitle('Key&Secret'),
         _buildKeySecretItem(
-          'xxx key',
-          '32131231231231',
+          'ic_client_key',
+          _bloc.clientKey,
         ),
-        buildTitle('其他信息'),
-        buildItem('查验发票量', ''),
-        buildItem('有效期', '',showLine: false),
+        _buildKeySecretItem(
+          'company_key',
+          _bloc.companyKey,
+        ),
+        _buildKeySecretItem(
+          'company_secret',
+          _bloc.companySecret,
+        ),
       ],
     );
   }
 
-  Container _buildKeySecretItem(String name, String timeLimit, {bool showLine = true}) {
+  Container _buildKeySecretItem(String name, Stream timeLimit,
+      {bool showLine = true}) {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(bottom: 15),
@@ -90,9 +104,13 @@ class AccountInfoPage2State extends State<AccountInfoPage2>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  timeLimit,
-                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                StreamBuilder(
+                  initialData: '',
+                  stream: timeLimit,
+                  builder: (c, s) => Text(
+                        s.data,
+                        style: TextStyle(fontSize: 15, color: Colors.grey),
+                      ),
                 ),
                 Image.asset('assets/images/ico_xq_fz.png')
               ],

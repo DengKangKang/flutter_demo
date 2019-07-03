@@ -1,17 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
-import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
+import 'package:flutter_app/data/persistence/Persistence.dart';
 import 'package:flutter_app/main.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'NewDailyPage.dart';
 import 'base/CommonPageState.dart';
 
 class NewDailyPage extends StatefulWidget {
@@ -22,12 +21,32 @@ class NewDailyPage extends StatefulWidget {
 }
 
 class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
+  var todayWorkContent = '';
+  var todayVisitClient = '';
+  var todaySolution = '';
+  var tomorrowPlane = '';
+  var tomorrowVisitClient = '';
+
   @override
   void initState() {
     if (bloc == null) {
       bloc = NewDailyBloc();
-      bloc.initData();
     }
+    Persistence().getDaily().then(
+      (s) {
+        if (s != null && s.isNotEmpty) {
+          var decoded = jsonDecode(s);
+          setState(() {
+            bloc._date.add(decoded['date'] ?? '');
+            todayWorkContent = decoded['todayWorkContent'] ?? '';
+            todayVisitClient = decoded['todayVisitClient'] ?? '';
+            todaySolution = decoded['todaySolution'] ?? '';
+            tomorrowPlane = decoded['tomorrowPlane'] ?? '';
+            tomorrowVisitClient = decoded['tomorrowVisitClient'] ?? '';
+          });
+        }
+      },
+    );
     super.initState();
   }
 
@@ -38,8 +57,9 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
         backgroundColor: colorBg,
         key: scaffoldKey,
         appBar: AppBar(
+          centerTitle: true,
           elevation: 0,
-          title: Text("新增日报"),
+          title: Text('新增日报'),
         ),
         body: Container(
           child: Theme(
@@ -60,27 +80,33 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                               var date = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),
-                                firstDate: DateTime.now(),
+                                firstDate: DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                ),
                                 lastDate: DateTime(DateTime.now().year + 10),
                               );
                               if (date != null) {
-                                bloc.date = DateFormat('yyyy-MM-dd').format(date);
+                                bloc.date =
+                                    DateFormat('yyyy-MM-dd').format(date);
                               }
                             },
                             child: StreamBuilder<String>(
-                              initialData: "",
+                              initialData: '',
                               stream: bloc.date,
                               builder: (
-                                  BuildContext context,
-                                  AsyncSnapshot<String> snapshot,
-                                  ) {
+                                BuildContext context,
+                                AsyncSnapshot<String> snapshot,
+                              ) {
                                 return Container(
                                   padding: EdgeInsets.symmetric(
                                     vertical: 15,
                                     horizontal: 20,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(
                                         '日期',
@@ -122,16 +148,24 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                                   ),
                                 ),
                                 TextField(
+                                  controller: TextEditingController.fromValue(
+                                    TextEditingValue(
+                                      text: todayWorkContent,
+                                      selection: TextSelection.collapsed(
+                                        offset: todayWorkContent.length,
+                                      ),
+                                    ),
+                                  ),
                                   decoration: InputDecoration(
                                     fillColor: Colors.red,
                                     border: InputBorder.none,
-                                    hintText: "请输入今日工作内容",
+                                    hintText: '请输入今日工作内容',
                                   ),
                                   keyboardType: TextInputType.multiline,
                                   maxLengthEnforced: true,
                                   maxLines: null,
                                   onChanged: (s) {
-                                    bloc.todayWorkContent = s;
+                                    todayWorkContent = s;
                                   },
                                 ),
                                 Divider(
@@ -152,13 +186,21 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                                   ),
                                 ),
                                 TextField(
+                                  controller: TextEditingController.fromValue(
+                                      TextEditingValue(
+                                    text: todayVisitClient,
+                                    selection: TextSelection.collapsed(
+                                      offset: todayVisitClient.length,
+                                    ),
+                                  )),
                                   decoration: InputDecoration(
-                                      border: InputBorder.none, hintText: '请输入相关内容'),
+                                      border: InputBorder.none,
+                                      hintText: '请输入相关内容'),
                                   keyboardType: TextInputType.multiline,
                                   maxLengthEnforced: true,
                                   maxLines: null,
                                   onChanged: (s) {
-                                    bloc.todayVisitClient = s;
+                                    todayVisitClient = s;
                                   },
                                 ),
                                 Divider(
@@ -179,13 +221,22 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                                   ),
                                 ),
                                 TextField(
+                                  controller: TextEditingController.fromValue(
+                                    TextEditingValue(
+                                      text: todaySolution,
+                                      selection: TextSelection.collapsed(
+                                        offset: todaySolution.length,
+                                      ),
+                                    ),
+                                  ),
                                   decoration: InputDecoration(
-                                      border: InputBorder.none, hintText: '请输入相关内容'),
+                                      border: InputBorder.none,
+                                      hintText: '请输入相关内容'),
                                   keyboardType: TextInputType.multiline,
                                   maxLengthEnforced: true,
                                   maxLines: null,
                                   onChanged: (s) {
-                                    bloc.todaySolution = s;
+                                    todaySolution = s;
                                   },
                                 ),
                                 Divider(
@@ -206,16 +257,23 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                                   ),
                                 ),
                                 TextField(
+                                  controller: TextEditingController.fromValue(
+                                      TextEditingValue(
+                                    text: tomorrowPlane,
+                                    selection: TextSelection.collapsed(
+                                      offset: tomorrowPlane.length,
+                                    ),
+                                  )),
                                   decoration: InputDecoration(
                                     fillColor: Theme.of(context).primaryColor,
                                     border: InputBorder.none,
-                                    hintText: "请输入明日工作计划",
+                                    hintText: '请输入明日工作计划',
                                   ),
                                   keyboardType: TextInputType.multiline,
                                   maxLengthEnforced: true,
                                   maxLines: null,
                                   onChanged: (s) {
-                                    bloc.tomorrowPlane = s;
+                                    tomorrowPlane = s;
                                   },
                                 ),
                                 Divider(
@@ -236,15 +294,22 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                                   ),
                                 ),
                                 TextField(
+                                  controller: TextEditingController.fromValue(
+                                      TextEditingValue(
+                                    text: tomorrowVisitClient,
+                                    selection: TextSelection.collapsed(
+                                      offset: tomorrowVisitClient.length,
+                                    ),
+                                  )),
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: "请输入相关内容",
+                                    hintText: '请输入相关内容',
                                   ),
                                   keyboardType: TextInputType.multiline,
                                   maxLengthEnforced: true,
                                   maxLines: null,
                                   onChanged: (s) {
-                                    bloc.tomorrowVisitClient = s;
+                                    tomorrowVisitClient = s;
                                   },
                                 ),
                               ],
@@ -257,8 +322,8 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                 ),
                 Material(
                   elevation: defaultElevation,
-                  child:InkWell(
-                    child:  Container(
+                  child: InkWell(
+                    child: Container(
                       height: 60,
                       child: Center(
                         child: Text(
@@ -270,8 +335,14 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                         ),
                       ),
                     ),
-                    onTap: (){
-                      bloc.save();
+                    onTap: () {
+                      bloc.save(
+                        todayWorkContent,
+                        todayVisitClient,
+                        todaySolution,
+                        tomorrowPlane,
+                        tomorrowVisitClient,
+                      );
                     },
                   ),
                 ),
@@ -284,20 +355,51 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
     );
   }
 
-  Future<bool> _onWillPop() {
+  Future<bool> _onWillPop() async {
+    var daily = {};
+    if (bloc._date.value.isNotEmpty) daily['date'] = bloc._date.value;
+    if (todayWorkContent.isNotEmpty) {
+      daily['todayWorkContent'] = todayWorkContent;
+    }
+
+    if (todayVisitClient.isNotEmpty) {
+      daily['todayVisitClient'] = todayVisitClient;
+    }
+
+    if (todaySolution.isNotEmpty) {
+      daily['todaySolution'] = todaySolution;
+    }
+
+    if (tomorrowPlane.isNotEmpty) {
+      daily['tomorrowPlane'] = tomorrowPlane;
+    }
+
+    if (tomorrowVisitClient.isNotEmpty) {
+      daily['tomorrowVisitClient'] = tomorrowVisitClient;
+    }
+
+    await Persistence().setDaily(
+      jsonEncode(daily),
+    );
     return showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                title: Text('Are you sure?'),
-                content: Text('Unsaved data will be lost.'),
+                title: Text('提示'),
+                content: Text('草稿已自动保存'),
                 actions: <Widget>[
                   FlatButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: Text('No'),
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text(
+                      '退出',
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   ),
                   FlatButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: Text('Yes'),
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text(
+                      '继续填写',
+                      style: TextStyle(color: colorOrigin),
+                    ),
                   ),
                 ],
               ),
@@ -312,36 +414,11 @@ class NewDailyBloc extends CommonBloc {
       DateTime.now(),
     ),
   );
-  String _todayWorkContent = "";
-  String _todayVisitClient = "";
-  String _todaySolution = "";
-  String _tomorrowPlane = "";
-  String _tomorrowVisitClient = "";
 
   dynamic get date => _date.stream;
 
   set date(String value) {
     _date.sink.add(value);
-  }
-
-  set todayWorkContent(String value) {
-    if (value != _todayWorkContent) _todayWorkContent = value;
-  }
-
-  set tomorrowVisitClient(String value) {
-    if (value != _tomorrowVisitClient) _tomorrowVisitClient = value;
-  }
-
-  set tomorrowPlane(String value) {
-    if (value != _tomorrowPlane) _tomorrowPlane = value;
-  }
-
-  set todaySolution(String value) {
-    if (value != _todaySolution) _todaySolution = value;
-  }
-
-  set todayVisitClient(String value) {
-    if (value != _todayVisitClient) _todayVisitClient = value;
   }
 
   @override
@@ -350,26 +427,35 @@ class NewDailyBloc extends CommonBloc {
     super.onClosed();
   }
 
-  void save() async {
-    if (_todayWorkContent.isEmpty &&
-        _todayVisitClient.isEmpty &&
-        _todaySolution.isEmpty &&
-        _tomorrowPlane.isEmpty &&
-        _tomorrowVisitClient.isEmpty) {
-      showTip("请至少输入一项！");
+  void save(
+    todayWorkContent,
+    todayVisitClient,
+    todaySolution,
+    tomorrowPlane,
+    tomorrowVisitClient,
+  ) async {
+    if (todayWorkContent.isEmpty &&
+        todayVisitClient.isEmpty &&
+        todaySolution.isEmpty &&
+        tomorrowPlane.isEmpty &&
+        tomorrowVisitClient.isEmpty) {
+      showTip('请至少输入一项！');
       return;
     }
     pageLoading();
     var rsp = await ApiService().newDaily(
       _date.value,
-      _todayWorkContent,
-      _todayVisitClient,
-      _todaySolution,
-      _tomorrowPlane,
-      _tomorrowVisitClient,
+      todayWorkContent,
+      todayVisitClient,
+      todaySolution,
+      tomorrowPlane,
+      tomorrowVisitClient,
     );
     pageCompleted();
     if (rsp.code == ApiService.success) {
+      await Persistence().setDaily(
+        jsonEncode(''),
+      );
       finish(result: true);
     } else {
       showTip(rsp.msg);

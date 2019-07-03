@@ -8,30 +8,42 @@ import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
+import 'package:flutter_app/data/persistence/Persistence.dart';
 import 'package:flutter_app/main.dart';
+import 'package:flutter_app/page/main_page.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'base/CommonPageState.dart';
 import 'new_daily_page.dart';
 
-const pageStateGroupMembers = 1;
-const pageStatePersonal = 2;
+const pageStateGroupMembers = 2;
+const pageStatePersonal = 1;
 
 class DailyPage extends StatefulWidget {
   @override
   State createState() => DailyPageState();
 }
 
-class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
+class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
+    with AutomaticKeepAliveClientMixin<DailyPage> {
   ScrollController _scrollController = ScrollController();
   GlobalKey _keyTitle = GlobalKey();
+  GlobalKey<RefreshIndicatorState> _refresh = GlobalKey();
+  MainBloc mainBloc;
 
   @override
   void initState() {
     if (bloc == null) {
       bloc = DailyBloc();
-      bloc.initData();
+    }
+    bloc.initData();
+    if (mainBloc == null) {
+      mainBloc = BlocProvider.of(context);
+      mainBloc.onFilterConfirm.listen((d) {
+        bloc.name = d ?? '';
+        bloc.initData();
+      });
     }
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -44,79 +56,60 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         key: _keyTitle,
         elevation: 0,
         centerTitle: true,
-        title: InkWell(
-          child: StreamBuilder<int>(
-            initialData: pageStatePersonal,
-            stream: bloc.pageState.stream,
-            builder: (c, s) => Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(s.data == pageStatePersonal ? '我的日报' : '组员日报'),
-                    Container(
-                      margin: EdgeInsets.only(left: 5),
-                      child: Image.asset('assets/images/ico_htxq_jt_s.png'),
-                    ),
-                  ],
-                ),
-          ),
-          onTap: () async {
-            final RenderBox overlay =
-                Overlay.of(context).context.findRenderObject();
-            print(Offset.zero & overlay.size);
-            double b =
-                _keyTitle.currentContext.findRenderObject().paintBounds.bottom;
-            double l = (overlay.size.width - 168) / 2;
-            double r = overlay.size.width - l;
-            final result = await showMenu(
-              context: context,
-              position: RelativeRect.fromLTRB(l, b, r, 0),
-              items: <PopupMenuEntry<int>>[
-                PopupMenuItem<int>(
-                  value: pageStatePersonal,
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      child: Center(
-                        child: Text('我的日报'),
+        title: StreamBuilder<bool>(
+          initialData: false,
+          stream: Persistence().userAuthority,
+          builder: (c, b) => InkWell(
+                child: StreamBuilder<int>(
+                  initialData: pageStatePersonal,
+                  stream: bloc.pageState.stream,
+                  builder: (c, s) => Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(s.data == pageStatePersonal ? '我的日报' : '组员日报'),
+                          Visibility(
+                            visible: b.data,
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: Image.asset(
+                                  'assets/images/ico_htxq_jt_s.png'),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
                 ),
-                PopupMenuDivider(
-                  height: 1,
-                ),
-                PopupMenuItem<int>(
-                  value: pageStateGroupMembers,
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      child: Center(
-                        child: Text('组员日报'),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-            bloc.pageState.sink.add(result);
-          },
+                onTap: b.data ? changePageState : null,
+              ),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add_circle_outline),
-            onPressed: () async {
-              var needRefresh = await Navigator.push(
-                  context, CommonRoute(builder: (c) => NewDailyPage()));
-              if (needRefresh == true) {
-                await bloc.initData();
-              }
-            },
-          )
+          StreamBuilder<int>(
+            initialData: pageStatePersonal,
+            stream: bloc.pageState.stream,
+            builder: (c, s) => s.data == pageStatePersonal
+                ? IconButton(
+                    icon: Icon(Icons.add_circle_outline),
+                    onPressed: () async {
+                      var needRefresh = await Navigator.push(
+                          context, CommonRoute(builder: (c) => NewDailyPage()));
+                      if (needRefresh == true) {
+                        await bloc.initData();
+                      }
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      mainBloc.showEndDrawer();
+                    },
+                  ),
+          ),
         ],
       ),
       body: Column(
@@ -149,7 +142,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: Row(
                     children: <Widget>[
@@ -185,8 +178,10 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
                     ),
                     lastDate: DateTime(DateTime.now().year + 10, 12, 31),
                   );
-                  bloc.selectedDay.value =
-                      DateFormat('yyyy-MM-dd').format(date);
+                  if (date != null) {
+                    bloc.selectedDay.value =
+                        DateFormat('yyyy-MM-dd').format(date);
+                  }
                   await bloc.initData();
                 },
               ),
@@ -214,6 +209,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
             stream: bloc.dailies,
             builder: (c, s) => Flexible(
                   child: RefreshIndicator(
+                      key: _refresh,
                       child: ListView.builder(
                         physics: AlwaysScrollableScrollPhysics(),
                         controller: _scrollController,
@@ -249,9 +245,25 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
               vertical: 10,
               horizontal: 20,
             ),
-            child: Text(
-              daily.daily_time,
-              style: TextStyle(color: colorOrigin, fontSize: 14),
+            child: Row(
+              children: <Widget>[
+                Visibility(
+                  visible: bloc.pageState.value == pageStateGroupMembers,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Text(
+                      daily.user_realname ?? '',
+                      style: TextStyle(color: colorOrigin, fontSize: 14),
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    daily.daily_time,
+                    style: TextStyle(color: colorOrigin, fontSize: 14),
+                  ),
+                ),
+              ],
             ),
           ),
           Divider(
@@ -355,10 +367,56 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc> {
       ),
     );
   }
+
+  void changePageState() async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+    print(Offset.zero & overlay.size);
+    double b = _keyTitle.currentContext.findRenderObject().paintBounds.bottom;
+    double l = (overlay.size.width - 168) / 2;
+    double r = overlay.size.width - l;
+    final result = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(l, b, r, 0),
+      items: <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          value: pageStatePersonal,
+          child: Center(
+            child: Container(
+              width: 100,
+              child: Center(
+                child: Text('我的日报'),
+              ),
+            ),
+          ),
+        ),
+        PopupMenuDivider(
+          height: 1,
+        ),
+        PopupMenuItem<int>(
+          value: pageStateGroupMembers,
+          child: Center(
+            child: Container(
+              width: 100,
+              child: Center(
+                child: Text('组员日报'),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+    if (result != null) bloc.pageState.sink.add(result);
+    await _refresh.currentState.show();
+    await bloc.initData();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class DailyBloc extends CommonBloc {
-  var pageState = StreamController<int>();
+  var pageState = BehaviorSubject<int>(seedValue: pageStatePersonal);
+  var name = '';
 
   BehaviorSubject<String> selectedDay = BehaviorSubject(
     seedValue: DateFormat('yyyy-MM-dd').format(DateTime.now()),
@@ -369,7 +427,13 @@ class DailyBloc extends CommonBloc {
 
   @override
   Future<void> initData() async {
-    var rsp = await ApiService().getDailies(1, 10, selectedDay.value);
+    var rsp = await ApiService().getDailies(
+      1,
+      10,
+      selectedDay.value,
+      pageState.value.toString(),
+      name,
+    );
     if (rsp.code == ApiService.success) {
       var dailiesRsp = rsp as DailiesRsp;
       _dailies.sink.add(dailiesRsp.data.list);
@@ -378,7 +442,13 @@ class DailyBloc extends CommonBloc {
   }
 
   void loadMore() async {
-    var rsp = await ApiService().getDailies(page + 1, 10, selectedDay.value);
+    var rsp = await ApiService().getDailies(
+      page + 1,
+      10,
+      selectedDay.value,
+      pageState.value.toString(),
+      name,
+    );
     if (rsp.code == ApiService.success) {
       var dailiesRsp = rsp as DailiesRsp;
       if (dailiesRsp?.data?.list != null &&

@@ -9,6 +9,7 @@ import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/clients_rsp.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/data/http/rsp/data/clients_data.dart';
+import 'package:flutter_app/data/persistence/Persistence.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/page/client_detail_page.dart';
@@ -18,6 +19,7 @@ import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'base/CommonPageState.dart';
+import 'daily_page.dart';
 
 const typeTrace = 0x1;
 const typeClient = 0x2;
@@ -36,13 +38,14 @@ class ClientListPage extends StatefulWidget {
 
 class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
   ScrollController _scrollController = ScrollController();
+  GlobalKey _keyTitle = GlobalKey();
 
   @override
   void initState() {
     if (bloc == null) {
       bloc = ClientListBloc(widget.businessType);
-      bloc.initData();
     }
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -60,31 +63,53 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
         key: scaffoldKey,
         backgroundColor: colorBg,
         appBar: AppBar(
+          key: _keyTitle,
           elevation: 0,
           centerTitle: true,
-          title: Text(widget.title),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () async {
-                var needRefresh = await Navigator.push(
-                  context,
-                  CommonRoute(
-                    builder: (c) => NewBusinessPage(
-                          type: widget.businessType & 0xf,
+          title: StreamBuilder<bool>(
+            initialData: false,
+            stream: Persistence().userAuthority,
+            builder: (c, b) => InkWell(
+                  child: StreamBuilder<int>(
+                    initialData: pageStatePersonal,
+                    stream: bloc.pageState.stream,
+                    builder: (c, s) => Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              geTitle(s),
+                            ),
+                            Visibility(
+                              visible: b.data &&
+                                  widget.businessType & 0xf0 == statePrivate,
+                              child: Image.asset(
+                                'assets/images/ico_htxq_jt_s.png',
+                              ),
+                            ),
+                          ],
                         ),
                   ),
-                );
-                if (needRefresh == true) {
-                  await bloc.initData();
-                }
-              },
+                  onTap: b.data && widget.businessType & 0xf0 == statePrivate
+                      ? () {
+                          changePageState(context);
+                        }
+                      : null,
+                ),
+          ),
+          actions: <Widget>[
+            Opacity(
+              opacity: widget.businessType & 0xf0 == statePrivate ? 1 : 0,
+              child: IconButton(
+                icon: Icon(Icons.add),
+                onPressed:
+                    widget.businessType & 0xf0 == statePrivate ? add : null,
+              ),
             ),
             Builder(
               builder: (context) => IconButton(
                     icon: Icon(Icons.menu),
                     onPressed: () async {
-                     scaffoldKey.currentState.openEndDrawer();
+                      scaffoldKey.currentState.openEndDrawer();
                     },
                   ),
             ),
@@ -114,6 +139,71 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
         ),
       ),
     );
+  }
+
+  void add() async {
+    var needRefresh = await Navigator.push(
+      context,
+      CommonRoute(
+        builder: (c) => NewBusinessPage(
+              type: widget.businessType & 0xf,
+            ),
+      ),
+    );
+    if (needRefresh == true) {
+      await bloc.initData();
+    }
+  }
+
+  Future changePageState(BuildContext context) async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+    print(Offset.zero & overlay.size);
+    double b = _keyTitle.currentContext.findRenderObject().paintBounds.bottom;
+    double l = (overlay.size.width - 168) / 2;
+    double r = overlay.size.width - l;
+    final result = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(l, b, r, 0),
+      items: <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          value: pageStatePersonal,
+          child: Center(
+            child: Container(
+              width: 100,
+              child: Center(
+                child: Text(
+                    '私海${widget.businessType & 0xf == typeTrace ? '线索' : '客户'}'),
+              ),
+            ),
+          ),
+        ),
+        PopupMenuDivider(
+          height: 1,
+        ),
+        PopupMenuItem<int>(
+          value: pageStateGroupMembers,
+          child: Center(
+            child: Container(
+              width: 100,
+              child: Center(
+                child: Text(
+                    '小组${widget.businessType & 0xf == typeTrace ? '线索' : '客户'}'),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+    if (result != null) bloc.pageState.sink.add(result);
+    await bloc.initData();
+  }
+
+  String geTitle(AsyncSnapshot<int> s) {
+    return widget.businessType & 0xf0 == statePrivate
+        ? s.data == pageStatePersonal
+            ? '私海${widget.businessType & 0xf == typeTrace ? '线索' : '客户'}'
+            : '小组${widget.businessType & 0xf == typeTrace ? '线索' : '客户'}'
+        : widget.title;
   }
 
   Widget _clientItem(List<Client> content, int index) {
@@ -157,7 +247,24 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                         client.source_name ?? '',
                         style: TextStyle(fontSize: 9, color: Color(0xFF3389FF)),
                       ),
-                    )
+                    ),
+                    Visibility(
+                      visible: bloc.pageState.value == pageStateGroupMembers,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 13.5),
+                        child: Image.asset('assets/images/ico_lb_ry.png'),
+                      ),
+                    ),
+                    Visibility(
+                      visible: bloc.pageState.value == pageStateGroupMembers,
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Text(
+                          client.realname ?? '',
+                          style: TextStyle(color: colorOrigin, fontSize: 14),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -276,7 +383,24 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                         client.source_name ?? '',
                         style: TextStyle(fontSize: 9, color: Color(0xFF3389FF)),
                       ),
-                    )
+                    ),
+                    Visibility(
+                      visible: bloc.pageState.value == pageStateGroupMembers,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 13.5),
+                        child: Image.asset('assets/images/ico_lb_ry.png'),
+                      ),
+                    ),
+                    Visibility(
+                      visible: bloc.pageState.value == pageStateGroupMembers,
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Text(
+                          client.realname ?? '',
+                          style: TextStyle(color: colorOrigin, fontSize: 14),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Opacity(
@@ -361,13 +485,16 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
     );
   }
 
-  void goDetail(client) async {
+  void goDetail(Client client) async {
     var needRefresh = await Navigator.push(
       context,
       CommonRoute(
         builder: (c) => ClientDetailPage(
               client: client,
               businessType: widget.businessType,
+              title: bloc.pageState.value == pageStateGroupMembers
+                  ? '${client.realname}的${widget.businessType & 0xf == typeTrace ? '线索' : '客户'}'
+                  : null,
             ),
       ),
     );
@@ -477,6 +604,8 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
 class ClientListBloc extends CommonBloc {
   ClientListBloc(this.businessType);
 
+  var pageState = BehaviorSubject<int>(seedValue: pageStatePersonal);
+
   String id = '';
   String maker;
 
@@ -516,6 +645,7 @@ class ClientListBloc extends CommonBloc {
     var state = businessType & 0xF0;
     if (type == typeClient) {
       rsp = await ApiService().clients(
+        key: state == statePrivate ? pageState.value.toString() : '',
         is_public: state == statePublic ? 'true' : '',
         state: state == statePublic ? '5,6,7,98' : '4,5,6,7',
         user: '8',
@@ -536,6 +666,7 @@ class ClientListBloc extends CommonBloc {
       );
     } else {
       rsp = await ApiService().trace(
+        key: state == statePrivate ? pageState.value.toString() : '',
         is_private: state == statePrivate ? 'true' : '',
         state: state == statePrivate ? '1,2,3' : '2,3,99',
         user: '8',
@@ -578,7 +709,6 @@ class ClientListBloc extends CommonBloc {
     _dailies.close();
     super.onClosed();
   }
-
 }
 
 class Filter extends StatefulWidget {
@@ -640,7 +770,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
   void initState() {
     if (_bloc == null) _bloc = BlocProvider.of(context);
     reset();
-    _actions.add(ActionButton('重制', reset, colorCyan));
+    _actions.add(ActionButton('重置', reset, colorCyan));
     _actions.add(ActionDivider());
     _actions.add(ActionButton('筛选', filter, colorOrigin));
     super.initState();
@@ -1032,9 +1162,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                               onTap: () {
-                                                if(source.value != item.id){
+                                                if (source.value != item.id) {
                                                   source.value = item.id;
-                                                }else{
+                                                } else {
                                                   source.value = null;
                                                 }
                                               },
@@ -1121,9 +1251,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                               onTap: () {
-                                                if(location.value != item.id){
+                                                if (location.value != item.id) {
                                                   location.value = item.id;
-                                                }else{
+                                                } else {
                                                   location.value = null;
                                                 }
                                               },
@@ -1214,9 +1344,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                               onTap: () {
-                                                if(company.value != item.id){
+                                                if (company.value != item.id) {
                                                   company.value = item.id;
-                                                }else{
+                                                } else {
                                                   company.value = null;
                                                 }
                                               },
@@ -1275,9 +1405,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                         ),
                                       ),
                                       onTap: () {
-                                        if(isImportant.value != item.id){
+                                        if (isImportant.value != item.id) {
                                           isImportant.value = item.id;
-                                        }else{
+                                        } else {
                                           isImportant.value = null;
                                         }
                                       },
@@ -1366,9 +1496,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                               onTap: () {
-                                                if(progress.value != item.id){
+                                                if (progress.value != item.id) {
                                                   progress.value = item.id;
-                                                }else{
+                                                } else {
                                                   progress.value = null;
                                                 }
                                               },
@@ -1427,9 +1557,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                         ),
                                       ),
                                       onTap: () {
-                                        if(secondDev.value != item.id){
+                                        if (secondDev.value != item.id) {
                                           secondDev.value = item.id;
-                                        }else{
+                                        } else {
                                           secondDev.value = null;
                                         }
                                       },
@@ -1476,15 +1606,13 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
     if (_bloc.source.isNotEmpty) source.value = int.parse(_bloc.source);
     if (_bloc.location.isNotEmpty) location.value = int.parse(_bloc.location);
     if (_bloc.company.isNotEmpty) company.value = int.parse(_bloc.company);
-    if (_bloc.isImportant.isNotEmpty){
+    if (_bloc.isImportant.isNotEmpty) {
       isImportant.value = int.parse(_bloc.isImportant);
-
     }
     if (_bloc.progress.isNotEmpty) progress.value = int.parse(_bloc.progress);
-    if (_bloc.secondDev.isNotEmpty){
+    if (_bloc.secondDev.isNotEmpty) {
       secondDev.value = int.parse(_bloc.secondDev);
     }
-
   }
 
   void filter() {

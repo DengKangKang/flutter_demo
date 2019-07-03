@@ -89,19 +89,19 @@ class CreateVisitPagePageState extends State<CreateVisitPage> {
       return;
     }
     onLoading(context);
-    var rsp = await ApiService().newVisitLog(
-      widget.id.toString(),
-      content,
-    );
-    loadingFinish(context);
-    if (rsp.code == ApiService.success) {
-      Navigator.of(context).pop(true);
-    } else {
-      _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          content: Text(rsp.msg),
-        ),
-      );
-    }
+//    var rsp = await ApiService().newVisitLog(
+//      widget.id.toString(),
+//      content,
+//    );
+//    loadingFinish(context);
+//    if (rsp.code == ApiService.success) {
+//      Navigator.of(context).pop(true);
+//    } else {
+//      _scaffoldKey.currentState.showSnackBar(
+//        SnackBar(
+//          content: Text(rsp.msg),
+//        ),
+//      );
+//    }
   }
 }
