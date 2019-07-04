@@ -1,14 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/data/http/api_service.dart';
-import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/data/persistence/Persistence.dart';
-import 'package:flutter_app/page/login_page.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
+import 'package:flutter_app/page/login_page.dart';
 import 'package:flutter_app/page/main_page.dart';
-import 'package:flutter_app/page/main_page.dart' as prefix0;
 
 const colorOrigin = Color(0XFFEE7B1C);
 const colorCyan = Color(0XFF37C6C5);
@@ -26,6 +23,7 @@ void main() {
   runApp(MaterialApp(
     theme: ThemeData(
         primaryColor: Colors.white,
+        accentColor: colorOrigin,
         scaffoldBackgroundColor: Colors.white,
         backgroundColor: Colors.white,
         hintColor: Colors.grey,
@@ -63,6 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final time = DateTime.now().millisecond;
     ApiService().sourceTypes().then(
       (rsp) {
+        print(rsp);
         if (rsp.code == ApiService.success) {
           var sourceTypesRsp = rsp;
           sourceTypes.addAll(sourceTypesRsp.data);
@@ -70,6 +69,10 @@ class _SplashScreenState extends State<SplashScreen> {
         var duration = 2000 - time;
         _goMainDelay(duration > 0 ? duration : 0);
       },
+      onError: (e){
+        var duration = 2000 - time;
+        _goMainDelay(duration > 0 ? duration : 0);
+      }
     );
   }
 

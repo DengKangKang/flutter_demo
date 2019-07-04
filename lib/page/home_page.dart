@@ -33,7 +33,7 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
       children: <Widget>[
         Image.asset('assets/images/p_sy.png'),
         Container(
-          margin: EdgeInsets.only(top: 170),
+          margin: EdgeInsets.only(top: 165),
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: <Widget>[
@@ -99,7 +99,7 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
     var type = businessType & 0xF;
     return Container(
         margin: EdgeInsets.only(
-            left: 20, right: 20, bottom: type == typeTrace ? 40 : 30),
+            left: 20, right: 20, bottom: type == typeTrace ? 40 : 0),
         child: RawMaterialButton(
           fillColor: Colors.white,
           elevation: 8,
@@ -108,7 +108,7 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
           child: Container(
             padding: EdgeInsets.all(15),
             width: 110,
-            height: 165,
+            height:  MediaQuery.of(context).size.height*0.25,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

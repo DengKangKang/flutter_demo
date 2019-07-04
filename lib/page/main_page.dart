@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/page/base/CommonPageState.dart';
+import 'package:flutter_app/page/client_detail_page.dart' as prefix0;
 import 'package:flutter_app/page/daily_page.dart';
 import 'package:flutter_app/page/home_page.dart';
 import 'package:flutter_app/page/personal_page.dart';
@@ -22,10 +23,9 @@ class MainPage extends StatefulWidget {
   State createState() => MainPageState();
 }
 
-class MainPageState extends CommonPageState<MainPage,MainBloc>
+class MainPageState extends CommonPageState<MainPage, MainBloc>
     with SingleTickerProviderStateMixin {
   MainBloc bloc;
-
 
   var page = [HomePage(), DailyPage(), PersonalPage()];
 
@@ -46,7 +46,7 @@ class MainPageState extends CommonPageState<MainPage,MainBloc>
   Widget build(BuildContext context) {
     return BlocProvider<MainBloc>(
       bloc: bloc,
-      child:  Scaffold(
+      child: Scaffold(
         key: scaffoldKey,
         body: TabBarView(
           physics: NeverScrollableScrollPhysics(),
@@ -57,57 +57,55 @@ class MainPageState extends CommonPageState<MainPage,MainBloc>
           initialData: 0,
           stream: bloc.currentIndex.stream,
           builder: (
-              BuildContext context,
-              AsyncSnapshot<int> snapshot,
-              ) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Container(
-                  width: 70,
-                  height: 70,
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(40)),
-                    child: snapshot.data == home
-                        ? Image.asset('assets/images/ico_sy_xz.png')
-                        : Image.asset('assets/images/ico_sy.png'),
-                    onTap: () {
-                      bloc.currentIndex.sink.add(0);
-                      controller.animateTo(0);
-                    },
+            BuildContext context,
+            AsyncSnapshot<int> snapshot,
+          ) {
+            return Container(
+              height: 70,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                    child:  Container(
+                      child: GestureDetector(
+                        child: snapshot.data == home
+                            ? Image.asset('assets/images/ico_sy_xz.png')
+                            : Image.asset('assets/images/ico_sy.png'),
+                        onTap: () {
+                          bloc.currentIndex.sink.add(0);
+                          controller.animateTo(0);
+                        },
+                      ),
+                    ),
                   ),
-                ),
-                Container(
-                  width: 70,
-                  height: 70,
-                  child: InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(40)),
-                    child: snapshot.data == daily
-                        ? Image.asset('assets/images/ico_rz_xz.png')
-                        : Image.asset('assets/images/ico_rz.png'),
-                    onTap: () {
-                      bloc.currentIndex.sink.add(1);
-                      controller.animateTo(1);
-                    },
+                  Expanded(
+                    child: Container(
+                      child: GestureDetector(
+                        child: snapshot.data == daily
+                            ? Image.asset('assets/images/ico_rz_xz.png')
+                            : Image.asset('assets/images/ico_rz.png'),
+                        onTap: () {
+                          bloc.currentIndex.sink.add(1);
+                          controller.animateTo(1);
+                        },
+                      ),
+                    ),
                   ),
-                ),
-                Container(
-                  width: 70,
-                  height: 70,
-                  child: InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(40)),
-                    child: snapshot.data == personal
-                        ? Image.asset('assets/images/ico_wd_xz.png')
-                        : Image.asset('assets/images/ico_wd.png'),
-                    onTap: () {
-                      bloc.currentIndex.sink.add(2);
-                      controller.animateTo(2);
-                    },
+                  Expanded(
+                    child: Container(
+                      child: GestureDetector(
+                        child: snapshot.data == personal
+                            ? Image.asset('assets/images/ico_wd_xz.png')
+                            : Image.asset('assets/images/ico_wd.png'),
+                        onTap: () {
+                          bloc.currentIndex.sink.add(2);
+                          controller.animateTo(2);
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),
@@ -118,15 +116,11 @@ class MainPageState extends CommonPageState<MainPage,MainBloc>
       ),
     );
   }
-
-
 }
 
 class MainBloc extends CommonBloc {
-
-
   StreamController<int> currentIndex = StreamController.broadcast();
-  var  onFilterConfirm = BehaviorSubject<String>();
+  var onFilterConfirm = BehaviorSubject<String>();
 }
 
 class Filter extends StatefulWidget {
@@ -137,17 +131,16 @@ class Filter extends StatefulWidget {
 }
 
 class FilterState extends State<Filter> with TickerProviderStateMixin {
-  var _actions = List<Action>();
-
+  var _actions = List<prefix0.Action>();
 
   var name;
 
-  MainBloc  bloc;
+  MainBloc bloc;
 
   @override
   void initState() {
     bloc = BlocProvider.of(context);
-    reset();
+    name = bloc.onFilterConfirm.value ?? '';
     _actions.add(ActionButton('重置', reset, colorCyan));
     _actions.add(ActionDivider());
     _actions.add(ActionButton('筛选', filter, colorOrigin));
@@ -221,7 +214,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
   }
 
   void reset() {
-    name = '';
+    setState(() {
+      name = '';
+    });
   }
 
   void filter() {

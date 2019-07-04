@@ -46,6 +46,7 @@ class LoginPageState extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("登录"),
       ),
       body: Builder(

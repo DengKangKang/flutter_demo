@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_app/data/http/rsp/data/clients_data.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/page/base/CommonPageState.dart';
 import 'package:flutter_app/page/clientdetails/apply_account/plugin_setting.dart';
+import 'package:flutter_app/weight/Tool.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -21,7 +23,7 @@ import 'client_debug_account_page.dart';
 
 const pluginNormal = 0;
 const pluginGroup = 10;
-const pluginRecognition = 36;
+const pluginRecognition = -1;
 const pluginApiOCR = 25; //api  ocr
 const pluginAppOCR = 27; //api  ocr
 const pluginWebOCR = 3; //api  ocr
@@ -72,267 +74,280 @@ class ClientDebugAccountPageState extends CommonPageState<
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: scaffoldKey,
-        backgroundColor: colorBg,
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: Text(isDebug(widget.accountType) ? '测试账号' : '正式账号'),
-          actions: <Widget>[
-            InkWell(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Center(
-                  child: Text(
-                    '申请',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: colorOrigin,
-                    ),
+      key: scaffoldKey,
+      backgroundColor: colorBg,
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        title: Text(isDebug(widget.accountType) ? '测试账号' : '正式账号'),
+        actions: <Widget>[
+          InkWell(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                child: Text(
+                  '申请',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: colorOrigin,
                   ),
                 ),
               ),
-              onTap: () {
-                bloc.apply(widget.client.id, widget.accountType,
-                    widget.client.leads_name);
-              },
-            )
-          ],
-        ),
-        body: ListView(
-          controller: _scrollController,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Material(
-                  color: Colors.white,
-                  elevation: defaultElevation / 2,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  widget.client.id?.toString() ?? '',
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.grey),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(2),
-                                  margin: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                    color: Color(0x263389FF),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    widget.client.source_name ?? '',
-                                    style: TextStyle(
-                                        fontSize: 9, color: Color(0xFF3389FF)),
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(left: 6),
-                                  child: Icon(
-                                    Icons.star_border,
-                                    color: Colors.grey,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          child: Divider(
-                            height: 1,
-                          ),
-                        ),
-                        Text(
-                          widget.client.leads_name ?? '',
-                          style: TextStyle(fontSize: 17),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Row(
-                            textBaseline: TextBaseline.ideographic,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            mainAxisSize: MainAxisSize.min,
+            ),
+            onTap: () {
+              bloc.apply(widget.client.id, widget.accountType,
+                  widget.client.leads_name);
+            },
+          )
+        ],
+      ),
+      body: ListView(
+        controller: _scrollController,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Material(
+                color: Colors.white,
+                elevation: defaultElevation / 2,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
                             children: <Widget>[
                               Text(
-                                widget.client.leads_contact ?? '',
+                                widget.client.id?.toString() ?? '',
                                 style:
-                                    TextStyle(fontSize: 15, color: colorOrigin),
+                                    TextStyle(fontSize: 13, color: Colors.grey),
                               ),
                               Container(
+                                padding: EdgeInsets.all(2),
                                 margin: EdgeInsets.only(left: 10),
+                                decoration: BoxDecoration(
+                                  color: Color(0x263389FF),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
                                 child: Text(
-                                  widget.client.job_title ?? '',
-                                  style: TextStyle(fontSize: 11),
+                                  widget.client.source_name ?? '',
+                                  style: TextStyle(
+                                      fontSize: 9, color: Color(0xFF3389FF)),
                                 ),
                               )
                             ],
                           ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Row(
                             children: <Widget>[
-                              Text(
-                                widget.client.leads_mobile,
-                                style: TextStyle(fontSize: 13),
-                              ),
-                              Image.asset("assets/images/ico_dh.png"),
+                              Container(
+                                margin: EdgeInsets.only(left: 6),
+                                child: Icon(
+                                  Icons.star_border,
+                                  color: Colors.grey,
+                                ),
+                              )
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  )),
-            ),
-            buildTitle('账号有效期'),
-            buildClickableItem(
-              label: '有效期',
-              hint: '请选择日期',
-              content: bloc.validity,
-              onClick: () async {
-                var date = await showDatePicker(
-                  context: context,
-                  initialDate: bloc.validity.value?.isNotEmpty == true
-                      ? DateTime.parse(bloc.validity.value)
-                      : DateTime.now(),
-                  firstDate: DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month,
-                    DateTime.now().day,
-                  ),
-                  lastDate: DateTime(DateTime.now().year + 10, 12, 31),
-                );
-                if (date != null) {
-                  bloc.validity.value = DateFormat('yyyy-MM-dd').format(date);
-                }
-              },
-              showLine: false,
-            ),
-            buildTitle('基础信息'),
-            buildInputItem(
-              label: '管理员姓名',
-              hint: '请输入管理员姓名',
-              content: bloc.adminName,
-            ),
-            buildInputItem(
-              label: '邮箱',
-              hint: '请输入邮箱',
-              content: bloc.email,
-            ),
-            buildInputItem(
-              label: '初始密码',
-              hint: '请输入初始密码',
-              content: bloc.password,
-            ),
-            buildInputItem(
-              label: '人员上限制',
-              hint: '请输入人员限制',
-              content: bloc.personnelLimit,
-            ),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    '备注',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    height: 83,
-                    width: double.infinity,
-                    margin: EdgeInsets.only(top: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(4)),
-                      border: Border.all(color: Color(0xFFF1F1F1)),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: '请输入备注内容',
-                        hintStyle: TextStyle(fontSize: 15),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(0),
+                        ],
                       ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            buildTitle('票量信息'),
-            buildInputItem(
-              label: '查验发票量',
-              hint: '请输入查验发票量',
-              content: bloc.verifyLimit,
-            ),
-            buildClickableItem(
-              label: '失效日期',
-              hint: '请选择日期',
-              content: bloc.verifyCountValidity,
-              onClick: () async {
-                var date = await showDatePicker(
-                  context: context,
-                  initialDate:
-                      bloc.verifyCountValidity.value?.isNotEmpty == true
-                          ? DateTime.parse(bloc.verifyCountValidity.value)
-                          : DateTime.now(),
-                  firstDate: DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month,
-                    DateTime.now().day,
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        child: Divider(
+                          height: 1,
+                        ),
+                      ),
+                      Text(
+                        widget.client.leads_name ?? '',
+                        style: TextStyle(fontSize: 17),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Row(
+                          textBaseline: TextBaseline.ideographic,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              widget.client.leads_contact ?? '',
+                              style:
+                                  TextStyle(fontSize: 15, color: colorOrigin),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: Text(
+                                widget.client.job_title ?? '',
+                                style: TextStyle(fontSize: 11),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              widget.client.leads_mobile,
+                              style: TextStyle(fontSize: 13),
+                            ),
+                            Image.asset("assets/images/ico_dh.png"),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  lastDate: DateTime(DateTime.now().year + 10, 12, 31),
-                );
-                if (date != null) {
-                  bloc.verifyCountValidity.value =
-                      DateFormat('yyyy-MM-dd').format(date);
-                }
-              },
-              showLine: false,
+                )),
+          ),
+          buildTitle('账号有效期'),
+          buildClickableItem(
+            label: '有效期',
+            hint: '请选择日期',
+            content: bloc.validity,
+            onClick: () async {
+              var date = await showDatePicker(
+                context: context,
+                initialDate: bloc.validity.value?.isNotEmpty == true
+                    ? DateTime.parse(bloc.validity.value)
+                    : DateTime.now(),
+                firstDate: DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                ),
+                lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+              );
+              if (date != null) {
+                bloc.validity.value = DateFormat('yyyy-MM-dd').format(date);
+              }
+            },
+            showLine: false,
+          ),
+          buildTitle('基础信息'),
+          buildInputItem(
+            label: '管理员姓名',
+            hint: '请输入管理员姓名',
+            content: bloc.adminName,
+          ),
+          buildInputItem(
+            label: '邮箱',
+            hint: '请输入邮箱',
+            content: bloc.email,
+          ),
+          buildInputItem(
+            label: '初始密码',
+            hint: '请输入初始密码',
+            content: bloc.password,
+          ),
+          buildInputItem(
+            label: '人员上限',
+            hint: '请输入人员限',
+            content: bloc.personnelLimit,
+          ),
+          Visibility(
+            visible: isRelease(widget.accountType),
+            child: buildInputItem(
+              label: '功能模块',
+              hint: '请输入功能模块',
+              content: bloc.function,
             ),
-            buildButtonTitle(
-              '插件信息',
-              '编辑插件',
-              'assets/images/ico_lb_tj.png',
-              () {
-                addPlugin(context);
-              },
+          ),
+          Container(
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '备注',
+                  style: TextStyle(fontSize: 15),
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  height: 83,
+                  width: double.infinity,
+                  margin: EdgeInsets.only(top: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    border: Border.all(color: Color(0xFFF1F1F1)),
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: '请输入备注内容',
+                      hintStyle: TextStyle(fontSize: 15),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(0),
+                    ),
+                  ),
+                )
+              ],
             ),
-            StreamBuilder<List<Plugin>>(
-              initialData: [],
-              stream: bloc.plugins,
-              builder: (c, s) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[...s.data.map((e) => buildPlugin(e))],
-                );
-              },
-            ),
-          ],
-        ));
+          ),
+          buildTitle('票量信息'),
+          buildInputItem(
+            label: '查验发票量',
+            hint: '请输入查验发票量',
+            content: bloc.verifyLimit,
+          ),
+          buildClickableItem(
+            label: '失效日期',
+            hint: '请选择日期',
+            content: bloc.verifyCountValidity,
+            onClick: () async {
+              var date = await showDatePicker(
+                context: context,
+                initialDate: bloc.verifyCountValidity.value?.isNotEmpty == true
+                    ? DateTime.parse(bloc.verifyCountValidity.value)
+                    : DateTime.now(),
+                firstDate: DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                ),
+                lastDate: DateTime(DateTime.now().year + 10, 12, 31),
+              );
+              if (date != null) {
+                bloc.verifyCountValidity.value =
+                    DateFormat('yyyy-MM-dd').format(date);
+              }
+            },
+            showLine: false,
+          ),
+          buildButtonTitle(
+            '插件信息',
+            '编辑插件',
+            'assets/images/ico_lb_tj.png',
+            () {
+              addPlugin(context);
+            },
+          ),
+          StreamBuilder<List<Plugin>>(
+            initialData: [],
+            stream: bloc.plugins,
+            builder: (c, s) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[...s.data.map((e) => buildPlugin(e))],
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void addPlugin(BuildContext context) async {
+    onLoading(context);
     var rsp = await ApiService().pluginList();
-    if (rsp.code == ApiService.success) {
+    loadingFinish(context);
+    if (rsp.code == ApiService.success && rsp.data != null) {
+      rsp.data.add(
+        RadioBean(pluginRecognition, '识别录入'),
+      );
       RadioBean result = await showDialog(
         context: context,
         builder: (context) {
@@ -358,10 +373,10 @@ class ClientDebugAccountPageState extends CommonPageState<
         context,
         CommonRoute(
           builder: (c) => PluginSetting(
-                plugin: selectedPlugin,
-                accountType: widget.accountType,
-                clientId: widget.client.id,
-              ),
+            plugin: selectedPlugin,
+            accountType: widget.accountType,
+            clientId: widget.client.id,
+          ),
         ),
       );
 
@@ -400,11 +415,11 @@ class ClientDebugAccountPageState extends CommonPageState<
           context,
           CommonRoute(
             builder: (c) => PluginSetting(
-                  plugin: plugin,
-                  accountType: widget.accountType,
-                  clientId: widget.client.id,
-                  isEdit: true,
-                ),
+              plugin: plugin,
+              accountType: widget.accountType,
+              clientId: widget.client.id,
+              isEdit: true,
+            ),
           ),
         );
         print(result);
@@ -787,19 +802,19 @@ class ClientDebugAccountPageState extends CommonPageState<
     var rsp = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            title: Text('提示?'),
-            content: Text('确定删除该插件？'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text('否'),
-              ),
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text('是'),
-              ),
-            ],
+        title: Text('提示?'),
+        content: Text('确定删除该插件？'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('否'),
           ),
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text('是'),
+          ),
+        ],
+      ),
     );
     if (rsp) {
       bloc.pageLoading();
@@ -822,8 +837,6 @@ class ClientDebugAccountPageState extends CommonPageState<
       }
     }
   }
-
-
 
   void _toEnd() async {
     await _scrollController.animateTo(
@@ -848,6 +861,7 @@ class ClientApplyDebugAccountBloc extends CommonBloc {
   StringBuffer memo = StringBuffer();
 
   StringBuffer verifyLimit = StringBuffer();
+  StringBuffer function = StringBuffer();
   var verifyCountValidity = BehaviorSubject<String>();
 
   var plugins = BehaviorSubject<List<Plugin>>(seedValue: []);
@@ -954,12 +968,20 @@ class ClientApplyDebugAccountBloc extends CommonBloc {
       showTip('请输入邮箱');
       return;
     }
+    if (!EmailValidator.validate(email.toString())) {
+      showTip('邮箱格式不正确');
+      return;
+    }
     if (password.isEmpty) {
       showTip('请输入初始密码');
       return;
     }
     if (personnelLimit.isEmpty) {
       showTip('请输入人员上限');
+      return;
+    }
+    if (function.isEmpty && isRelease(accountType)) {
+      showTip('请输入功能模块');
       return;
     }
     if (verifyLimit.isEmpty) {
@@ -984,6 +1006,7 @@ class ClientApplyDebugAccountBloc extends CommonBloc {
       check_amount: verifyLimit.toString(),
       time_limit: verifyCountValidity.value,
       leads_name: leads_name,
+      features: function.toString(),
     );
     pageCompleted();
     if (rsp.code == ApiService.success) {
@@ -1014,15 +1037,19 @@ Widget buildInputItem({
             children: [
               RichText(
                 text: TextSpan(
-                    text: label ?? '',
-                    style: TextStyle(fontSize: 15, color: Colors.black),
-                    children: spans),
+                  text: label ?? '',
+                  style: TextStyle(fontSize: 15, color: Colors.black),
+                  children: spans,
+                ),
               ),
               Flexible(
                 child: TextField(
                   controller: TextEditingController.fromValue(
                     TextEditingValue(
                       text: content.toString(),
+                      selection: TextSelection.collapsed(
+                        offset: content.length,
+                      ),
                     ),
                   ),
                   textAlign: TextAlign.end,
@@ -1091,13 +1118,12 @@ Widget buildClickableItem({
                         initialData: hint,
                         stream: content,
                         builder: (b, s) => Text(
-                              s.data?.toString() ?? '',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color:
-                                    s.data == hint ? Colors.grey : Colors.black,
-                              ),
-                            ),
+                          s.data?.toString() ?? '',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: s.data == hint ? Colors.grey : Colors.black,
+                          ),
+                        ),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 5),
@@ -1179,7 +1205,7 @@ Widget buildSwitchItem(
               StreamBuilder<bool>(
                 initialData: false,
                 stream: value,
-                builder: (c,s)=>Switch(
+                builder: (c, s) => Switch(
                   activeColor: colorOrigin,
                   onChanged: onChanged,
                   value: s.data,
@@ -1202,7 +1228,7 @@ Widget buildSwitchItem(
 bool billTypeIsClassify(plugin) {
   return plugin.quota?.firstWhere(
         (e) => e.category == 7,
-    orElse: () => null,
-  ) ==
+        orElse: () => null,
+      ) ==
       null;
 }

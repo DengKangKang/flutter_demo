@@ -70,7 +70,7 @@ class ClientDebugAccountPageState
           appBar: AppBar(
             elevation: 0,
             centerTitle: true,
-            title: Text('测试账号'),
+            title: Text(isRelease(widget.accountType)?'正式账号':'测试账号'),
           ),
           body: Column(
             children: <Widget>[
@@ -112,6 +112,7 @@ class ClientDebugAccountBloc extends CommonBloc {
   var email = BehaviorSubject<String>();
   var password = BehaviorSubject<String>();
   var peopleCount = BehaviorSubject<String>();
+  var function = BehaviorSubject<String>();
   var validity = BehaviorSubject<String>();
   var memo = BehaviorSubject<String>();
   var verifyCount = BehaviorSubject<String>();
@@ -174,6 +175,7 @@ class ClientDebugAccountBloc extends CommonBloc {
     email.add(rsp.data.detail?.first?.email?.toString() ?? '');
     password.add(rsp.data.detail?.first?.initial_password?.toString() ?? '');
     peopleCount.add(rsp.data.detail?.first?.staff_limit?.toString() ?? '');
+    function.add(rsp.data.detail?.first?.features?.toString() ?? '');
     validity.add(rsp.data.detail?.first?.expire_time?.toString() ?? '');
     memo.add(rsp.data.detail?.first?.memo?.toString() ?? '');
     verifyCount.add(rsp.data.detail?.first?.check_amount?.toString() ?? '');

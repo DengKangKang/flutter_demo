@@ -9,6 +9,7 @@ import 'package:flutter_app/data/http/rsp/data/sign_log_data.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/page/base/CommonPageState.dart';
 import 'package:flutter_app/page/clientdetails/apply_account/client_apply_debug_account_page.dart';
+import 'package:flutter_app/weight/Tool.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -106,7 +107,7 @@ class ClientApplyTrainPageState
                       }),
                   buildClickableItem(
                     label: '签约类型',
-                    hint: '请输入签约类型',
+                    hint: '请选择签约类型',
                     content: bloc.type,
                     onClick: () async {
                       RadioBean signType = await showDialog(
@@ -160,6 +161,7 @@ class ClientApplyTrainPageState
       bloc.showTip('请输入签约类型。');
       return;
     }
+    onLoading(context);
     var rsp = await ApiService().signContract(
       widget.client.id.toString(),
       bloc.amount.toString(),
@@ -168,6 +170,7 @@ class ClientApplyTrainPageState
       widget.client.leads_name.toString(),
       widget.client.userid_sale.toString(),
     );
+    loadingFinish(context);
     if (rsp.code == ApiService.success) {
       Navigator.of(context).pop();
     } else {
@@ -225,8 +228,8 @@ class SignHistoryState extends State<SignHistory> {
       body: ListView.builder(
         itemCount: histories.length,
         itemBuilder: (c, i) => ItemSign(
-              signLog: histories[i],
-            ),
+          signLog: histories[i],
+        ),
       ),
     );
   }
@@ -249,7 +252,7 @@ class ItemSignState extends State<ItemSign> {
 
   @override
   void initState() {
-    if(widget.signLog.files.isNotEmpty){
+    if (widget.signLog.files.isNotEmpty) {
       extra.add(widget.signLog.files.first);
     }
     super.initState();
@@ -295,24 +298,24 @@ class ItemSignState extends State<ItemSign> {
               Container(
                 margin: EdgeInsets.only(top: 5),
                 child: Text(
-                  '签约类型：${widget.signLog?.contract_type ?? ''}',
+                  '签约类型：${widget.signLog?.contract_type == signTypes[0].id ? signTypes[0].name : signTypes[1].name}',
                   style: TextStyle(fontSize: 14),
                 ),
               ),
               Opacity(
-                opacity: widget.signLog?.files?.isNotEmpty == true ? 1:0,
+                opacity: widget.signLog?.files?.isNotEmpty == true ? 1 : 0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     ...extra.map(
-                          (e) => Container(
+                      (e) => Container(
                         margin: EdgeInsets.only(top: 5),
                         child: InkWell(
                           child: Text(
                             e.file_name,
                             style: TextStyle(color: colorCyan, fontSize: 12),
                           ),
-                          onTap: (){
+                          onTap: () {
                             launch(e.file_path);
                           },
                         ),
@@ -322,7 +325,7 @@ class ItemSignState extends State<ItemSign> {
                 ),
               ),
               Container(
-                height:  widget.signLog?.files?.isNotEmpty == true ? null:0,
+                height: widget.signLog?.files?.isNotEmpty == true ? null : 0,
                 child: InkWell(
                   child: Container(
                     margin: EdgeInsets.only(top: 5),
@@ -335,14 +338,16 @@ class ItemSignState extends State<ItemSign> {
                               expanded
                                   ? '收起'
                                   : '查看更多（${widget.signLog?.files?.length ?? '0'}）',
-                              style: TextStyle(fontSize: 12, color: Colors.grey),
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.grey),
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 5),
                               child: expanded
-                                  ? Image.asset('assets/images/ico_htxq_jt_x.png')
+                                  ? Image.asset(
+                                      'assets/images/ico_htxq_jt_x.png')
                                   : Image.asset(
-                                  'assets/images/ico_htxq_jt_s.png'),
+                                      'assets/images/ico_htxq_jt_s.png'),
                             )
                           ],
                         ),

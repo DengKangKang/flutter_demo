@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
@@ -29,7 +30,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
     with AutomaticKeepAliveClientMixin<DailyPage> {
   ScrollController _scrollController = ScrollController();
   GlobalKey _keyTitle = GlobalKey();
-  GlobalKey<RefreshIndicatorState> _refresh = GlobalKey();
+  GlobalKey<RefreshIndicatorState> _keyRefresh = GlobalKey();
   MainBloc mainBloc;
 
   @override
@@ -37,12 +38,14 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
     if (bloc == null) {
       bloc = DailyBloc();
     }
-    bloc.initData();
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) => {_keyRefresh.currentState.show()},
+    );
     if (mainBloc == null) {
       mainBloc = BlocProvider.of(context);
       mainBloc.onFilterConfirm.listen((d) {
         bloc.name = d ?? '';
-        bloc.initData();
+        _keyRefresh.currentState.show();
       });
     }
     _scrollController.addListener(() {
@@ -67,26 +70,25 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
           initialData: false,
           stream: Persistence().userAuthority,
           builder: (c, b) => InkWell(
-                child: StreamBuilder<int>(
-                  initialData: pageStatePersonal,
-                  stream: bloc.pageState.stream,
-                  builder: (c, s) => Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(s.data == pageStatePersonal ? '我的日报' : '组员日报'),
-                          Visibility(
-                            visible: b.data,
-                            child: Container(
-                              margin: EdgeInsets.only(left: 5),
-                              child: Image.asset(
-                                  'assets/images/ico_htxq_jt_s.png'),
-                            ),
-                          ),
-                        ],
-                      ),
-                ),
-                onTap: b.data ? changePageState : null,
+            child: StreamBuilder<int>(
+              initialData: pageStatePersonal,
+              stream: bloc.pageState.stream,
+              builder: (c, s) => Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(s.data == pageStatePersonal ? '我的日报' : '组员日报'),
+                  Visibility(
+                    visible: b.data,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5),
+                      child: Image.asset('assets/images/ico_htxq_jt_s.png'),
+                    ),
+                  ),
+                ],
               ),
+            ),
+            onTap: b.data ? changePageState : null,
+          ),
         ),
         actions: <Widget>[
           StreamBuilder<int>(
@@ -99,7 +101,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                       var needRefresh = await Navigator.push(
                           context, CommonRoute(builder: (c) => NewDailyPage()));
                       if (needRefresh == true) {
-                        await bloc.initData();
+                        await _keyRefresh.currentState.show();
                       }
                     },
                   )
@@ -131,7 +133,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                     ),
                   );
                   bloc.selectedDay.value = date;
-                  bloc.initData();
+                  _keyRefresh.currentState.show();
                 },
               ),
               InkWell(
@@ -149,12 +151,12 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                       StreamBuilder(
                         stream: bloc.selectedDay.stream,
                         builder: (c, s) => Text(
-                              s.data ?? '',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: colorOrigin,
-                              ),
-                            ),
+                          s.data ?? '',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: colorOrigin,
+                          ),
+                        ),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 14),
@@ -164,25 +166,22 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                   ),
                 ),
                 onTap: () async {
+                  var initData = bloc.selectedDay.value?.isNotEmpty == true
+                      ? DateTime.parse(
+                          bloc.selectedDay.value,
+                        )
+                      : DateTime.now();
                   var date = await showDatePicker(
                     context: context,
-                    initialDate: bloc.selectedDay.value?.isNotEmpty == true
-                        ? DateTime.parse(
-                            bloc.selectedDay.value,
-                          )
-                        : DateTime.now(),
-                    firstDate: DateTime(
-                      DateTime.now().year,
-                      DateTime.now().month,
-                      DateTime.now().day,
-                    ),
+                    initialDate: initData,
+                    firstDate:DateTime(DateTime.now().year - 2, 12, 31),
                     lastDate: DateTime(DateTime.now().year + 10, 12, 31),
                   );
                   if (date != null) {
                     bloc.selectedDay.value =
                         DateFormat('yyyy-MM-dd').format(date);
                   }
-                  await bloc.initData();
+                  await _keyRefresh.currentState.show();
                 },
               ),
               InkWell(
@@ -199,7 +198,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                     ),
                   );
                   bloc.selectedDay.value = date;
-                  bloc.initData();
+                  _keyRefresh.currentState.show();
                 },
               )
             ],
@@ -208,18 +207,18 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
             initialData: List<Daily>(),
             stream: bloc.dailies,
             builder: (c, s) => Flexible(
-                  child: RefreshIndicator(
-                      key: _refresh,
-                      child: ListView.builder(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        controller: _scrollController,
-                        itemCount: s.data.length,
-                        itemBuilder: (context, i) {
-                          return _buildItem(i, s.data);
-                        },
-                      ),
-                      onRefresh: () => bloc.initData()),
-                ),
+              child: RefreshIndicator(
+                  key: _keyRefresh,
+                  child: ListView.builder(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    controller: _scrollController,
+                    itemCount: s.data.length,
+                    itemBuilder: (context, i) {
+                      return _buildItem(i, s.data);
+                    },
+                  ),
+                  onRefresh: () => bloc.initData()),
+            ),
           ),
         ],
       ),
@@ -406,8 +405,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
       ],
     );
     if (result != null) bloc.pageState.sink.add(result);
-    await _refresh.currentState.show();
-    await bloc.initData();
+    await _keyRefresh.currentState.show();
   }
 
   @override

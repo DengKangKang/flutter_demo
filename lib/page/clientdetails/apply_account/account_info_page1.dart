@@ -88,6 +88,10 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
         buildItem('邮箱', _bloc.email.stream),
         buildItem('初始密码', _bloc.password.stream),
         buildItem('人员上限', _bloc.peopleCount.stream),
+        Visibility(
+          visible: isRelease(_bloc.accountType),
+          child: buildItem('功能模块', _bloc.function.stream),
+        ),
         buildItem('有效日期', _bloc.validity.stream),
         Container(
           color: Colors.white,

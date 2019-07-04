@@ -12,7 +12,8 @@ class PersonalPage extends StatefulWidget {
   State createState() => PersonalPageState();
 }
 
-class PersonalPageState extends State<PersonalPage> with AutomaticKeepAliveClientMixin<PersonalPage> {
+class PersonalPageState extends State<PersonalPage>
+    with AutomaticKeepAliveClientMixin<PersonalPage> {
   String userName;
 
   var userAccount = '';
@@ -99,23 +100,33 @@ class PersonalPageState extends State<PersonalPage> with AutomaticKeepAliveClien
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                            title: Text("提示"),
-                            content: Text("是否确认退出"),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('取消'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
+                        title: Text("提示"),
+                        content: Text("是否确认退出"),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text(
+                              '确定',
+                              style: TextStyle(
+                                color: Colors.grey,
                               ),
-                              FlatButton(
-                                child: Text('确定'),
-                                onPressed: () {
-                                  _onLogout(context);
-                                },
-                              ),
-                            ],
+                            ),
+                            onPressed: () {
+                              _onLogout(context);
+                            },
                           ),
+                          FlatButton(
+                            child: Text(
+                              '取消',
+                              style: TextStyle(
+                                color: colorOrigin,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -160,10 +171,11 @@ class PersonalPageState extends State<PersonalPage> with AutomaticKeepAliveClien
     await Persistence().userAuthority.add(false);
     await Persistence().setUserAuthority(false);
     await Navigator.pushReplacement(
-        context,
-        CommonRoute(
-          builder: (BuildContext context) => LoginPage(),
-        ));
+      context,
+      CommonRoute(
+        builder: (BuildContext context) => LoginPage(),
+      ),
+    );
   }
 
   @override

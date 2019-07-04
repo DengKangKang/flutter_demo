@@ -91,17 +91,6 @@ class ClientApplyPageState extends State<ClientApplyPage>
                             initData();
                           }
                           break;
-                        case applyStateApplying:
-                          await Navigator.push(
-                            context,
-                            CommonRoute(
-                              builder: (c) => ClientDebugAccountPage(
-                                    accountType: applyTypeDebugAccount,
-                                    clientId: widget.client.id,
-                                  ),
-                            ),
-                          );
-                          break;
                         case applyStateApplied:
                           await Navigator.push(
                             context,
@@ -164,17 +153,6 @@ class ClientApplyPageState extends State<ClientApplyPage>
                           if (rsp == true) {
                             initData();
                           }
-                          break;
-                        case applyStateApplying:
-                          await Navigator.push(
-                            context,
-                            CommonRoute(
-                              builder: (c) => ClientDebugAccountPage(
-                                    accountType: applyTypeReleaseAccount,
-                                    clientId: widget.client.id,
-                                  ),
-                            ),
-                          );
                           break;
                         case applyStateApplied:
                           await Navigator.push(

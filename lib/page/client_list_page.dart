@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/CommonRoute.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_app/data/persistence/Persistence.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/page/client_detail_page.dart';
+import 'package:flutter_app/page/client_detail_page.dart' as prefix0;
 import 'package:flutter_app/page/clientdetails/new_business.dart';
 import 'package:flutter_app/weight/Tool.dart';
 import 'package:intl/intl.dart';
@@ -39,13 +41,23 @@ class ClientListPage extends StatefulWidget {
 class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
   ScrollController _scrollController = ScrollController();
   GlobalKey _keyTitle = GlobalKey();
+  var _keyRefresh = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     if (bloc == null) {
       bloc = ClientListBloc(widget.businessType);
+      bloc.filterCallBack.listen(
+        (b) {
+          if (b) _keyRefresh.currentState?.show();
+        },
+      );
     }
-
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) {
+        _keyRefresh.currentState?.show();
+      },
+    );
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -70,31 +82,31 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
             initialData: false,
             stream: Persistence().userAuthority,
             builder: (c, b) => InkWell(
-                  child: StreamBuilder<int>(
-                    initialData: pageStatePersonal,
-                    stream: bloc.pageState.stream,
-                    builder: (c, s) => Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              geTitle(s),
-                            ),
-                            Visibility(
-                              visible: b.data &&
-                                  widget.businessType & 0xf0 == statePrivate,
-                              child: Image.asset(
-                                'assets/images/ico_htxq_jt_s.png',
-                              ),
-                            ),
-                          ],
-                        ),
-                  ),
-                  onTap: b.data && widget.businessType & 0xf0 == statePrivate
-                      ? () {
-                          changePageState(context);
-                        }
-                      : null,
+              child: StreamBuilder<int>(
+                initialData: pageStatePersonal,
+                stream: bloc.pageState.stream,
+                builder: (c, s) => Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      geTitle(s),
+                    ),
+                    Visibility(
+                      visible:
+                          b.data && widget.businessType & 0xf0 == statePrivate,
+                      child: Image.asset(
+                        'assets/images/ico_htxq_jt_s.png',
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              onTap: b.data && widget.businessType & 0xf0 == statePrivate
+                  ? () {
+                      changePageState(context);
+                    }
+                  : null,
+            ),
           ),
           actions: <Widget>[
             Opacity(
@@ -107,15 +119,16 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
             ),
             Builder(
               builder: (context) => IconButton(
-                    icon: Icon(Icons.menu),
-                    onPressed: () async {
-                      scaffoldKey.currentState.openEndDrawer();
-                    },
-                  ),
+                icon: Icon(Icons.menu),
+                onPressed: () async {
+                  scaffoldKey.currentState.openEndDrawer();
+                },
+              ),
             ),
           ],
         ),
         body: RefreshIndicator(
+            key: _keyRefresh,
             child: StreamBuilder<List<Client>>(
               initialData: List<Client>(),
               stream: bloc.dailies,
@@ -146,12 +159,12 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
       context,
       CommonRoute(
         builder: (c) => NewBusinessPage(
-              type: widget.businessType & 0xf,
-            ),
+          type: widget.businessType & 0xf,
+        ),
       ),
     );
     if (needRefresh == true) {
-      await bloc.initData();
+      await _keyRefresh.currentState?.show();
     }
   }
 
@@ -195,7 +208,7 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
       ],
     );
     if (result != null) bloc.pageState.sink.add(result);
-    await bloc.initData();
+    await _keyRefresh.currentState?.show();
   }
 
   String geTitle(AsyncSnapshot<int> s) {
@@ -490,16 +503,16 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
       context,
       CommonRoute(
         builder: (c) => ClientDetailPage(
-              client: client,
-              businessType: widget.businessType,
-              title: bloc.pageState.value == pageStateGroupMembers
-                  ? '${client.realname}的${widget.businessType & 0xf == typeTrace ? '线索' : '客户'}'
-                  : null,
-            ),
+          client: client,
+          businessType: widget.businessType,
+          title: bloc.pageState.value == pageStateGroupMembers
+              ? '${client.realname}的${widget.businessType & 0xf == typeTrace ? '线索' : '客户'}'
+              : null,
+        ),
       ),
     );
     if (needRefresh == true) {
-      await bloc.initData();
+      await _keyRefresh.currentState?.show();
     }
   }
 
@@ -508,7 +521,7 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
     var rsp = await ApiService().transformToClient(client.id.toString());
     loadingFinish(context);
     if (rsp.code == ApiService.success) {
-      await bloc.initData();
+      await _keyRefresh.currentState?.show();
     } else {
       bloc.showTip(rsp.msg);
     }
@@ -518,42 +531,42 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-            title: Text("提示"),
-            content: Text("确定加入私海？"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(c).pop();
-                },
+        title: Text("提示"),
+        content: Text("确定加入私海？"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.grey,
               ),
-              FlatButton(
-                child: Text(
-                  '确定',
-                  style: TextStyle(
-                    color: colorOrigin,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(c).pop();
-                  onLoading(context);
-                  var rsp = await ApiService()
-                      .addToPrivateTrace(client.id.toString());
-                  loadingFinish(context);
-                  if (rsp.code == ApiService.success) {
-                    await bloc.initData();
-                  } else {
-                    bloc.showTip(rsp.msg);
-                  }
-                },
-              ),
-            ],
+            ),
+            onPressed: () {
+              Navigator.of(c).pop();
+            },
           ),
+          FlatButton(
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: colorOrigin,
+              ),
+            ),
+            onPressed: () async {
+              Navigator.of(c).pop();
+              onLoading(context);
+              var rsp =
+                  await ApiService().addToPrivateTrace(client.id.toString());
+              loadingFinish(context);
+              if (rsp.code == ApiService.success) {
+                await _keyRefresh.currentState?.show();
+              } else {
+                bloc.showTip(rsp.msg);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -561,42 +574,42 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-            title: Text("提示"),
-            content: Text("确定加入私海？"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(c).pop();
-                },
+        title: Text("提示"),
+        content: Text("确定加入私海？"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.grey,
               ),
-              FlatButton(
-                child: Text(
-                  '确定',
-                  style: TextStyle(
-                    color: colorOrigin,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(c).pop();
-                  onLoading(context);
-                  var rsp = await ApiService()
-                      .addToPrivateClient(client.id.toString());
-                  loadingFinish(context);
-                  if (rsp.code == ApiService.success) {
-                    await bloc.initData();
-                  } else {
-                    bloc.showTip(rsp.msg);
-                  }
-                },
-              ),
-            ],
+            ),
+            onPressed: () {
+              Navigator.of(c).pop();
+            },
           ),
+          FlatButton(
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: colorOrigin,
+              ),
+            ),
+            onPressed: () async {
+              Navigator.of(c).pop();
+              onLoading(context);
+              var rsp =
+                  await ApiService().addToPrivateClient(client.id.toString());
+              loadingFinish(context);
+              if (rsp.code == ApiService.success) {
+                await _keyRefresh.currentState?.show();
+              } else {
+                bloc.showTip(rsp.msg);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -605,6 +618,7 @@ class ClientListBloc extends CommonBloc {
   ClientListBloc(this.businessType);
 
   var pageState = BehaviorSubject<int>(seedValue: pageStatePersonal);
+  var filterCallBack = BehaviorSubject<bool>();
 
   String id = '';
   String maker;
@@ -720,7 +734,7 @@ class Filter extends StatefulWidget {
 
 class FilterState extends State<Filter> with TickerProviderStateMixin {
   ClientListBloc _bloc;
-  var _actions = List<Action>();
+  var _actions = List<prefix0.Action>();
 
   var id;
   var maker;
@@ -878,12 +892,12 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                 initialData: '开始日期',
                                 stream: dateStart.stream,
                                 builder: (c, s) => Text(
-                                      s.data,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
+                                  s.data,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -931,12 +945,12 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                 initialData: '结束日期',
                                 stream: dateEnd.stream,
                                 builder: (c, s) => Text(
-                                      s.data,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
+                                  s.data,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -1118,63 +1132,62 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                   StreamBuilder<List<RadioBean>>(
                     stream: sources,
                     builder: (c, s) => AnimatedSize(
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.fastOutSlowIn,
-                          vsync: this,
-                          child: Container(
-                            height: s.data?.isEmpty == true ? 0 : null,
-                            child: GridView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 12.5,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 2.5,
-                                ),
-                                itemCount: s.data?.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  var item = s.data[index];
-                                  return StreamBuilder<int>(
-                                    stream: source,
-                                    builder: (c, s) => Material(
-                                          child: Container(
-                                            color: Colors.white,
-                                            child: GestureDetector(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: s.data == item.id
-                                                      ? colorOriginLight
-                                                      : colorGrey,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4.0)),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    item.name,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                if (source.value != item.id) {
-                                                  source.value = item.id;
-                                                } else {
-                                                  source.value = null;
-                                                }
-                                              },
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.fastOutSlowIn,
+                      vsync: this,
+                      child: Container(
+                        height: s.data?.isEmpty == true ? 0 : null,
+                        child: GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 12.5,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 2.5,
+                            ),
+                            itemCount: s.data?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              var item = s.data[index];
+                              return StreamBuilder<int>(
+                                stream: source,
+                                builder: (c, s) => Material(
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: s.data == item.id
+                                              ? colorOriginLight
+                                              : colorGrey,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0)),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            item.name,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ),
-                                  );
-                                }),
-                          ),
-                        ),
+                                      ),
+                                      onTap: () {
+                                        if (source.value != item.id) {
+                                          source.value = item.id;
+                                        } else {
+                                          source.value = null;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
+                    ),
                   ),
                   GestureDetector(
                     child: Container(
@@ -1207,63 +1220,62 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                   StreamBuilder<List<RadioBean>>(
                     stream: filterLocations,
                     builder: (c, s) => AnimatedSize(
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.fastOutSlowIn,
-                          vsync: this,
-                          child: Container(
-                            height: s.data?.isEmpty == true ? 0 : null,
-                            child: GridView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 12.5,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 2.5,
-                                ),
-                                itemCount: s.data?.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  var item = s.data[index];
-                                  return StreamBuilder<int>(
-                                    stream: location,
-                                    builder: (c, s) => Material(
-                                          child: Container(
-                                            color: Colors.white,
-                                            child: GestureDetector(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: s.data == item.id
-                                                      ? colorOriginLight
-                                                      : colorGrey,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4.0)),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    item.name,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                if (location.value != item.id) {
-                                                  location.value = item.id;
-                                                } else {
-                                                  location.value = null;
-                                                }
-                                              },
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.fastOutSlowIn,
+                      vsync: this,
+                      child: Container(
+                        height: s.data?.isEmpty == true ? 0 : null,
+                        child: GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 12.5,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 2.5,
+                            ),
+                            itemCount: s.data?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              var item = s.data[index];
+                              return StreamBuilder<int>(
+                                stream: location,
+                                builder: (c, s) => Material(
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: s.data == item.id
+                                              ? colorOriginLight
+                                              : colorGrey,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0)),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            item.name,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ),
-                                  );
-                                }),
-                          ),
-                        ),
+                                      ),
+                                      onTap: () {
+                                        if (location.value != item.id) {
+                                          location.value = item.id;
+                                        } else {
+                                          location.value = null;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
+                    ),
                   ),
                   GestureDetector(
                     child: Container(
@@ -1297,66 +1309,65 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                   StreamBuilder<List<RadioBean>>(
                     stream: companies,
                     builder: (c, s) => AnimatedSize(
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.fastOutSlowIn,
-                          vsync: this,
-                          child: Container(
-                            height: s.data?.isEmpty == true ||
-                                    _bloc.businessType & 0xf == typeTrace
-                                ? 0
-                                : null,
-                            child: GridView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 12.5,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 2.5,
-                                ),
-                                itemCount: s.data?.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  var item = s.data[index];
-                                  return StreamBuilder<int>(
-                                    stream: company,
-                                    builder: (c, s) => Material(
-                                          child: Container(
-                                            color: Colors.white,
-                                            child: GestureDetector(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: s.data == item.id
-                                                      ? colorOriginLight
-                                                      : colorGrey,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4.0)),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    item.name,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                if (company.value != item.id) {
-                                                  company.value = item.id;
-                                                } else {
-                                                  company.value = null;
-                                                }
-                                              },
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.fastOutSlowIn,
+                      vsync: this,
+                      child: Container(
+                        height: s.data?.isEmpty == true ||
+                                _bloc.businessType & 0xf == typeTrace
+                            ? 0
+                            : null,
+                        child: GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 12.5,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 2.5,
+                            ),
+                            itemCount: s.data?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              var item = s.data[index];
+                              return StreamBuilder<int>(
+                                stream: company,
+                                builder: (c, s) => Material(
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: s.data == item.id
+                                              ? colorOriginLight
+                                              : colorGrey,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0)),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            item.name,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ),
-                                  );
-                                }),
-                          ),
-                        ),
+                                      ),
+                                      onTap: () {
+                                        if (company.value != item.id) {
+                                          company.value = item.id;
+                                        } else {
+                                          company.value = null;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
+                    ),
                   ),
                   Container(
                     height: _bloc.businessType & 0xf == typeClient ? null : 0,
@@ -1383,37 +1394,37 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                           return StreamBuilder<int>(
                             stream: isImportant,
                             builder: (c, s) => Material(
+                              child: Container(
+                                color: Colors.white,
+                                child: GestureDetector(
                                   child: Container(
-                                    color: Colors.white,
-                                    child: GestureDetector(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: s.data == item.id
-                                              ? colorOriginLight
-                                              : colorGrey,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            item.name,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                            ),
-                                          ),
+                                    decoration: BoxDecoration(
+                                      color: s.data == item.id
+                                          ? colorOriginLight
+                                          : colorGrey,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(4.0)),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        item.name,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 12,
                                         ),
                                       ),
-                                      onTap: () {
-                                        if (isImportant.value != item.id) {
-                                          isImportant.value = item.id;
-                                        } else {
-                                          isImportant.value = null;
-                                        }
-                                      },
                                     ),
                                   ),
+                                  onTap: () {
+                                    if (isImportant.value != item.id) {
+                                      isImportant.value = item.id;
+                                    } else {
+                                      isImportant.value = null;
+                                    }
+                                  },
                                 ),
+                              ),
+                            ),
                           );
                         }),
                   ),
@@ -1449,66 +1460,65 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                   StreamBuilder<List<RadioBean>>(
                     stream: filterProgresses,
                     builder: (c, s) => AnimatedSize(
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.fastOutSlowIn,
-                          vsync: this,
-                          child: Container(
-                            height: s.data?.isEmpty == true ||
-                                    _bloc.businessType & 0xf == typeTrace
-                                ? 0
-                                : null,
-                            child: GridView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 12.5,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 2.5,
-                                ),
-                                itemCount: s.data?.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  var item = s.data[index];
-                                  return StreamBuilder<int>(
-                                    stream: company,
-                                    builder: (c, s) => Material(
-                                          child: Container(
-                                            color: Colors.white,
-                                            child: GestureDetector(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: s.data == item.id
-                                                      ? colorOriginLight
-                                                      : colorGrey,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4.0)),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    item.name,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                if (progress.value != item.id) {
-                                                  progress.value = item.id;
-                                                } else {
-                                                  progress.value = null;
-                                                }
-                                              },
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.fastOutSlowIn,
+                      vsync: this,
+                      child: Container(
+                        height: s.data?.isEmpty == true ||
+                                _bloc.businessType & 0xf == typeTrace
+                            ? 0
+                            : null,
+                        child: GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 12.5,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 2.5,
+                            ),
+                            itemCount: s.data?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              var item = s.data[index];
+                              return StreamBuilder<int>(
+                                stream: company,
+                                builder: (c, s) => Material(
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: s.data == item.id
+                                              ? colorOriginLight
+                                              : colorGrey,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0)),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            item.name,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ),
-                                  );
-                                }),
-                          ),
-                        ),
+                                      ),
+                                      onTap: () {
+                                        if (progress.value != item.id) {
+                                          progress.value = item.id;
+                                        } else {
+                                          progress.value = null;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
+                    ),
                   ),
                   Container(
                     height: _bloc.businessType & 0xf == typeClient ? null : 0,
@@ -1535,37 +1545,37 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                           return StreamBuilder<int>(
                             stream: secondDev,
                             builder: (c, s) => Material(
+                              child: Container(
+                                color: Colors.white,
+                                child: GestureDetector(
                                   child: Container(
-                                    color: Colors.white,
-                                    child: GestureDetector(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: s.data == item.id
-                                              ? colorOriginLight
-                                              : colorGrey,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            item.name,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                            ),
-                                          ),
+                                    decoration: BoxDecoration(
+                                      color: s.data == item.id
+                                          ? colorOriginLight
+                                          : colorGrey,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(4.0)),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        item.name,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 12,
                                         ),
                                       ),
-                                      onTap: () {
-                                        if (secondDev.value != item.id) {
-                                          secondDev.value = item.id;
-                                        } else {
-                                          secondDev.value = null;
-                                        }
-                                      },
                                     ),
                                   ),
+                                  onTap: () {
+                                    if (secondDev.value != item.id) {
+                                      secondDev.value = item.id;
+                                    } else {
+                                      secondDev.value = null;
+                                    }
+                                  },
                                 ),
+                              ),
+                            ),
                           );
                         }),
                   ),
@@ -1629,7 +1639,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
     _bloc.isImportant = isImportant.value?.toString() ?? '';
     _bloc.progress = progress.value?.toString() ?? '';
     _bloc.secondDev = secondDev.value?.toString() ?? '';
-    _bloc.initData();
+    _bloc.filterCallBack.add(true);
     Navigator.pop(context);
   }
 }

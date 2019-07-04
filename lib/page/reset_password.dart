@@ -54,6 +54,8 @@ class ResetPasswordState
                         onChanged: (s) {
                           bloc.oldPassword = s;
                         },
+                        obscureText: false,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       Divider(
                         height: 1,
@@ -68,6 +70,8 @@ class ResetPasswordState
                         onChanged: (s) {
                           bloc.newPassword = s;
                         },
+                        obscureText: false,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       Divider(
                         height: 1,
@@ -82,6 +86,8 @@ class ResetPasswordState
                         onChanged: (s) {
                           bloc.newPasswordAgain = s;
                         },
+                        obscureText: false,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                     ],
                   ),

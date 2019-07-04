@@ -1025,6 +1025,7 @@ class ApiService {
     requirements = '',
     train_place = '',
     visit_time = '',
+    features = '',
   }) async {
     try {
       Response rsp = await client.post(
@@ -1048,6 +1049,7 @@ class ApiService {
           'requirements': requirements, // 培训功能
           'train_place': train_place,
           'visit_time': visit_time,
+          'features': features,
         },
       );
       print(rsp.body);
