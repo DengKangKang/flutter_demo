@@ -64,6 +64,9 @@ class ClientDebugAccountPageState extends CommonPageState<
       bloc = ClientApplyDebugAccountBloc(widget.accountType, widget.client.id);
       bloc.initData();
     }
+    if (isDebug(widget.accountType)) {
+      bloc.personnelLimit.write('5');
+    }
     _scrollController = ScrollController(
       initialScrollOffset: 0.0,
       keepScrollOffset: true,
@@ -237,17 +240,21 @@ class ClientDebugAccountPageState extends CommonPageState<
             label: '邮箱',
             hint: '请输入邮箱',
             content: bloc.email,
+            inputType: TextInputType.emailAddress,
           ),
           buildInputItem(
             label: '初始密码',
             hint: '请输入初始密码',
             content: bloc.password,
+            inputType: TextInputType.emailAddress,
           ),
           buildInputItem(
-            label: '人员上限',
-            hint: '请输入人员限',
-            content: bloc.personnelLimit,
-          ),
+              label: '人员上限',
+              hint: '请输入人员限',
+              content: bloc.personnelLimit,
+              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+              inputType: TextInputType.number,
+              enabled: isRelease(widget.accountType)),
           Visibility(
             visible: isRelease(widget.accountType),
             child: buildInputItem(
@@ -276,6 +283,8 @@ class ClientDebugAccountPageState extends CommonPageState<
                     border: Border.all(color: Color(0xFFF1F1F1)),
                   ),
                   child: TextField(
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       hintText: '请输入备注内容',
                       hintStyle: TextStyle(fontSize: 15),
@@ -292,6 +301,8 @@ class ClientDebugAccountPageState extends CommonPageState<
             label: '查验发票量',
             hint: '请输入查验发票量',
             content: bloc.verifyLimit,
+            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+            inputType: TextInputType.number,
           ),
           buildClickableItem(
             label: '失效日期',
@@ -1025,6 +1036,7 @@ Widget buildInputItem({
   List<TextInputFormatter> inputFormatters,
   TextInputType inputType,
   bool showLine = true,
+  bool enabled = true,
 }) {
   return Container(
     color: Colors.white,
@@ -1066,6 +1078,7 @@ Widget buildInputItem({
                     border: InputBorder.none,
                   ),
                   style: TextStyle(fontSize: 15),
+                  enabled: enabled,
                   onChanged: (s) {
                     if (content.isNotEmpty) content.clear();
                     content.write(s);

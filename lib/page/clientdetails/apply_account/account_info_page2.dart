@@ -44,9 +44,9 @@ class AccountInfoPage2State extends State<AccountInfoPage2>
                 initialData: '',
                 stream: _bloc.maker.stream,
                 builder: (c, s) => Text(
-                      '创建人：${s.data}',
-                      style: TextStyle(fontSize: 15),
-                    ),
+                  '创建人：${s.data}',
+                  style: TextStyle(fontSize: 15),
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 5),
@@ -54,9 +54,9 @@ class AccountInfoPage2State extends State<AccountInfoPage2>
                   initialData: '',
                   stream: _bloc.applyTime.stream,
                   builder: (c, s) => Text(
-                        '申请时间：${s.data}',
-                        style: TextStyle(fontSize: 15),
-                      ),
+                    '申请时间：${s.data}',
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ),
               ),
             ],
@@ -100,25 +100,34 @@ class AccountInfoPage2State extends State<AccountInfoPage2>
             style: TextStyle(fontSize: 15),
           ),
           Container(
-            padding: EdgeInsets.only(top: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                StreamBuilder(
-                  initialData: '',
-                  stream: timeLimit,
-                  builder: (c, s) => Text(
-                        s.data,
-                        style: TextStyle(fontSize: 15, color: Colors.grey),
-                      ),
+              padding: EdgeInsets.only(top: 5),
+              child: StreamBuilder(
+                initialData: '',
+                stream: timeLimit,
+                builder: (c, s) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      s.data,
+                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                    ),
+                    InkWell(
+                      child: Image.asset('assets/images/ico_xq_fz.png'),
+                      onTap: () {
+                        copy(s.data);
+                      },
+                    )
+                  ],
                 ),
-                Image.asset('assets/images/ico_xq_fz.png')
-              ],
-            ),
-          ),
+              )),
         ],
       ),
     );
+  }
+
+  void copy(text) {
+    Clipboard.setData(ClipboardData(text: text));
+    _bloc.showTip('复制成功');
   }
 
   @override

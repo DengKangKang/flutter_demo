@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
@@ -44,7 +45,7 @@ class NewBusinessPagePageState
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text('新增客户'),
+        title: Text(widget.type == typeClient ? '新增客户' : '新增线索'),
         actions: <Widget>[
           InkWell(
             child: Container(
@@ -185,7 +186,7 @@ class NewBusinessPagePageState
                 ),
               ),
               TextSpan(
-                text: '所在地',
+                text: '来源类型',
                 style: TextStyle(fontSize: 15),
               ),
             ],
@@ -221,6 +222,8 @@ class NewBusinessPagePageState
             ],
             hint: '请输入年发票量',
             content: bloc._invoiceCount,
+            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+            inputType: TextInputType.number,
           ),
           buildClickableItem(
             label: '是否为重点',
@@ -307,22 +310,19 @@ class NewBusinessPagePageState
             content: bloc._companyIntro,
           ),
           buildTitle('联系人信息'),
-          buildInputItem(
-              spans: [
-                TextSpan(
-                  text: '*',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: colorOrigin,
-                  ),
-                ),
-                TextSpan(
-                  text: '甲方负责人',
-                  style: TextStyle(fontSize: 15),
-                ),
-              ],
-              hint: '请输入甲方负责人姓名',
-              content: bloc._firstPartyRepresentatives),
+          buildInputItem(spans: [
+            TextSpan(
+              text: '*',
+              style: TextStyle(
+                fontSize: 15,
+                color: colorOrigin,
+              ),
+            ),
+            TextSpan(
+              text: '甲方负责人',
+              style: TextStyle(fontSize: 15),
+            ),
+          ], hint: '请输入甲方负责人姓名', content: bloc._firstPartyRepresentatives),
           buildInputItem(
             spans: [
               TextSpan(
@@ -341,10 +341,10 @@ class NewBusinessPagePageState
             content: bloc._contactWay,
           ),
           buildInputItem(
-            label: '邮箱',
-            hint: '请输入邮箱',
-            content: bloc._email,
-          ),
+              label: '邮箱',
+              hint: '请输入邮箱',
+              content: bloc._email,
+              inputType: TextInputType.emailAddress),
           buildInputItem(
             spans: [
               TextSpan(
@@ -368,7 +368,6 @@ class NewBusinessPagePageState
   }
 
   void onConfirm() async {
-
     if (bloc._clientName.isEmpty) {
       bloc.showTip('请输入客户名称');
       return;
@@ -377,15 +376,15 @@ class NewBusinessPagePageState
       bloc.showTip('请选择公司类型');
       return;
     }
-    if (bloc._industry.value== null) {
+    if (bloc._industry.value == null) {
       bloc.showTip('请选择所属行业');
       return;
     }
-    if (bloc._source.value== null) {
+    if (bloc._source.value == null) {
       bloc.showTip('请选择来源类型');
       return;
     }
-    if (bloc._location.value== null) {
+    if (bloc._location.value == null) {
       bloc.showTip('请选择所在地');
       return;
     }
@@ -401,7 +400,8 @@ class NewBusinessPagePageState
       bloc.showTip('邮箱格式不正确');
       return;
     }
-    if (bloc._firstPartyRepresentatives == null || bloc._firstPartyRepresentatives.isEmpty) {
+    if (bloc._firstPartyRepresentatives == null ||
+        bloc._firstPartyRepresentatives.isEmpty) {
       bloc.showTip('请输入甲方联系人');
       return;
     }
@@ -410,21 +410,21 @@ class NewBusinessPagePageState
       bloc.showTip('请输入联系方式');
       return;
     }
-    if (bloc._title == null ||bloc. _title.isEmpty) {
+    if (bloc._title == null || bloc._title.isEmpty) {
       bloc.showTip('请输入职务');
       return;
     }
     onLoading(context);
     var rsp = await ApiService().newBusiness(
       bloc._clientName.toString(),
-      bloc._company.value?.id?.toString()??'',
-      bloc._industry.value?.id?.toString()??'',
-      bloc._location.value?.id?.toString()??'',
-      bloc._source.value?.id?.toString()??'',
+      bloc._company.value?.id?.toString() ?? '',
+      bloc._industry.value?.id?.toString() ?? '',
+      bloc._location.value?.id?.toString() ?? '',
+      bloc._source.value?.id?.toString() ?? '',
       bloc._invoiceCount.toString(),
-      bloc._isImportant.value?.id?.toString()??'',
-      bloc._secondaryDevelopment.value?.id?.toString()??'',
-      bloc._progress.value?.id?.toString()??'',
+      bloc._isImportant.value?.id?.toString() ?? '',
+      bloc._secondaryDevelopment.value?.id?.toString() ?? '',
+      bloc._progress.value?.id?.toString() ?? '',
       bloc._expectedContractAmount.toString(),
       bloc._expectedSignDate.value.toString(),
       bloc._lnsize.toString(),
@@ -438,7 +438,7 @@ class NewBusinessPagePageState
     loadingFinish(context);
     if (rsp.code == ApiService.success) {
       Navigator.of(context).pop(true);
-    }else{
+    } else {
       bloc.showTip(rsp.msg);
     }
   }

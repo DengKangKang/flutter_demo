@@ -118,9 +118,9 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
               ),
             ),
             Builder(
-              builder: (context) => IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () async {
+              builder: (context) => InkWell(
+                child: Image.asset('assets/images/ico_sx.png',color: Colors.black,),
+                onTap: (){
                   scaffoldKey.currentState.openEndDrawer();
                 },
               ),
@@ -784,9 +784,17 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
   void initState() {
     if (_bloc == null) _bloc = BlocProvider.of(context);
     reset();
-    _actions.add(ActionButton('重置', reset, colorCyan));
+    _actions.add(ActionButton(
+      '重置',
+      colorCyan,
+      reset,
+    ));
     _actions.add(ActionDivider());
-    _actions.add(ActionButton('筛选', filter, colorOrigin));
+    _actions.add(ActionButton(
+      '筛选',
+      colorOrigin,
+      filter,
+    ));
     super.initState();
   }
 
@@ -1138,54 +1146,58 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                       child: Container(
                         height: s.data?.isEmpty == true ? 0 : null,
                         child: GridView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 12.5,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 2.5,
-                            ),
-                            itemCount: s.data?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              var item = s.data[index];
-                              return StreamBuilder<int>(
-                                stream: source,
-                                builder: (c, s) => Material(
-                                  child: Container(
-                                    color: Colors.white,
-                                    child: GestureDetector(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: s.data == item.id
-                                              ? colorOriginLight
-                                              : colorGrey,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            item.name,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                            ),
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 12.5,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 2.5,
+                          ),
+                          itemCount: s.data?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            var item = s.data[index];
+                            return StreamBuilder<int>(
+                              stream: source,
+                              builder: (c, s) => Material(
+                                child: Container(
+                                  color: Colors.white,
+                                  child: GestureDetector(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: s.data == item.id
+                                            ? colorOriginLight
+                                            : colorGrey,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4.0)),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          item.name,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 12,
                                           ),
                                         ),
                                       ),
-                                      onTap: () {
-                                        if (source.value != item.id) {
-                                          source.value = item.id;
-                                        } else {
-                                          source.value = null;
-                                        }
-                                      },
                                     ),
+                                    onTap: () {
+                                      if (source.value != item.id) {
+                                        source.value = item.id;
+                                      } else {
+                                        source.value = null;
+                                      }
+                                    },
                                   ),
                                 ),
-                              );
-                            }),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -1245,6 +1257,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                     color: Colors.white,
                                     child: GestureDetector(
                                       child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 2,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: s.data == item.id
                                               ? colorOriginLight
@@ -1334,6 +1349,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                 stream: company,
                                 builder: (c, s) => Material(
                                   child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
                                     color: Colors.white,
                                     child: GestureDetector(
                                       child: Container(
@@ -1398,6 +1416,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                 color: Colors.white,
                                 child: GestureDetector(
                                   child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: s.data == item.id
                                           ? colorOriginLight
@@ -1488,6 +1509,9 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                     color: Colors.white,
                                     child: GestureDetector(
                                       child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 2,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: s.data == item.id
                                               ? colorOriginLight

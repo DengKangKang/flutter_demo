@@ -81,11 +81,9 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                                 context: context,
                                 initialDate: DateTime.now(),
                                 firstDate: DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
+                                  DateTime.now().year - 2
                                 ),
-                                lastDate: DateTime(DateTime.now().year + 10),
+                                lastDate: DateTime.now(),
                               );
                               if (date != null) {
                                 bloc.date =
@@ -384,25 +382,25 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
     return showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                title: Text('提示'),
-                content: Text('草稿已自动保存'),
-                actions: <Widget>[
-                  FlatButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: Text(
-                      '退出',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: Text(
-                      '继续填写',
-                      style: TextStyle(color: colorOrigin),
-                    ),
-                  ),
-                ],
+            title: Text('提示'),
+            content: Text('草稿已自动保存'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(
+                  '退出',
+                  style: TextStyle(color: Colors.grey),
+                ),
               ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  '继续填写',
+                  style: TextStyle(color: colorOrigin),
+                ),
+              ),
+            ],
+          ),
         ) ??
         false;
   }

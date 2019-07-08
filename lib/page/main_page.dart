@@ -66,7 +66,7 @@ class MainPageState extends CommonPageState<MainPage, MainBloc>
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Expanded(
-                    child:  Container(
+                    child: Container(
                       child: GestureDetector(
                         child: snapshot.data == home
                             ? Image.asset('assets/images/ico_sy_xz.png')
@@ -141,9 +141,17 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
   void initState() {
     bloc = BlocProvider.of(context);
     name = bloc.onFilterConfirm.value ?? '';
-    _actions.add(ActionButton('重置', reset, colorCyan));
+    _actions.add(ActionButton(
+      '重置',
+      colorCyan,
+      reset,
+    ));
     _actions.add(ActionDivider());
-    _actions.add(ActionButton('筛选', filter, colorOrigin));
+    _actions.add(ActionButton(
+      '筛选',
+      colorOrigin,
+      filter,
+    ));
     super.initState();
   }
 

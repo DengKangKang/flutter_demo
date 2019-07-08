@@ -44,7 +44,10 @@ class PersonalPageState extends State<PersonalPage>
         Stack(
           alignment: AlignmentDirectional.center,
           children: <Widget>[
-            Image.asset('assets/images/p_me.png'),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Image.asset('assets/images/p_me.png',fit: BoxFit.fitWidth,),
+            ),
             Column(
               children: <Widget>[
                 Container(
@@ -84,7 +87,7 @@ class PersonalPageState extends State<PersonalPage>
               item(
                 '重置密码',
                 'assets/images/ico_me_mm.png',
-                () {
+                    () {
                   Navigator.push(
                     context,
                     CommonRoute(builder: (c) => ResetPasswordPage()),
@@ -96,7 +99,7 @@ class PersonalPageState extends State<PersonalPage>
                 child: item(
                   '退出登录',
                   'assets/images/ico_me_tc.png',
-                  () {
+                      () {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -107,7 +110,7 @@ class PersonalPageState extends State<PersonalPage>
                             child: Text(
                               '确定',
                               style: TextStyle(
-                                color: Colors.grey,
+                                color: colorOrigin,
                               ),
                             ),
                             onPressed: () {

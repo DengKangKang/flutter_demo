@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/applied_plugins_rsp.dart';
@@ -275,6 +276,10 @@ class PluginSettingState
             hint: '请输入集团子公司数量',
             content: bloc.subsidiaryCorporation,
             showLine: false,
+            inputFormatters: [
+              WhitelistingTextInputFormatter.digitsOnly
+            ],
+            inputType: TextInputType.number,
           ),
         );
         break;
@@ -395,16 +400,28 @@ class PluginSettingState
                     label: '增值税发票',
                     hint: '请输入识别票量',
                     content: bloc.quota1,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    inputType: TextInputType.number,
                   ),
                   buildInputItem(
                     label: '其他发票量',
                     hint: '请输入识别票量',
                     content: bloc.quota2,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    inputType: TextInputType.number,
                   ),
                   buildInputItem(
                     label: '定额发票量',
                     hint: '请输入识别票量',
                     content: bloc.quota3,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    inputType: TextInputType.number,
                     showLine: false,
                   ),
                 ],
@@ -417,6 +434,10 @@ class PluginSettingState
                     label: '发票量',
                     hint: '请输入识别票量',
                     content: bloc.allQuota,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    inputType: TextInputType.number,
                     showLine: false,
                   ),
                 ],

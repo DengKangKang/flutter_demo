@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/bloc/ClientDetailBloc.dart';
-import 'package:flutter_app/data/Constant.dart';
 import 'package:flutter_app/data/http/api_service.dart';
-import 'package:flutter_app/data/http/rsp/VisitLogsRsp.dart';
-import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
-import 'package:flutter_app/data/http/rsp/data/VisitLogsData.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
-import 'package:flutter_app/page/clientdetails/NewPlainVisit.dart';
-import 'package:flutter_app/page/clientdetails/NewSpecialVisit.dart';
 import 'package:flutter_app/weight/Tool.dart';
 
 import '../../main.dart';
@@ -67,27 +57,30 @@ class CreateDemandPageState extends State<CreateDemandPage> {
           margin: EdgeInsets.symmetric(vertical: 10),
           padding: EdgeInsets.all(20),
           color: Colors.white,
-          child: Theme(
-            data: ThemeData(
-              primaryColor: colorOrigin,
+          child: Container(
+            padding: EdgeInsets.all(10),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+              border: Border.all(color: Color(0xFFF1F1F1)),
             ),
             child: TextField(
               controller: _contentController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "请输入需求内容",
-                alignLabelWithHint: true,
-              ),
+              maxLines: null,
               keyboardType: TextInputType.multiline,
-              maxLengthEnforced: true,
-              maxLines: 100,
+              decoration: InputDecoration(
+                hintText: '请输入备注内容',
+                hintStyle: TextStyle(fontSize: 15),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(0),
+              ),
             ),
           ),
         ));
   }
 
   void _onAdd(BuildContext context) async {
-    var content =_contentController.value.text;
+    var content = _contentController.value.text;
 
     if (content == null || content.isEmpty) {
       _scaffoldKey.currentState.showSnackBar(

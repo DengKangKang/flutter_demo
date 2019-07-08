@@ -52,20 +52,44 @@ class ClientDetailPageState
     if (_action == null) _action = List();
     switch (widget.businessType) {
       case (typeTrace | statePrivate):
-        _action.add(ActionButton('释放线索', releaseTrace, colorCyan));
+        _action.add(ActionButton(
+          '释放线索',
+          colorCyan,
+          releaseTrace,
+        ));
         _action.add(ActionDivider());
-        _action.add(ActionButton('转为客户', transformToClient, colorOrigin));
+        _action.add(ActionButton(
+          '转为客户',
+          colorOrigin,
+          transformToClient,
+        ));
         break;
       case (typeTrace | statePublic):
-        _action.add(ActionButton('加入私海', addToPrivateTrace, colorCyan));
+        _action.add(ActionButton(
+          '加入私海',
+          colorOrigin,
+          addToPrivateTrace,
+        ));
         break;
       case (typeClient | statePrivate):
-        _action.add(ActionButton('释放客户', releaseClient, colorCyan));
+        _action.add(ActionButton(
+          '释放客户',
+          colorCyan,
+          releaseClient,
+        ));
         _action.add(ActionDivider());
-        _action.add(ActionButton('签约', signContract, colorOrigin));
+        _action.add(ActionButton(
+          '签约',
+          colorOrigin,
+          signContract,
+        ));
         break;
       case (typeClient | statePublic):
-        _action.add(ActionButton('加入私海客户', addToPrivateClient, colorCyan));
+        _action.add(ActionButton(
+          '加入私海客户',
+          colorCyan,
+          addToPrivateClient,
+        ));
         break;
     }
 
@@ -172,11 +196,11 @@ class ClientDetailPageState
                                             ),
                                             Container(
                                               margin: EdgeInsets.only(left: 6),
-                                              child: Icon(
+                                              child: Image.asset(
                                                 widget.client.is_important ==
                                                         yes
-                                                    ? Icons.star
-                                                    : Icons.star_border,
+                                                    ? 'assets/images/ico_zd_checked.png'
+                                                    : 'assets/images/ico_zd.png',
                                                 color: widget.client
                                                             .is_important ==
                                                         yes
@@ -290,10 +314,9 @@ class ClientDetailPageState
     );
   }
 
-  String title()=>
-    widget.title == null
-                ? widget.businessType & 0xF == typeTrace ? '线索详情' : '客户详情'
-                : widget.title;
+  String title() => widget.title == null
+      ? widget.businessType & 0xF == typeTrace ? '线索详情' : '客户详情'
+      : widget.title;
 
   void callPhone() async {
     if (await canLaunch('tel:${widget.client.leads_mobile}')) {
@@ -313,42 +336,42 @@ class ClientDetailPageState
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-            title: Text("提示"),
-            content: Text("确定释放线索？"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(c).pop();
-                },
+        title: Text("提示"),
+        content: Text("确定释放线索？"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.grey,
               ),
-              FlatButton(
-                child: Text(
-                  '确定',
-                  style: TextStyle(
-                    color: colorOrigin,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(c).pop();
-                  onLoading(context);
-                  var rsp = await ApiService()
-                      .releaseTrace(widget.client.id.toString());
-                  loadingFinish(context);
-                  if (rsp.code == ApiService.success) {
-                    Navigator.of(context).pop(true);
-                  } else {
-                    bloc.showTip(rsp.msg);
-                  }
-                },
-              ),
-            ],
+            ),
+            onPressed: () {
+              Navigator.of(c).pop();
+            },
           ),
+          FlatButton(
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: colorOrigin,
+              ),
+            ),
+            onPressed: () async {
+              Navigator.of(c).pop();
+              onLoading(context);
+              var rsp =
+                  await ApiService().releaseTrace(widget.client.id.toString());
+              loadingFinish(context);
+              if (rsp.code == ApiService.success) {
+                Navigator.of(context).pop(true);
+              } else {
+                bloc.showTip(rsp.msg);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -361,9 +384,9 @@ class ClientDetailPageState
         context,
         CommonRoute(
           builder: (BuildContext context) => ClientListPage(
-                title: '私海客户',
-                businessType: typeClient | statePrivate,
-              ),
+            title: '私海客户',
+            businessType: typeClient | statePrivate,
+          ),
         ),
         ModalRoute.withName('/main'),
       );
@@ -376,51 +399,51 @@ class ClientDetailPageState
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-            title: Text("提示"),
-            content: Text("确定加入私海？"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(c).pop();
-                },
+        title: Text("提示"),
+        content: Text("确定加入私海？"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.grey,
               ),
-              FlatButton(
-                child: Text(
-                  '确定',
-                  style: TextStyle(
-                    color: colorOrigin,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(c).pop();
-                  onLoading(context);
-                  var rsp = await ApiService()
-                      .addToPrivateTrace(widget.client.id.toString());
-                  loadingFinish(context);
-                  if (rsp.code == ApiService.success) {
-                    await Navigator.pushAndRemoveUntil(
-                      context,
-                      CommonRoute(
-                        builder: (BuildContext context) => ClientListPage(
-                              title: '私海线索',
-                              businessType: typeTrace | statePrivate,
-                            ),
-                      ),
-                      ModalRoute.withName('/main'),
-                    );
-                  } else {
-                    bloc.showTip(rsp.msg);
-                  }
-                },
-              ),
-            ],
+            ),
+            onPressed: () {
+              Navigator.of(c).pop();
+            },
           ),
+          FlatButton(
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: colorOrigin,
+              ),
+            ),
+            onPressed: () async {
+              Navigator.of(c).pop();
+              onLoading(context);
+              var rsp = await ApiService()
+                  .addToPrivateTrace(widget.client.id.toString());
+              loadingFinish(context);
+              if (rsp.code == ApiService.success) {
+                await Navigator.pushAndRemoveUntil(
+                  context,
+                  CommonRoute(
+                    builder: (BuildContext context) => ClientListPage(
+                      title: '私海线索',
+                      businessType: typeTrace | statePrivate,
+                    ),
+                  ),
+                  ModalRoute.withName('/main'),
+                );
+              } else {
+                bloc.showTip(rsp.msg);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -428,42 +451,42 @@ class ClientDetailPageState
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-            title: Text("提示"),
-            content: Text("确定释放客户？"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(c).pop();
-                },
+        title: Text("提示"),
+        content: Text("确定释放客户？"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.grey,
               ),
-              FlatButton(
-                child: Text(
-                  '确定',
-                  style: TextStyle(
-                    color: colorOrigin,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(c).pop();
-                  onLoading(context);
-                  var rsp = await ApiService()
-                      .releaseClient(widget.client.id.toString());
-                  loadingFinish(context);
-                  if (rsp.code == ApiService.success) {
-                    Navigator.of(context).pop(true);
-                  } else {
-                    bloc.showTip(rsp.msg);
-                  }
-                },
-              ),
-            ],
+            ),
+            onPressed: () {
+              Navigator.of(c).pop();
+            },
           ),
+          FlatButton(
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: colorOrigin,
+              ),
+            ),
+            onPressed: () async {
+              Navigator.of(c).pop();
+              onLoading(context);
+              var rsp =
+                  await ApiService().releaseClient(widget.client.id.toString());
+              loadingFinish(context);
+              if (rsp.code == ApiService.success) {
+                Navigator.of(context).pop(true);
+              } else {
+                bloc.showTip(rsp.msg);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -481,51 +504,51 @@ class ClientDetailPageState
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-            title: Text("提示"),
-            content: Text("确定加入私海？"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(c).pop();
-                },
+        title: Text("提示"),
+        content: Text("确定加入私海？"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.grey,
               ),
-              FlatButton(
-                child: Text(
-                  '确定',
-                  style: TextStyle(
-                    color: colorOrigin,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(c).pop();
-                  onLoading(context);
-                  var rsp = await ApiService()
-                      .addToPrivateClient(widget.client.id.toString());
-                  loadingFinish(context);
-                  if (rsp.code == ApiService.success) {
-                    await Navigator.pushAndRemoveUntil(
-                      context,
-                      CommonRoute(
-                        builder: (BuildContext context) => ClientListPage(
-                              title: '私海客户',
-                              businessType: typeClient | statePrivate,
-                            ),
-                      ),
-                      ModalRoute.withName('/main'),
-                    );
-                  } else {
-                    bloc.showTip(rsp.msg);
-                  }
-                },
-              ),
-            ],
+            ),
+            onPressed: () {
+              Navigator.of(c).pop();
+            },
           ),
+          FlatButton(
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: colorOrigin,
+              ),
+            ),
+            onPressed: () async {
+              Navigator.of(c).pop();
+              onLoading(context);
+              var rsp = await ApiService()
+                  .addToPrivateClient(widget.client.id.toString());
+              loadingFinish(context);
+              if (rsp.code == ApiService.success) {
+                await Navigator.pushAndRemoveUntil(
+                  context,
+                  CommonRoute(
+                    builder: (BuildContext context) => ClientListPage(
+                      title: '私海客户',
+                      businessType: typeClient | statePrivate,
+                    ),
+                  ),
+                  ModalRoute.withName('/main'),
+                );
+              } else {
+                bloc.showTip(rsp.msg);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -536,45 +559,62 @@ class ClientDetailBloc extends CommonBloc {
   final Client client;
 }
 
-abstract class Action {
+abstract class Action = ActionStructure with ActionBehavior;
+
+class ActionButton = ActionButtonStructure
+    with ActionButtonBehavior
+    implements Action;
+
+class ActionDivider = ActionDividerStructure
+    with ActionDividerBehavior
+    implements Action;
+
+mixin ActionBehavior {
   Widget build();
 }
 
-class ActionButton extends Action {
-  ActionButton(this.label, this.action, this.color);
+class ActionStructure {}
 
-  final String label;
-  final VoidCallback action;
+mixin ActionButtonBehavior {
+  String get label;
 
-  final color;
+  Color get color;
 
-  @override
-  Widget build() {
-    return Flexible(
-      child: InkWell(
-        child: Container(
-          height: 60,
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: 17,
-                color: color,
+  GestureTapCallback get action;
+
+  Widget build() => Flexible(
+        child: InkWell(
+          child: Container(
+            height: 60,
+            child: Center(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 17,
+                  color: color,
+                ),
               ),
             ),
           ),
+          onTap: action,
         ),
-        onTap: action,
-      ),
-    );
-  }
+      );
 }
 
-class ActionDivider extends Action {
-  @override
+class ActionButtonStructure {
+  ActionButtonStructure(this.label, this.color, this.action);
+
+  final String label;
+  final Color color;
+  final GestureTapCallback action;
+}
+
+mixin ActionDividerBehavior {
   Widget build() {
     return VerticalDivider(
       width: 1,
     );
   }
 }
+
+class ActionDividerStructure {}

@@ -17,7 +17,8 @@ class HomePage extends StatefulWidget {
   State createState() => HomePageState();
 }
 
-class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKeepAliveClientMixin<HomePage>{
+class HomePageState extends CommonPageState<HomePage, HomeBloc>
+    with AutomaticKeepAliveClientMixin<HomePage> {
   @override
   void initState() {
     if (bloc == null) {
@@ -31,9 +32,15 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Image.asset('assets/images/p_sy.png'),
+        Positioned.fill(
+          child: Image.asset(
+            'assets/images/p_sy.png',
+            fit: BoxFit.fitWidth,
+            alignment: Alignment.topCenter,
+          ),
+        ),
         Container(
-          margin: EdgeInsets.only(top: 165),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.25),
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: <Widget>[
@@ -44,21 +51,21 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
                     initialData: '0',
                     stream: bloc.privateTrace.stream,
                     builder: (c, s) => _item(
-                          '私海线索',
-                          s.data,
-                          '我的线索',
-                          typeTrace | statePrivate,
-                        ),
+                      '私海线索',
+                      s.data,
+                      '我的线索',
+                      typeTrace | statePrivate,
+                    ),
                   ),
                   StreamBuilder(
                     initialData: '0',
                     stream: bloc.publicTrace.stream,
                     builder: (c, s) => _item(
-                          '公海线索',
-                          s.data,
-                          '今日新增',
-                          typeTrace | statePublic,
-                        ),
+                      '公海线索',
+                      s.data,
+                      '今日新增',
+                      typeTrace | statePublic,
+                    ),
                   ),
                 ],
               ),
@@ -69,21 +76,21 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
                     initialData: '0',
                     stream: bloc.privateClient.stream,
                     builder: (c, s) => _item(
-                          '私海客户',
-                          s.data,
-                          '我的客户',
-                          typeClient | statePrivate,
-                        ),
+                      '私海客户',
+                      s.data,
+                      '我的客户',
+                      typeClient | statePrivate,
+                    ),
                   ),
                   StreamBuilder(
                     initialData: '0',
                     stream: bloc.publicClient.stream,
                     builder: (c, s) => _item(
-                          '公海客户',
-                          s.data,
-                          '今日新增',
-                          typeClient | statePublic,
-                        ),
+                      '公海客户',
+                      s.data,
+                      '今日新增',
+                      typeClient | statePublic,
+                    ),
                   ),
                 ],
               ),
@@ -99,16 +106,20 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
     var type = businessType & 0xF;
     return Container(
         margin: EdgeInsets.only(
-            left: 20, right: 20, bottom: type == typeTrace ? 40 : 0),
+          left: 20,
+          right: 20,
+          bottom:
+              type == typeTrace ? MediaQuery.of(context).size.height * 0.05 : 0,
+        ),
         child: RawMaterialButton(
           fillColor: Colors.white,
           elevation: 8,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadiusDirectional.all(Radius.circular(20))),
           child: Container(
-            padding: EdgeInsets.all(15),
-            width: 110,
-            height:  MediaQuery.of(context).size.height*0.25,
+            padding: EdgeInsets.only(top: 15,left: 15,right: 15,bottom: 10),
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: MediaQuery.of(context).size.height * 0.275,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,7 +136,6 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
                         title,
                         style: TextStyle(
                           fontSize: 17,
-                          color: type == typeTrace ? colorCyan : colorOrigin,
                         ),
                       ),
                     ),
@@ -150,7 +160,7 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
                         color: type == typeTrace ? colorCyan : colorOrigin,
                         borderRadius: BorderRadius.all(Radius.circular(3)),
                       ),
-                      margin: EdgeInsets.only(top: 15),
+                      margin: EdgeInsets.only(top: 10),
                       height: 3,
                       width: 20,
                     )
@@ -163,7 +173,10 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc> with AutomaticKe
             Navigator.push(
               context,
               CommonRoute(
-                builder: (c) => ClientListPage(title: title,businessType: businessType,),
+                builder: (c) => ClientListPage(
+                  title: title,
+                  businessType: businessType,
+                ),
               ),
             );
           },

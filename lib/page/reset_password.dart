@@ -26,6 +26,7 @@ class ResetPasswordState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: colorBg,
       appBar: AppBar(
         elevation: 0,
@@ -54,7 +55,7 @@ class ResetPasswordState
                         onChanged: (s) {
                           bloc.oldPassword = s;
                         },
-                        obscureText: false,
+                        obscureText: true,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       Divider(
@@ -70,7 +71,7 @@ class ResetPasswordState
                         onChanged: (s) {
                           bloc.newPassword = s;
                         },
-                        obscureText: false,
+                        obscureText: true,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       Divider(
@@ -86,7 +87,7 @@ class ResetPasswordState
                         onChanged: (s) {
                           bloc.newPasswordAgain = s;
                         },
-                        obscureText: false,
+                        obscureText: true,
                         keyboardType: TextInputType.emailAddress,
                       ),
                     ],
@@ -139,14 +140,16 @@ class ResetPassword extends CommonBloc {
       showTip('请再次输入新密码');
       return;
     }
-    if(newPassword== newPasswordAgain){
+    if(newPassword!= newPasswordAgain){
       showTip('两次密码不一致');
       return;
     }
+    pageLoading();
     var rsp = await ApiService().modifyPassword(
       new_password: newPassword,
       old_password: oldPassword,
     );
+    pageCompleted();
     if(rsp.code == ApiService.success){
       finish();
     }else{

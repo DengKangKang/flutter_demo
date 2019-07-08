@@ -779,6 +779,26 @@ class ApiService {
     String state,
   ) async {
     try {
+      print( {
+        'leads_name': leads_name,
+        'company_type': company_type, // int   公司类型
+        'industry': industry, // int   行业
+        'location': location, // int  所在地
+        'source_id': source_id, //  int  来源
+        'annual_invoice': annual_invoice, //int  年发票量
+        'is_important': is_important, //int  重点 是：1 否：2
+        'on_premise': on_premise, // int 二次开发 是：1 否：2
+        'progress_percent': progress_percent, //int 项目进度
+        'anticipated_amount': anticipated_amount, //预计签约金额
+        'anticipated_month': anticipated_month, //
+        'company_size': company_size, //规模   var
+        'memo': memo, //简介   var
+        'leads_contact': leads_contact, //负责人
+        'leads_mobile': leads_mobile,
+        'job_title': job_title,
+        'leads_email': leads_email,
+        'state': state,
+      });
       Response rsp = await client.post(
         '$_baseUrl/app/fc/customer/addcustom',
         headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},

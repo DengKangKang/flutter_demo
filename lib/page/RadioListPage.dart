@@ -63,14 +63,31 @@ class RadioListPageState<T extends RadioBean> extends State<StatefulWidget> {
         },
       ));
     });
-    return Dialog(
-      child: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: content.length,
-        itemBuilder: (context, i) {
-          return content[i];
+    return Container(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
         },
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: <Widget>[
+            Material(
+              child: Container(
+                color: Colors.white,
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.4),
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: content.length,
+                  itemBuilder: (context, i) {
+                    return content[i];
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -232,15 +249,13 @@ final signTypes = [
   RadioBean(2, "续签"),
 ];
 
-const billTypeClassify =1 ;
-const billTypeCommon =2 ;
+const billTypeClassify = 1;
+
+const billTypeCommon = 2;
+
 final billingTypes = [
   RadioBean(billTypeClassify, "分类计费"),
   RadioBean(billTypeCommon, "通用计费"),
 ];
 
-
 final sourceTypes = List<RadioBean>();
-
-
-

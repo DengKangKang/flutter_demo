@@ -34,7 +34,11 @@ class ClientInfoPageState extends State<ClientInfoPage>
         buildItem(
           context,
           '公司类型',
-          widget.client.leads_name??'',
+          companyTypes
+                  .firstWhere((e) => e.id == widget.client.company_type,
+                      orElse: () => null)
+                  ?.name ??
+              '',
         ),
         buildItem(
           context,
@@ -65,13 +69,15 @@ class ClientInfoPageState extends State<ClientInfoPage>
           widget.client?.on_premise == yes ? '是' : '否',
         ),
         buildItem(
-          context,
-          '执行比例',
-            progresses.firstWhere(
-                  (e) => e.id == widget.client?.progress_percent,
-              orElse: () => null,
-            )?.name??''
-        ),
+            context,
+            '执行比例',
+            progresses
+                    .firstWhere(
+                      (e) => e.id == widget.client?.progress_percent,
+                      orElse: () => null,
+                    )
+                    ?.name ??
+                ''),
         buildItem(
           context,
           '预计签约额',
@@ -80,17 +86,17 @@ class ClientInfoPageState extends State<ClientInfoPage>
         buildItem(
           context,
           '预计签约日',
-          widget.client.anticipated_date??'',
+          widget.client.anticipated_date ?? '',
         ),
         buildItem(
           context,
           '公司规模',
-          widget.client.company_size??'',
+          widget.client.company_size ?? '',
         ),
         buildItem(
           context,
           '公司简介',
-          widget.client.memo??'',
+          widget.client.memo ?? '',
           showLine: false,
         ),
       ],

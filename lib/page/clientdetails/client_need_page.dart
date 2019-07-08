@@ -154,7 +154,6 @@ class ClientNeedPageState extends State<ClientNeedPage>
             opacity: _clientNeeds.value.last == clientNeed ? 0 : 1,
             child: Divider(
               height: 1,
-              color: Colors.grey,
             ),
           ),
         ],
