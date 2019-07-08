@@ -20,20 +20,22 @@ const colorDivider = Color(0XFFE6E6E6);
 const defaultElevation = 8.0;
 
 void main() {
-  runApp(MaterialApp(
-    theme: ThemeData(
-        primaryColor: Colors.white,
-        accentColor: colorOrigin,
-        scaffoldBackgroundColor: Colors.white,
-        backgroundColor: Colors.white,
-        hintColor: Colors.grey,
-        dividerColor: colorDivider),
-    home: SplashScreen(),
-    routes: <String, WidgetBuilder>{
-      '/main': (BuildContext context) => MainPage(),
-      '/login': (BuildContext context) => LoginPage(),
-    },
-  ));
+  runApp(
+    MaterialApp(
+      theme: ThemeData(
+          primaryColor: Colors.white,
+          accentColor: colorOrigin,
+          scaffoldBackgroundColor: Colors.white,
+          backgroundColor: Colors.white,
+          hintColor: Colors.grey,
+          dividerColor: colorDivider),
+      home: SplashScreen(),
+      routes: <String, WidgetBuilder>{
+        '/main': (BuildContext context) => MainPage(),
+        '/login': (BuildContext context) => LoginPage(),
+      },
+    ),
+  );
 }
 
 class SplashScreen extends StatefulWidget {
@@ -59,21 +61,18 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     final time = DateTime.now().millisecond;
-    ApiService().sourceTypes().then(
-      (rsp) {
-        print(rsp);
-        if (rsp.code == ApiService.success) {
-          var sourceTypesRsp = rsp;
-          sourceTypes.addAll(sourceTypesRsp.data);
-        }
-        var duration = 2000 - time;
-        _goMainDelay(duration > 0 ? duration : 0);
-      },
-      onError: (e){
-        var duration = 2000 - time;
-        _goMainDelay(duration > 0 ? duration : 0);
+    ApiService().sourceTypes().then((rsp) {
+      print(rsp);
+      if (rsp.code == ApiService.success) {
+        var sourceTypesRsp = rsp;
+        sourceTypes.addAll(sourceTypesRsp.data);
       }
-    );
+      var duration = 2000 - time;
+      _goMainDelay(duration > 0 ? duration : 0);
+    }, onError: (e) {
+      var duration = 2000 - time;
+      _goMainDelay(duration > 0 ? duration : 0);
+    });
   }
 
   @override

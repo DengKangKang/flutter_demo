@@ -45,13 +45,15 @@ class LoginPageState extends State<StatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("登录"),
-      ),
       body: Builder(
-        builder: (context) => Column(
+        builder: (context) => ListView(
               children: <Widget>[
+                Container(
+                  height: 130,
+                  width: 140,
+                  margin: EdgeInsets.symmetric(vertical: 80),
+                  child: Image.asset('assets/images/ico_dl_logo.png'),
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
@@ -64,6 +66,10 @@ class LoginPageState extends State<StatefulWidget> {
                         hintText: '请输入账号',
                       ),
                       keyboardType: TextInputType.emailAddress),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(height: 1,),
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -80,12 +86,19 @@ class LoginPageState extends State<StatefulWidget> {
                       keyboardType: TextInputType.emailAddress),
                 ),
                 Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(height: 1,),
+                ),
+                Container(
                   margin: EdgeInsets.symmetric(
                     vertical: 40,
                     horizontal: 60,
                   ),
                   width: double.infinity,
                   child: MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
                     color: colorOrigin,
                     textColor: Colors.white,
                     padding: EdgeInsets.symmetric(

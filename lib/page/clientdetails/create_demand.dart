@@ -30,6 +30,7 @@ class CreateDemandPageState extends State<CreateDemandPage> {
         key: _scaffoldKey,
         backgroundColor: colorBg,
         appBar: AppBar(
+          elevation: 0,
           centerTitle: true,
           title: Text('添加需求'),
           actions: <Widget>[
