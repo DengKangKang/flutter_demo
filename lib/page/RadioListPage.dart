@@ -258,4 +258,15 @@ final billingTypes = [
   RadioBean(billTypeCommon, "通用计费"),
 ];
 
+const workFormCallOut = 1;
+const workFormGoOut = 2;
+const workFormOther = 3;
+
+final workForms = [
+  RadioBean(workFormCallOut, "外呼"),
+  RadioBean(workFormGoOut, "外出"),
+  RadioBean(workFormOther, "其他"),
+];
+
+
 final sourceTypes = List<RadioBean>();

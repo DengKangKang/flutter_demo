@@ -47,18 +47,33 @@ class AccountInfoPage4State extends State<AccountInfoPage4>
       initialData: [],
       stream: data,
       builder: (c, s) => ListView(
-            physics: BouncingScrollPhysics(),
-            controller: _scrollController,
-            children: <Widget>[
-              buildItem(
-                '发票余量',
-                total,
-                showLine: false,
-              ),
-              buildTitle('每日查验量'),
-              ...s.data.map((e) => _buildItem(e.dt, e.count.toString()))
-            ],
+        physics: BouncingScrollPhysics(),
+        controller: _scrollController,
+        children: <Widget>[
+          buildItem(
+            '发票余量',
+            total,
+            showLine: false,
           ),
+          buildTitle('每日查验量'),
+          Visibility(
+            visible: s.data == null || s.data.isEmpty,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 20),
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              child: Text(
+                '暂无内容',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          ),
+          ...s.data.map((e) => _buildItem(e.dt, e.count.toString()))
+        ],
+      ),
     );
   }
 

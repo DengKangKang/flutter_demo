@@ -170,7 +170,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Text(
-                      '名字',
+                      '名称',
                       style: TextStyle(fontSize: 12),
                     ),
                   ),
@@ -190,7 +190,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                       ),
                       style: TextStyle(fontSize: 12),
                       decoration: InputDecoration(
-                        hintText: '请输入销售经理的名字',
+                        hintText: '请输组员的名称',
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(0),
                       ),

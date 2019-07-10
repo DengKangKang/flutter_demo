@@ -86,8 +86,8 @@ class ClientDetailPageState
         break;
       case (typeClient | statePublic):
         _action.add(ActionButton(
-          '加入私海客户',
-          colorCyan,
+          '加入私海',
+          colorOrigin,
           addToPrivateClient,
         ));
         break;
@@ -156,7 +156,9 @@ class ClientDetailPageState
                                         Row(
                                           children: <Widget>[
                                             Text(
-                                              widget.client.id?.toString() ??
+                                              'id:' +
+                                                      widget.client.id
+                                                          ?.toString() ??
                                                   '',
                                               style: TextStyle(
                                                   fontSize: 13,
@@ -182,17 +184,17 @@ class ClientDetailPageState
                                         ),
                                         Row(
                                           children: <Widget>[
-                                            Opacity(
+                                            Visibility(
                                               child: Text(
                                                 '还剩${widget.client.daily}天释放到公海',
                                                 style: TextStyle(
                                                     fontSize: 13,
                                                     color: Colors.red),
                                               ),
-                                              opacity: widget.businessType ==
-                                                      (typeTrace | statePrivate)
-                                                  ? 1
-                                                  : 0,
+                                              visible: widget.businessType ==
+                                                      (typeTrace |
+                                                          statePrivate) &&
+                                                  widget.client.daily >= 0,
                                             ),
                                             Container(
                                               margin: EdgeInsets.only(left: 6),
@@ -207,7 +209,7 @@ class ClientDetailPageState
                                                     ? colorOrigin
                                                     : Colors.grey,
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ],
@@ -221,7 +223,10 @@ class ClientDetailPageState
                                     ),
                                     Text(
                                       widget.client.leads_name ?? '',
-                                      style: TextStyle(fontSize: 17),
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(top: 10),
@@ -234,8 +239,10 @@ class ClientDetailPageState
                                           Text(
                                             widget.client.leads_contact ?? '',
                                             style: TextStyle(
-                                                fontSize: 15,
-                                                color: colorOrigin),
+                                              fontSize: 15,
+                                              color: colorOrigin,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Container(
                                             margin: EdgeInsets.only(left: 10),

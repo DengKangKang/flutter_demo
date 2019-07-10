@@ -72,6 +72,7 @@ class OperationLogPageState extends State<OperationLogPage>
           Container(
             margin: EdgeInsets.only(top: 11),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
                   operationLog.user_realname,

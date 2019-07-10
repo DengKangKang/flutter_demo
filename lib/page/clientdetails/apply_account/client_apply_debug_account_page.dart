@@ -123,7 +123,7 @@ class ClientDebugAccountPageState extends CommonPageState<
                           Row(
                             children: <Widget>[
                               Text(
-                                widget.client.id?.toString() ?? '',
+                                'id:' + widget.client.id?.toString() ?? '',
                                 style:
                                     TextStyle(fontSize: 13, color: Colors.grey),
                               ),
@@ -144,16 +144,16 @@ class ClientDebugAccountPageState extends CommonPageState<
                               )
                             ],
                           ),
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(left: 6),
-                                child: Icon(
-                                  Icons.star_border,
-                                  color: Colors.grey,
-                                ),
-                              )
-                            ],
+                          Container(
+                            margin: EdgeInsets.only(left: 6),
+                            child: Image.asset(
+                              widget.client.is_important == yes
+                                  ? 'assets/images/ico_zd_checked.png'
+                                  : 'assets/images/ico_zd.png',
+                              color: widget.client.is_important == yes
+                                  ? colorOrigin
+                                  : Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -165,7 +165,10 @@ class ClientDebugAccountPageState extends CommonPageState<
                       ),
                       Text(
                         widget.client.leads_name ?? '',
-                        style: TextStyle(fontSize: 17),
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 10),
@@ -176,8 +179,11 @@ class ClientDebugAccountPageState extends CommonPageState<
                           children: <Widget>[
                             Text(
                               widget.client.leads_contact ?? '',
-                              style:
-                                  TextStyle(fontSize: 15, color: colorOrigin),
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: colorOrigin,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 10),
@@ -330,7 +336,7 @@ class ClientDebugAccountPageState extends CommonPageState<
           ),
           buildButtonTitle(
             '插件信息',
-            '编辑插件',
+            '新增插件',
             'assets/images/ico_lb_tj.png',
             () {
               addPlugin(context);
@@ -340,10 +346,24 @@ class ClientDebugAccountPageState extends CommonPageState<
             initialData: [],
             stream: bloc.plugins,
             builder: (c, s) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[...s.data.map((e) => buildPlugin(e))],
-              );
+              return s.data.isNotEmpty
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[...s.data.map((e) => buildPlugin(e))],
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      color: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      child: Text(
+                        '暂无内容',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
             },
           ),
         ],

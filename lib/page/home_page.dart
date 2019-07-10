@@ -40,7 +40,8 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc>
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.25),
+          margin:
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.25),
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: <Widget>[
@@ -117,7 +118,7 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc>
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadiusDirectional.all(Radius.circular(20))),
           child: Container(
-            padding: EdgeInsets.only(top: 15,left: 15,right: 15,bottom: 10),
+            padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
             width: MediaQuery.of(context).size.width * 0.3,
             height: MediaQuery.of(context).size.height * 0.275,
             child: Column(
@@ -136,6 +137,7 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc>
                         title,
                         style: TextStyle(
                           fontSize: 17,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -145,10 +147,11 @@ class HomePageState extends CommonPageState<HomePage, HomeBloc>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      count + '条',
+                      count + (type == typeTrace ? '条' : '个'),
                       style: TextStyle(
                         fontSize: 17,
                         color: type == typeTrace ? colorCyan : colorOrigin,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(

@@ -156,8 +156,9 @@ class VisitLogsPageState extends State<VisitLogsPage>
 
     children.add(
       Container(
-        margin: EdgeInsets.only(top: 11),
+        margin: EdgeInsets.only(top: 10),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Text(
               visitLog.user_realname ?? '',
@@ -347,15 +348,23 @@ class VisitLogsPageState extends State<VisitLogsPage>
         ),
       ));
     }
-
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      color: Colors.white,
-      padding: EdgeInsets.only(bottom: 10, right: 20, left: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: children,
-      ),
+    return Column(
+      children: <Widget>[
+        Container(
+          color: Colors.white,
+          padding: EdgeInsets.only(bottom: 10, right: 20, left: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: children,
+          ),
+        ),
+        Visibility(
+          visible: _visitLogs.value?.last != visitLog,
+          child: Divider(
+            height: 1,
+          ),
+        )
+      ],
     );
   }
 

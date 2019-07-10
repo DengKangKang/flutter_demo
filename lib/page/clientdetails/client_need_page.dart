@@ -128,6 +128,7 @@ class ClientNeedPageState extends State<ClientNeedPage>
           Container(
             margin: EdgeInsets.only(top: 11),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
                   clientNeed.creator_realname,

@@ -394,6 +394,7 @@ class ApiService {
         return BaseRsp(illicit, '网络异常，请稍后再试。');
       }
     } catch (e) {
+      print(e);
       return BaseRsp(illicit, '网络异常，请稍后再试。');
     }
   }
@@ -405,6 +406,10 @@ class ApiService {
     String todaySolution,
     String tomorrowPlane,
     String tomorrowVisitClient,
+    String morn_type,
+    String morn_content,
+    String afternoon_type,
+    String afternoon_content,
   ) async {
     try {
       Response rsp = await client.post('$_baseUrl/app/fc/daily/add', headers: {
@@ -416,6 +421,10 @@ class ApiService {
         'today_solution': todaySolution,
         'next_plan': tomorrowPlane,
         'next_customer_visit': tomorrowVisitClient,
+        'morn_type': morn_type,
+        'afternoon_type': afternoon_type,
+        'morn_content': morn_content,
+        'afternoon_content': afternoon_content,
       });
       print(rsp.body);
       if (rsp.statusCode == 200) {
@@ -521,7 +530,6 @@ class ApiService {
           'time_area': time_area,
         },
       );
-      print(uri.toString());
       Response rsp = await client.get(
         uri,
         headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},
@@ -779,7 +787,7 @@ class ApiService {
     String state,
   ) async {
     try {
-      print( {
+      print({
         'leads_name': leads_name,
         'company_type': company_type, // int   公司类型
         'industry': industry, // int   行业

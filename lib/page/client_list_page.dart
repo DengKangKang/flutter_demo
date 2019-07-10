@@ -60,7 +60,9 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
     );
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+              _scrollController.position.maxScrollExtent &&
+          bloc._dailies.value != null &&
+          bloc._dailies.value.length >= 10) {
         bloc.loadMore();
       }
     });
@@ -94,8 +96,12 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                     Visibility(
                       visible:
                           b.data && widget.businessType & 0xf0 == statePrivate,
-                      child: Image.asset(
-                        'assets/images/ico_htxq_jt_s.png',
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5),
+                        child: Image.asset(
+                          'assets/images/ico_htxq_jt_s.png',
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ],
@@ -119,8 +125,11 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
             ),
             Builder(
               builder: (context) => InkWell(
-                child: Image.asset('assets/images/ico_sx.png',color: Colors.black,),
-                onTap: (){
+                child: Image.asset(
+                  'assets/images/ico_sx.png',
+                  color: Colors.black,
+                ),
+                onTap: () {
                   scaffoldKey.currentState.openEndDrawer();
                 },
               ),
@@ -244,7 +253,7 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                 Row(
                   children: <Widget>[
                     Text(
-                      client.id?.toString() ?? '',
+                      'id:' + client.id?.toString() ?? '',
                       style: TextStyle(fontSize: 13, color: Colors.grey),
                     ),
                     Container(
@@ -380,7 +389,7 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                 Row(
                   children: <Widget>[
                     Text(
-                      client.id?.toString() ?? '',
+                      'id:' + client.id?.toString() ?? '',
                       style: TextStyle(fontSize: 13, color: Colors.grey),
                     ),
                     Container(
@@ -416,8 +425,8 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                     ),
                   ],
                 ),
-                Opacity(
-                  opacity: state == statePrivate ? 1 : 0,
+                Visibility(
+                  visible: state == statePrivate && client.daily >= 0,
                   child: Text(
                     '还剩${client.daily ?? '0'}天',
                     style: TextStyle(fontSize: 13, color: Colors.red),
@@ -433,7 +442,10 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
             ),
             Text(
               client.leads_name ?? '',
-              style: TextStyle(fontSize: 17),
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
@@ -450,7 +462,10 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                     margin: EdgeInsets.only(left: 10),
                     child: Text(
                       client.job_title ?? '',
-                      style: TextStyle(fontSize: 11),
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   )
                 ],
@@ -705,6 +720,7 @@ class ClientListBloc extends CommonBloc {
   }
 
   void loadMore() async {
+    print('loadMore');
     var rsp =
         await ApiService().clients(page: (page + 1).toString(), size: '10');
     if (rsp.code == ApiService.success) {
@@ -736,17 +752,23 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
   ClientListBloc _bloc;
   var _actions = List<prefix0.Action>();
 
-  var id;
-  var maker;
+  var id = '';
+  TextEditingController idController;
+
+  var maker = '';
+  TextEditingController makerController;
 
   var dateStart = BehaviorSubject<String>();
   var dateEnd = BehaviorSubject<String>();
 
-  var contact;
+  var contact = '';
+  TextEditingController contactController;
 
-  var clientName;
+  var clientName = '';
+  TextEditingController clientNameController;
 
-  var responsibleMan;
+  var responsibleMan = '';
+  TextEditingController responsibleManController;
 
   var sources = BehaviorSubject<List<RadioBean>>(
     seedValue: List.from(sourceTypes),
@@ -783,18 +805,55 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
   @override
   void initState() {
     if (_bloc == null) _bloc = BlocProvider.of(context);
-    reset();
-    _actions.add(ActionButton(
-      '重置',
-      colorCyan,
-      reset,
-    ));
-    _actions.add(ActionDivider());
-    _actions.add(ActionButton(
-      '筛选',
-      colorOrigin,
-      filter,
-    ));
+    if (_actions.isEmpty) {
+      _actions.add(ActionButton(
+        '重置',
+        colorCyan,
+        reset,
+      ));
+      _actions.add(ActionDivider());
+      _actions.add(ActionButton(
+        '筛选',
+        colorOrigin,
+        filter,
+      ));
+    }
+    init();
+    if (idController == null) {
+      idController = TextEditingController.fromValue(
+        TextEditingValue(
+          text: id,
+        ),
+      );
+    }
+    if (makerController == null) {
+      makerController = TextEditingController.fromValue(
+        TextEditingValue(
+          text: maker,
+        ),
+      );
+    }
+    if (contactController == null) {
+      contactController = TextEditingController.fromValue(
+        TextEditingValue(
+          text: contact,
+        ),
+      );
+    }
+    if (clientNameController == null) {
+      clientNameController = TextEditingController.fromValue(
+        TextEditingValue(
+          text: clientName,
+        ),
+      );
+    }
+    if (responsibleManController == null) {
+      responsibleManController = TextEditingController.fromValue(
+        TextEditingValue(
+          text: responsibleMan,
+        ),
+      );
+    }
     super.initState();
   }
 
@@ -826,11 +885,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                     ),
                     child: TextField(
                       textAlign: TextAlign.center,
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(
-                          text: id,
-                        ),
-                      ),
+                      controller: idController,
                       style: TextStyle(fontSize: 12),
                       decoration: InputDecoration(
                         hintText: '请输入id号',
@@ -858,11 +913,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                     ),
                     child: TextField(
                       textAlign: TextAlign.center,
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(
-                          text: id,
-                        ),
-                      ),
+                      controller: makerController,
                       style: TextStyle(fontSize: 12),
                       decoration: InputDecoration(
                         hintText: '请输入创建人名称',
@@ -877,7 +928,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                   Container(
                     margin: EdgeInsets.only(top: 15, bottom: 5),
                     child: Text(
-                      '创建人时间',
+                      '创建时间',
                       style: TextStyle(fontSize: 12),
                     ),
                   ),
@@ -900,7 +951,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                 initialData: '开始日期',
                                 stream: dateStart.stream,
                                 builder: (c, s) => Text(
-                                  s.data,
+                                  s.data ?? '开始日期',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -953,7 +1004,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                 initialData: '结束日期',
                                 stream: dateEnd.stream,
                                 builder: (c, s) => Text(
-                                  s.data,
+                                  s.data ?? '结束日期',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -1022,11 +1073,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                     ),
                     child: TextField(
                       textAlign: TextAlign.center,
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(
-                          text: id,
-                        ),
-                      ),
+                      controller: contactController,
                       style: TextStyle(fontSize: 12),
                       decoration: InputDecoration(
                         hintText: '请输入联系方式',
@@ -1054,11 +1101,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                     ),
                     child: TextField(
                       textAlign: TextAlign.center,
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(
-                          text: id,
-                        ),
-                      ),
+                      controller: clientNameController,
                       style: TextStyle(fontSize: 12),
                       decoration: InputDecoration(
                         hintText: '请输入客户名称',
@@ -1092,11 +1135,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                     ),
                     child: TextField(
                       textAlign: TextAlign.center,
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(
-                          text: id,
-                        ),
-                      ),
+                      controller: responsibleManController,
                       style: TextStyle(fontSize: 12),
                       decoration: InputDecoration(
                         hintText: '请输入甲方负责人名称',
@@ -1108,7 +1147,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     child: Container(
                       margin: EdgeInsets.only(top: 10),
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -1163,7 +1202,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                               builder: (c, s) => Material(
                                 child: Container(
                                   color: Colors.white,
-                                  child: GestureDetector(
+                                  child: InkWell(
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                         horizontal: 2,
@@ -1201,7 +1240,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Row(
@@ -1255,7 +1294,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                 builder: (c, s) => Material(
                                   child: Container(
                                     color: Colors.white,
-                                    child: GestureDetector(
+                                    child: InkWell(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 2,
@@ -1292,7 +1331,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     child: Container(
                       height: _bloc.businessType & 0xf == typeClient ? null : 0,
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -1353,7 +1392,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                                       horizontal: 2,
                                     ),
                                     color: Colors.white,
-                                    child: GestureDetector(
+                                    child: InkWell(
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: s.data == item.id
@@ -1414,7 +1453,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                             builder: (c, s) => Material(
                               child: Container(
                                 color: Colors.white,
-                                child: GestureDetector(
+                                child: InkWell(
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                       horizontal: 2,
@@ -1449,7 +1488,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                           );
                         }),
                   ),
-                  GestureDetector(
+                  InkWell(
                     child: Container(
                       height: _bloc.businessType & 0xf == typeClient ? null : 0,
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -1503,11 +1542,11 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                             itemBuilder: (context, index) {
                               var item = s.data[index];
                               return StreamBuilder<int>(
-                                stream: company,
+                                stream: progress,
                                 builder: (c, s) => Material(
                                   child: Container(
                                     color: Colors.white,
-                                    child: GestureDetector(
+                                    child: InkWell(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 2,
@@ -1571,7 +1610,7 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
                             builder: (c, s) => Material(
                               child: Container(
                                 color: Colors.white,
-                                child: GestureDetector(
+                                child: InkWell(
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: s.data == item.id
@@ -1629,14 +1668,14 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
     );
   }
 
-  void reset() {
-    id = _bloc.id;
-    maker = _bloc.maker;
+  void init() {
+    id = _bloc.id ?? '';
+    maker = _bloc.maker ?? '';
     if (_bloc.dateStart.isNotEmpty) dateStart.value = _bloc.dateStart;
     if (_bloc.dateEnd.isNotEmpty) dateEnd.value = _bloc.dateEnd;
-    contact = _bloc.contact;
-    clientName = _bloc.clientName;
-    responsibleMan = _bloc.responsibleMan;
+    contact = _bloc.contact ?? '';
+    clientName = _bloc.clientName ?? '';
+    responsibleMan = _bloc.responsibleMan ?? '';
     if (_bloc.source.isNotEmpty) source.value = int.parse(_bloc.source);
     if (_bloc.location.isNotEmpty) location.value = int.parse(_bloc.location);
     if (_bloc.company.isNotEmpty) company.value = int.parse(_bloc.company);
@@ -1647,6 +1686,27 @@ class FilterState extends State<Filter> with TickerProviderStateMixin {
     if (_bloc.secondDev.isNotEmpty) {
       secondDev.value = int.parse(_bloc.secondDev);
     }
+  }
+
+  void reset() {
+    idController.clear();
+    id = '';
+    makerController.clear();
+    maker = '';
+    dateStart.value = null;
+    dateEnd.value = null;
+    contactController.clear();
+    contact = '';
+    clientNameController.clear();
+    clientName = '';
+    responsibleManController.clear();
+    responsibleMan = '';
+    source.value = null;
+    location.value = null;
+    company.value = null;
+    isImportant.value = null;
+    progress.value = null;
+    secondDev.value = null;
   }
 
   void filter() {

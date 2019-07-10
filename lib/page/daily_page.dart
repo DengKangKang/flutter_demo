@@ -11,6 +11,7 @@ import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
 import 'package:flutter_app/data/persistence/Persistence.dart';
 import 'package:flutter_app/main.dart';
+import 'package:flutter_app/page/RadioListPage.dart';
 import 'package:flutter_app/page/main_page.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
@@ -50,7 +51,9 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
     }
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+              _scrollController.position.maxScrollExtent &&
+          bloc._dailies.value != null &&
+          bloc._dailies.value.length >= 10) {
         bloc.loadMore();
       }
     });
@@ -81,7 +84,10 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                     visible: b.data,
                     child: Container(
                       margin: EdgeInsets.only(left: 5),
-                      child: Image.asset('assets/images/ico_htxq_jt_s.png'),
+                      child: Image.asset(
+                        'assets/images/ico_htxq_jt_s.png',
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ],
@@ -174,7 +180,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                   var date = await showDatePicker(
                     context: context,
                     initialDate: initData,
-                    firstDate:DateTime(DateTime.now().year - 2, 12, 31),
+                    firstDate: DateTime(DateTime.now().year - 2, 12, 31),
                     lastDate: DateTime(DateTime.now().year + 10, 12, 31),
                   );
                   if (date != null) {
@@ -266,7 +272,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
             ),
           ),
           Divider(
-            height: 2,
+            height: 1,
             color: Colors.grey,
           ),
           Container(
@@ -277,6 +283,51 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Text(
+                    "今日工作形式",
+                    style: TextStyle(color: colorCyan, fontSize: 10),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 5,
+                    bottom: 10,
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '上午  ',
+                        style: TextStyle(fontSize: 12, color: colorCyan),
+                      ),
+                      Text(
+                        '${getWorkFrom(daily, true)}${daily.morn_content}',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                    margin: EdgeInsets.only(
+                      top: 5,
+                      bottom: 10,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '下午  ',
+                          style: TextStyle(fontSize: 12, color: colorCyan),
+                        ),
+                        Text(
+                          '${getWorkFrom(daily, false)}${daily.afternoon_content}',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    )),
+                Divider(
+                  height: 1,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 5),
                   child: Text(
@@ -291,7 +342,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   child: Divider(
-                    height: 2,
+                    height: 1,
                   ),
                 ),
                 Container(
@@ -308,7 +359,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   child: Divider(
-                    height: 2,
+                    height: 1,
                   ),
                 ),
                 Container(
@@ -325,7 +376,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   child: Divider(
-                    height: 2,
+                    height: 1,
                   ),
                 ),
                 Container(
@@ -342,7 +393,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   child: Divider(
-                    height: 2,
+                    height: 1,
                   ),
                 ),
                 Container(
@@ -365,6 +416,25 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
         ],
       ),
     );
+  }
+
+  String getWorkFrom(Daily daily, [isForenoon = true]) {
+    var workFrom = workForms?.firstWhere(
+      (s) => s.id == (isForenoon ? daily.morn_type : daily.afternoon_type),
+      orElse: () => null,
+    );
+    var colon = '';
+    if (isForenoon) {
+      colon = daily.morn_content != null && daily.morn_content.isNotEmpty
+          ? '：'
+          : '';
+    } else {
+      colon =
+          daily.afternoon_content != null && daily.afternoon_content.isNotEmpty
+              ? '：'
+              : '';
+    }
+    return workFrom != null ? '$workFrom$colon' : '';
   }
 
   void changePageState() async {
@@ -397,7 +467,7 @@ class DailyPageState extends CommonPageState<DailyPage, DailyBloc>
             child: Container(
               width: 100,
               child: Center(
-                child: Text('组员日报'),
+                child: Text('小组日报'),
               ),
             ),
           ),

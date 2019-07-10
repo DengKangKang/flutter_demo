@@ -426,7 +426,7 @@ class NewBusinessPagePageState
       bloc._secondaryDevelopment.value?.id?.toString() ?? '',
       bloc._progress.value?.id?.toString() ?? '',
       bloc._expectedContractAmount.toString(),
-      bloc._expectedSignDate.value.toString(),
+      bloc._expectedSignDate.value?.toString()??'',
       bloc._lnsize.toString(),
       bloc._companyIntro.toString(),
       bloc._firstPartyRepresentatives.toString(),

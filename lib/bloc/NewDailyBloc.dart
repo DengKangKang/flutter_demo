@@ -48,28 +48,28 @@ class NewDailyBloc extends CommonBloc {
   }
 
   void save() async {
-    if (_todayWorkContent.isEmpty &&
-        _todayVisitClient.isEmpty &&
-        _todaySolution.isEmpty &&
-        _tomorrowPlane.isEmpty &&
-        _tomorrowVisitClient.isEmpty) {
-      showTip("请至少输入一项！");
-      return;
-    }
-    pageLoading();
-    var rsp = await ApiService().newDaily(
-      _date.value,
-      _todayWorkContent,
-      _todayVisitClient,
-      _todaySolution,
-      _tomorrowPlane,
-      _tomorrowVisitClient,
-    );
-    pageCompleted();
-    if (rsp.code == ApiService.success) {
-      finish(result: true);
-    } else {
-      showTip(rsp.msg);
-    }
+//    if (_todayWorkContent.isEmpty &&
+//        _todayVisitClient.isEmpty &&
+//        _todaySolution.isEmpty &&
+//        _tomorrowPlane.isEmpty &&
+//        _tomorrowVisitClient.isEmpty) {
+//      showTip("请至少输入一项！");
+//      return;
+//    }
+//    pageLoading();
+//    var rsp = await ApiService().newDaily(
+//      _date.value,
+//      _todayWorkContent,
+//      _todayVisitClient,
+//      _todaySolution,
+//      _tomorrowPlane,
+//      _tomorrowVisitClient,
+//    );
+//    pageCompleted();
+//    if (rsp.code == ApiService.success) {
+//      finish(result: true);
+//    } else {
+//      showTip(rsp.msg);
+//    }
   }
 }

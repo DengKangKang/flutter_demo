@@ -42,7 +42,11 @@ Daily _$DailyFromJson(Map<String, dynamic> json) {
       json['today_solution'] as String,
       json['next_plan'] as String,
       json['next_customer_visit'] as String,
-      json['user_realname'] as String);
+      json['user_realname'] as String,
+      json['morn_type'] as int,
+      json['afternoon_type'] as int,
+      json['morn_content'] as String,
+      json['afternoon_content'] as String);
 }
 
 Map<String, dynamic> _$DailyToJson(Daily instance) => <String, dynamic>{
@@ -52,5 +56,9 @@ Map<String, dynamic> _$DailyToJson(Daily instance) => <String, dynamic>{
       'today_solution': instance.today_solution,
       'next_plan': instance.next_plan,
       'next_customer_visit': instance.next_customer_visit,
-      'user_realname': instance.user_realname
+      'user_realname': instance.user_realname,
+      'morn_type': instance.morn_type,
+      'afternoon_type': instance.afternoon_type,
+      'morn_content': instance.morn_content,
+      'afternoon_content': instance.afternoon_content
     };

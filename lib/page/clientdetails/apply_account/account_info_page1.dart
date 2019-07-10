@@ -34,55 +34,55 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
       physics: BouncingScrollPhysics(),
       children: <Widget>[
         Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            StreamBuilder(
-              initialData: '',
-              stream: _bloc.id.stream,
-              builder: (c,s)=>Text(
-                '开通时间：${s.data}',
-                style: TextStyle(fontSize: 15),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 5),
-              child: StreamBuilder(
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              StreamBuilder(
                 initialData: '',
-                stream: _bloc.applier.stream,
-                builder: (c,s)=>Text(
-                  '申请人：${s.data}',
+                stream: _bloc.id.stream,
+                builder: (c, s) => Text(
+                  'com_id：${s.data}',
                   style: TextStyle(fontSize: 15),
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 5),
-              child: StreamBuilder(
-                initialData: '',
-                stream: _bloc.applyTime.stream,
-                builder: (c,s)=>Text(
-                  '申请时间：${s.data}',
-                  style: TextStyle(fontSize: 15),
+              Container(
+                padding: EdgeInsets.only(top: 5),
+                child: StreamBuilder(
+                  initialData: '',
+                  stream: _bloc.applier.stream,
+                  builder: (c, s) => Text(
+                    '申请人：${s.data}',
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 5),
-              child: StreamBuilder(
-                initialData: '',
-                stream: _bloc.passTime.stream,
-                builder: (c,s)=>Text(
-                  '开通时间：${s.data}',
-                  style: TextStyle(fontSize: 15),
+              Container(
+                padding: EdgeInsets.only(top: 5),
+                child: StreamBuilder(
+                  initialData: '',
+                  stream: _bloc.applyTime.stream,
+                  builder: (c, s) => Text(
+                    '申请时间：${s.data}',
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ),
               ),
-            ),
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 5),
+                child: StreamBuilder(
+                  initialData: '',
+                  stream: _bloc.passTime.stream,
+                  builder: (c, s) => Text(
+                    '开通时间：${s.data}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
         buildTitle('基础信息'),
         buildItem('管理员姓名', _bloc.adminName.stream),
         buildItem('邮箱', _bloc.email.stream),
@@ -116,11 +116,11 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
                   initialData: '',
                   stream: _bloc.memo.stream,
                   builder: (c, s) => Text(
-                        s.data??'',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
+                    s.data ?? '',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
                 ),
               )
             ],
@@ -134,10 +134,23 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
           initialData: [],
           stream: _bloc.plugins,
           builder: (c, s) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[...s.data.map((e) => buildPlugin(e))],
-            );
+            return s.data == null || s.data.isNotEmpty
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[...s.data.map((e) => buildPlugin(e))],
+                  )
+                : Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    color: Colors.white,
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                    child: Text(
+                      '暂无内容',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  );
           },
         ),
       ],
@@ -320,24 +333,24 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
                   Row(
                     children: <Widget>[
                       ...plugin.ocrSonPlugins.map((p) => Container(
-                        margin: EdgeInsets.only(left: 10),
-                        height: 20,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: colorBlueLight,
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            p.name,
-                            style: TextStyle(
-                              color: colorBlue,
-                              fontSize: 12,
+                            margin: EdgeInsets.only(left: 10),
+                            height: 20,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: colorBlueLight,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
                             ),
-                          ),
-                        ),
-                      ))
+                            child: Center(
+                              child: Text(
+                                p.name,
+                                style: TextStyle(
+                                  color: colorBlue,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ))
                     ],
                   ),
                 ],
@@ -359,24 +372,24 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
                   Row(
                     children: <Widget>[
                       ...plugin.invoicePlugins.map((p) => Container(
-                        margin: EdgeInsets.only(left: 10),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: colorBlueLight,
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            p.name,
-                            style: TextStyle(
-                              color: colorBlue,
-                              fontSize: 12,
+                            margin: EdgeInsets.only(left: 10),
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: colorBlueLight,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
                             ),
-                          ),
-                        ),
-                      ))
+                            child: Center(
+                              child: Text(
+                                p.name,
+                                style: TextStyle(
+                                  color: colorBlue,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ))
                     ],
                   ),
                 ],
@@ -418,12 +431,12 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
                         ),
                         Text(
                           plugin.quota
-                              ?.firstWhere(
-                                (e) => e.category == 7,
-                            orElse: () => null,
-                          )
-                              ?.quota
-                              ?.toString() ??
+                                  ?.firstWhere(
+                                    (e) => e.category == 7,
+                                    orElse: () => null,
+                                  )
+                                  ?.quota
+                                  ?.toString() ??
                               '0',
                           style: TextStyle(fontSize: 15),
                         ),
@@ -442,12 +455,12 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
                         ),
                         Text(
                           plugin.quota
-                              ?.firstWhere(
-                                (e) => e.category == 2,
-                            orElse: () => null,
-                          )
-                              ?.quota
-                              ?.toString() ??
+                                  ?.firstWhere(
+                                    (e) => e.category == 2,
+                                    orElse: () => null,
+                                  )
+                                  ?.quota
+                                  ?.toString() ??
                               '0',
                           style: TextStyle(fontSize: 15),
                         ),
@@ -466,12 +479,12 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
                         ),
                         Text(
                           plugin.quota
-                              ?.firstWhere(
-                                (e) => e.category == 3,
-                            orElse: () => null,
-                          )
-                              ?.quota
-                              ?.toString() ??
+                                  ?.firstWhere(
+                                    (e) => e.category == 3,
+                                    orElse: () => null,
+                                  )
+                                  ?.quota
+                                  ?.toString() ??
                               '0',
                           style: TextStyle(fontSize: 15),
                         ),
@@ -490,12 +503,12 @@ class AccountInfoPage1State extends State<AccountInfoPage1>
                         ),
                         Text(
                           plugin.quota
-                              ?.firstWhere(
-                                (e) => e.category == 4,
-                            orElse: () => null,
-                          )
-                              ?.quota
-                              ?.toString() ??
+                                  ?.firstWhere(
+                                    (e) => e.category == 4,
+                                    orElse: () => null,
+                                  )
+                                  ?.quota
+                                  ?.toString() ??
                               '0',
                           style: TextStyle(fontSize: 15),
                         ),
