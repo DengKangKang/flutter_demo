@@ -299,7 +299,10 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
             ),
             Text(
               client.leads_name ?? '',
-              style: TextStyle(fontSize: 17),
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
@@ -464,7 +467,6 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                       client.job_title ?? '',
                       style: TextStyle(
                         fontSize: 11,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   )
