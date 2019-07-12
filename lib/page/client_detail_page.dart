@@ -194,7 +194,9 @@ class ClientDetailPageState
                                               visible: widget.businessType ==
                                                       (typeTrace |
                                                           statePrivate) &&
-                                                  widget.client.daily >= 0,
+                                                  (widget.client.daily ??
+                                                          -1) >=
+                                                      0,
                                             ),
                                             Container(
                                               margin: EdgeInsets.only(left: 6),

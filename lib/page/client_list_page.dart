@@ -426,7 +426,7 @@ class ClientListState extends CommonPageState<ClientListPage, ClientListBloc> {
                   ],
                 ),
                 Visibility(
-                  visible: state == statePrivate && client.daily >= 0,
+                  visible: state == statePrivate && (client.daily ?? -1) >= 0,
                   child: Text(
                     '还剩${client.daily ?? '0'}天',
                     style: TextStyle(fontSize: 13, color: Colors.red),
@@ -720,9 +720,49 @@ class ClientListBloc extends CommonBloc {
   }
 
   void loadMore() async {
-    print('loadMore');
-    var rsp =
-        await ApiService().clients(page: (page + 1).toString(), size: '10');
+    var type = businessType & 0xF;
+    var state = businessType & 0xF0;
+    var rsp;
+    if (type == typeClient) {
+      rsp = await ApiService().clients(
+        key: state == statePrivate ? pageState.value.toString() : '',
+        is_public: state == statePublic ? 'true' : '',
+        state: state == statePublic ? '5,6,7,98' : '4,5,6,7',
+        user: '8',
+        id: id ?? '',
+        creator: maker ?? '',
+        time_area:
+        dateStart?.isNotEmpty == true && dateStart?.isNotEmpty == true
+            ? [dateStart, dateEnd].join(',')
+            : '',
+        leads_mobile: contact ?? '',
+        leads_name: clientName ?? '',
+        source_id: source?.toString() ?? '',
+        location: location?.toString() ?? '',
+        company_type: company?.toString() ?? '',
+        is_important: isImportant?.toString() ?? '',
+        progress_percent: progress?.toString() ?? '',
+        on_premise: secondDev?.toString() ?? '',
+      );
+    } else {
+      rsp = await ApiService().trace(
+        key: state == statePrivate ? pageState.value.toString() : '',
+        is_private: state == statePrivate ? 'true' : '',
+        state: state == statePrivate ? '1,2,3' : '2,3,99',
+        user: '8',
+        id: id ?? '',
+        creator: maker ?? '',
+        time_area:
+        dateStart?.isNotEmpty == true && dateStart?.isNotEmpty == true
+            ? [dateStart, dateEnd].join(',')
+            : '',
+        leads_mobile: contact ?? '',
+        leads_name: clientName ?? '',
+        leads_contact: responsibleMan ?? '',
+        source_id: source?.toString() ?? '',
+        location: location?.toString() ?? '',
+      );
+    }
     if (rsp.code == ApiService.success) {
       if (rsp?.data?.rows != null && rsp?.data?.rows?.isNotEmpty == true) {
         page++;
