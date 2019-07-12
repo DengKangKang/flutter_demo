@@ -20,6 +20,9 @@ const colorDivider = Color(0XFFE6E6E6);
 const defaultElevation = 8.0;
 
 void main() {
+  ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+    return Container();
+  };
   runApp(
     MaterialApp(
       theme: ThemeData(

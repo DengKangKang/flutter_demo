@@ -25,8 +25,6 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends CommonPageState<MainPage, MainBloc>
     with SingleTickerProviderStateMixin {
-  MainBloc bloc;
-
   var page = [HomePage(), DailyPage(), PersonalPage()];
 
   TabController controller;
@@ -121,6 +119,13 @@ class MainPageState extends CommonPageState<MainPage, MainBloc>
 class MainBloc extends CommonBloc {
   StreamController<int> currentIndex = StreamController.broadcast();
   var onFilterConfirm = BehaviorSubject<String>();
+
+  @override
+  void onClosed() {
+    currentIndex.close();
+    onFilterConfirm.close();
+    super.onClosed();
+  }
 }
 
 class Filter extends StatefulWidget {

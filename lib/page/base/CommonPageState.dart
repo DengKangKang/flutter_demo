@@ -73,4 +73,10 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
     }
     super.initState();
   }
+
+  @override
+  void dispose() {
+    bloc.onClosed();
+    super.dispose();
+  }
 }

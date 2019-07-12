@@ -37,9 +37,9 @@ class ApiService {
 
   static final ApiService _singleton = ApiService._internal();
 
-  static final String _baseUrl = 'http://192.168.1.241:3000/op/api';
-  static final String _authority = '192.168.1.241:3000';
-  static final String _basePath = '/op/api';
+  static final String _baseUrl = 'http://op.deallinker.com/op';
+  static final String _authority = 'op.deallinker.com';
+  static final String _basePath = '/op';
 
 //  static final String _baseUrl = 'http://op.deallinker.com/op';
   static final int success = 0;
@@ -63,6 +63,7 @@ class ApiService {
         return BaseRsp(illicit, '网络异常，请稍后再试。');
       }
     } catch (e) {
+      print(e);
       return BaseRsp(illicit, '网络异常，请稍后再试。');
     }
   }
