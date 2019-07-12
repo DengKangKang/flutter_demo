@@ -732,9 +732,9 @@ class ClientListBloc extends CommonBloc {
         id: id ?? '',
         creator: maker ?? '',
         time_area:
-        dateStart?.isNotEmpty == true && dateStart?.isNotEmpty == true
-            ? [dateStart, dateEnd].join(',')
-            : '',
+            dateStart?.isNotEmpty == true && dateStart?.isNotEmpty == true
+                ? [dateStart, dateEnd].join(',')
+                : '',
         leads_mobile: contact ?? '',
         leads_name: clientName ?? '',
         source_id: source?.toString() ?? '',
@@ -743,6 +743,8 @@ class ClientListBloc extends CommonBloc {
         is_important: isImportant?.toString() ?? '',
         progress_percent: progress?.toString() ?? '',
         on_premise: secondDev?.toString() ?? '',
+        page: (page + 1).toString(),
+        size: '10',
       );
     } else {
       rsp = await ApiService().trace(
@@ -753,14 +755,16 @@ class ClientListBloc extends CommonBloc {
         id: id ?? '',
         creator: maker ?? '',
         time_area:
-        dateStart?.isNotEmpty == true && dateStart?.isNotEmpty == true
-            ? [dateStart, dateEnd].join(',')
-            : '',
+            dateStart?.isNotEmpty == true && dateStart?.isNotEmpty == true
+                ? [dateStart, dateEnd].join(',')
+                : '',
         leads_mobile: contact ?? '',
         leads_name: clientName ?? '',
         leads_contact: responsibleMan ?? '',
         source_id: source?.toString() ?? '',
         location: location?.toString() ?? '',
+        page: (page + 1).toString(),
+        size: '10',
       );
     }
     if (rsp.code == ApiService.success) {
