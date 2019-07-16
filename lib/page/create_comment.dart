@@ -73,7 +73,7 @@ class CreateCommentPageState extends State<CreateCommentPage> {
               maxLines: null,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
-                hintText: '请输入评论内容',
+                hintText: widget.targetName != null ?'回复${widget.targetName}' : '请输入评论内容',
                 hintStyle: TextStyle(fontSize: 15),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(0),
