@@ -161,7 +161,7 @@ class VisitLogsPageState extends State<VisitLogsPage>
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Text(
-              visitLog.user_realname ?? '',
+              visitLog.user_realname ?? visitLog.creator_realname??'',
               style: TextStyle(fontSize: 11, color: colorOrigin),
             ),
             Container(
@@ -340,6 +340,105 @@ class VisitLogsPageState extends State<VisitLogsPage>
             Flexible(
               child: Text(
                 visitLog.visit_goal,
+                style: TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ));
+    }
+
+    if (visitLog.cs_log != null && visitLog.cs_log.isNotEmpty) {
+      children.add(Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Text(
+          visitLog.cs_log,
+          style: TextStyle(fontSize: 12),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ));
+    }
+
+    if (visitLog.visitname != null && visitLog.visitname.isNotEmpty) {
+      children.add(Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '拜访人：',
+              style: TextStyle(fontSize: 12),
+            ),
+            Flexible(
+              child: Text(
+                visitLog.visitname,
+                style: TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ));
+    }
+
+    if (visitLog.visittime != null && visitLog.visittime.isNotEmpty) {
+      children.add(Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '拜访时间：',
+              style: TextStyle(fontSize: 12),
+            ),
+            Flexible(
+              child: Text(
+                visitLog.visittime,
+                style: TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ));
+    }
+
+    if (visitLog.visitcon != null && visitLog.visitcon.isNotEmpty) {
+      children.add(Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '拜访内容：',
+              style: TextStyle(fontSize: 12),
+            ),
+            Flexible(
+              child: Text(
+                visitLog.visitcon,
+                style: TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ));
+    }
+
+    if (visitLog.visitsite != null && visitLog.visitsite.isNotEmpty) {
+      children.add(Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '拜访地点：',
+              style: TextStyle(fontSize: 12),
+            ),
+            Flexible(
+              child: Text(
+                visitLog.visitsite,
                 style: TextStyle(fontSize: 12),
                 overflow: TextOverflow.ellipsis,
               ),

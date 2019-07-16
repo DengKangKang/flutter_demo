@@ -36,6 +36,7 @@ Map<String, dynamic> _$DailyRspDataToJson(DailyRspData instance) =>
 
 Daily _$DailyFromJson(Map<String, dynamic> json) {
   return Daily(
+      json['_id'] as String,
       json['daily_time'] as String,
       json['today_content'] as String,
       json['today_customer_visit'] as String,
@@ -46,10 +47,15 @@ Daily _$DailyFromJson(Map<String, dynamic> json) {
       json['morn_type'] as int,
       json['afternoon_type'] as int,
       json['morn_content'] as String,
-      json['afternoon_content'] as String);
+      json['afternoon_content'] as String,
+      (json['comments'] as List)
+          ?.map((e) =>
+              e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
+          ?.toList());
 }
 
 Map<String, dynamic> _$DailyToJson(Daily instance) => <String, dynamic>{
+      '_id': instance.id,
       'daily_time': instance.daily_time,
       'today_content': instance.today_content,
       'today_customer_visit': instance.today_customer_visit,
@@ -60,5 +66,37 @@ Map<String, dynamic> _$DailyToJson(Daily instance) => <String, dynamic>{
       'morn_type': instance.morn_type,
       'afternoon_type': instance.afternoon_type,
       'morn_content': instance.morn_content,
-      'afternoon_content': instance.afternoon_content
+      'afternoon_content': instance.afternoon_content,
+      'comments': instance.comments
+    };
+
+Comment _$CommentFromJson(Map<String, dynamic> json) {
+  return Comment(
+      json['create_time'] as String,
+      json['role_type'] as int,
+      json['target_name'] as String,
+      json['author'] as String,
+      json['view_id'] as int,
+      json['viewed'] as int,
+      json['daily_id'] as String,
+      json['target_id'] as int,
+      json['_id'] as String,
+      json['author_id'] as int,
+      json['content'] as String,
+      json['daily_time'] as String);
+}
+
+Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
+      'create_time': instance.create_time,
+      'role_type': instance.role_type,
+      'target_name': instance.target_name,
+      'author': instance.author,
+      'view_id': instance.view_id,
+      'viewed': instance.viewed,
+      'daily_id': instance.daily_id,
+      'target_id': instance.target_id,
+      '_id': instance.id,
+      'author_id': instance.author_id,
+      'content': instance.content,
+      'daily_time': instance.daily_time
     };

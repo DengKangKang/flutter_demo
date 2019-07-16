@@ -30,7 +30,12 @@ VisitLog _$VisitLogFromJson(Map<String, dynamic> json) {
       json['sale_solution'] as String,
       json['expense'] as int,
       json['visitor'] as String,
-      json['visit_goal'] as String);
+      json['visit_goal'] as String,
+      json['visitcon'] as String,
+      json['visitname'] as String,
+      json['visitsite'] as String,
+      json['visittime'] as String,
+      json['creator_realname'] as String);
 }
 
 Map<String, dynamic> _$VisitLogToJson(VisitLog instance) => <String, dynamic>{
@@ -38,6 +43,7 @@ Map<String, dynamic> _$VisitLogToJson(VisitLog instance) => <String, dynamic>{
       'create_time': instance.create_time,
       'user_id': instance.user_id,
       'user_realname': instance.user_realname,
+      'creator_realname': instance.creator_realname,
       'category': instance.category,
       'cs_log': instance.cs_log,
       'sale_visit_time': instance.sale_visit_time,
@@ -46,5 +52,9 @@ Map<String, dynamic> _$VisitLogToJson(VisitLog instance) => <String, dynamic>{
       'sale_solution': instance.sale_solution,
       'expense': instance.expense,
       'visitor': instance.visitor,
-      'visit_goal': instance.visit_goal
+      'visit_goal': instance.visit_goal,
+      'visitcon': instance.visitcon,
+      'visitname': instance.visitname,
+      'visitsite': instance.visitsite,
+      'visittime': instance.visittime
     };

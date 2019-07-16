@@ -1,0 +1,13 @@
+abstract class Closer {
+  void onClosed();
+}
+
+abstract class DataInitializer {
+  dynamic initData();
+}
+
+abstract class Navigator {
+  void navigate();
+
+  void finish();
+}

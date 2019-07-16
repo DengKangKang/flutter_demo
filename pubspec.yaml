@@ -88,6 +88,11 @@ flutter:
     - assets/images/rili.png
     - assets/images/ico_sy_k.png
     - assets/images/ico_dl_logo.png
+    - assets/images/ico_tx.png
+    - assets/images/ico_wdrb_jt_y.png
+    - assets/images/ico_wdrb_jt_z.png
+    - assets/images/ico_rb_pl.png
+    - assets/images/ico_xx.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

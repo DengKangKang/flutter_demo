@@ -81,7 +81,39 @@ class MainPageState extends CommonPageState<MainPage, MainBloc>
                       child: GestureDetector(
                         child: snapshot.data == daily
                             ? Image.asset('assets/images/ico_rz_xz.png')
-                            : Image.asset('assets/images/ico_rz.png'),
+                            : Container(
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: <Widget>[
+                                    Image.asset('assets/images/ico_rz.png'),
+                                    StreamBuilder(
+                                      stream: bloc.comments,
+                                      builder: (c, s) => Visibility(
+                                        visible: s.data != null && s.data != 0,
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              bottom: 15, left: 15),
+                                          width: 15,
+                                          height: 15,
+                                          decoration: BoxDecoration(
+                                              color: colorOrigin,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12))),
+                                          child: Center(
+                                            child: Text(
+                                              '${s.data ?? 0}',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                         onTap: () {
                           bloc.currentIndex.sink.add(1);
                           controller.animateTo(1);
@@ -119,6 +151,7 @@ class MainPageState extends CommonPageState<MainPage, MainBloc>
 class MainBloc extends CommonBloc {
   StreamController<int> currentIndex = StreamController.broadcast();
   var onFilterConfirm = BehaviorSubject<String>();
+  var comments = BehaviorSubject<int>(seedValue: 0);
 
   @override
   void onClosed() {

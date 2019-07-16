@@ -18,19 +18,25 @@ class VisitLogsData extends Object {
 @JsonSerializable()
 class VisitLog extends Object {
   VisitLog(
-      this.leads_id,
-      this.create_time,
-      this.user_id,
-      this.user_realname,
-      this.category,
-      this.cs_log,
-      this.sale_visit_time,
-      this.sale_visit_form,
-      this.sale_feedback,
-      this.sale_solution,
-      this.expense,
-      this.visitor,
-      this.visit_goal);
+    this.leads_id,
+    this.create_time,
+    this.user_id,
+    this.user_realname,
+    this.category,
+    this.cs_log,
+    this.sale_visit_time,
+    this.sale_visit_form,
+    this.sale_feedback,
+    this.sale_solution,
+    this.expense,
+    this.visitor,
+    this.visit_goal,
+    this.visitcon,
+    this.visitname,
+    this.visitsite,
+    this.visittime,
+    this.creator_realname,
+  );
 
   factory VisitLog.fromJson(Map<String, dynamic> json) =>
       _$VisitLogFromJson(json);
@@ -40,6 +46,7 @@ class VisitLog extends Object {
   String create_time;
   int user_id;
   String user_realname;
+  String creator_realname;
   int category;
   String cs_log;
   String sale_visit_time;
@@ -49,4 +56,8 @@ class VisitLog extends Object {
   int expense;
   String visitor;
   String visit_goal;
+  String visitcon;
+  String visitname;
+  String visitsite;
+  String visittime;
 }

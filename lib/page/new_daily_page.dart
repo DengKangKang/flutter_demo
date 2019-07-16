@@ -495,7 +495,6 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
                 bottom: 8,
               ),
             ),
-            enabled: s.data != workFormCallOut && s.data != null,
             style: TextStyle(fontSize: 15),
             keyboardType: TextInputType.multiline,
             maxLengthEnforced: true,
@@ -670,7 +669,7 @@ class NewDailyPageState extends CommonPageState<NewDailyPage, NewDailyBloc> {
     var hint;
     switch (workFrom) {
       case workFormCallOut:
-        hint = '';
+        hint = '请输入呼叫数（必填）';
         break;
       case workFormGoOut:
         hint = '请输入客户名（必填）';
@@ -720,8 +719,7 @@ class NewDailyBloc extends CommonBloc {
       return;
     }
 
-    if (forenoonWorkFrom != workFormCallOut &&
-        (forenoonWorkContent == null || forenoonWorkContent.isEmpty)) {
+    if ((forenoonWorkContent == null || forenoonWorkContent.isEmpty)) {
       showTip('${getHint(forenoonWorkFrom)}！');
       return;
     }
@@ -731,8 +729,7 @@ class NewDailyBloc extends CommonBloc {
       showTip('请选择下午工作形式！');
       return;
     }
-    if (afternoonWorkFrom != workFormCallOut &&
-        (afternoonWorkContent == null || afternoonWorkContent.isEmpty)) {
+    if ((afternoonWorkContent == null || afternoonWorkContent.isEmpty)) {
       showTip('${getHint(afternoonWorkFrom)}！');
       return;
     }
@@ -772,7 +769,7 @@ class NewDailyBloc extends CommonBloc {
     var hint;
     switch (workFrom) {
       case workFormCallOut:
-        hint = '';
+        hint = '请输入呼叫数';
         break;
       case workFormGoOut:
         hint = '请输入客户名';

@@ -16,6 +16,7 @@ import 'package:flutter_app/data/http/rsp/apply_info.dart';
 import 'package:flutter_app/data/http/rsp/clients_rsp.dart';
 import 'package:flutter_app/data/http/rsp/client_info.dart';
 import 'package:flutter_app/data/http/rsp/count_use.dart';
+import 'package:flutter_app/data/http/rsp/data/comments.dart';
 import 'package:flutter_app/data/http/rsp/department_info.dart';
 import 'package:flutter_app/data/http/rsp/home_rsp.dart';
 import 'package:flutter_app/data/http/rsp/sign_log_rsp.dart';
@@ -37,9 +38,13 @@ class ApiService {
 
   static final ApiService _singleton = ApiService._internal();
 
-  static final String _baseUrl = 'http://op.deallinker.com/op';
-  static final String _authority = 'op.deallinker.com';
-  static final String _basePath = '/op';
+//  static final String _baseUrl = 'http://op.deallinker.com/op';
+//  static final String _authority = 'op.deallinker.com';
+//  static final String _basePath = '/op';
+
+  static final String _baseUrl = 'http://192.168.1.241:3000/op/api';
+  static final String _authority = '192.168.1.241:3000';
+  static final String _basePath = '/op/api';
 
 //  static final String _baseUrl = 'http://op.deallinker.com/op';
   static final int success = 0;
@@ -377,25 +382,22 @@ class ApiService {
     String daily_time,
     String key,
     String sale_name,
+    [String daily_id = '']
   ) async {
-    try {
-      Response rsp = await client.post('$_baseUrl/app/fc/daily/list', headers: {
-        'Authorization': 'Bearer ${await Persistence().getToken()}'
-      }, body: {
-        'page': page.toString(),
-        'size': size.toString(),
-        'daily_time': daily_time,
-        'key': key,
-        'sale_name': sale_name,
-      });
-      print(rsp.body);
-      if (rsp.statusCode == 200) {
-        return DailiesRsp.fromJson(json.decode(rsp.body));
-      } else {
-        return BaseRsp(illicit, '网络异常，请稍后再试。');
-      }
-    } catch (e) {
-      print(e);
+    Response rsp = await client.post('$_baseUrl/app/fc/daily/list', headers: {
+      'Authorization': 'Bearer ${await Persistence().getToken()}'
+    }, body: {
+      'page': page.toString(),
+      'size': size.toString(),
+      'daily_time': daily_time,
+      'key': key,
+      'sale_name': sale_name,
+      'daily_id': daily_id,
+    });
+    print(rsp.body);
+    if (rsp.statusCode == 200) {
+      return DailiesRsp.fromJson(json.decode(rsp.body));
+    } else {
       return BaseRsp(illicit, '网络异常，请稍后再试。');
     }
   }
@@ -1245,6 +1247,58 @@ class ApiService {
       }
     } catch (e) {
       return CountUseRsp.base(illicit, '网络异常，请稍后再试。');
+    }
+  }
+
+  Future<BaseRsp> comment(
+    String content, {
+    String daily_id = '',
+    String target_name = '',
+    String target_id = '',
+  }) async {
+    try {
+      Response rsp =
+          await client.post('$_baseUrl/app/fc/daily/addcomments', headers: {
+        'Authorization': 'Bearer ${await Persistence().getToken()}'
+      }, body: {
+        'content': content,
+        'daily_id': daily_id,
+        'target_name': target_name,
+        'target_id': target_id,
+      });
+      print(rsp.body);
+      if (rsp.statusCode == 200) {
+        return BaseRsp.fromJson(json.decode(rsp.body));
+      } else {
+        return BaseRsp(illicit, '网络异常，请稍后再试。');
+      }
+    } catch (e) {
+      return BaseRsp(illicit, '网络异常，请稍后再试。');
+    }
+  }
+
+  Future<CommentsRsp> getComments() async {
+    Response rsp = await client.post(
+      '$_baseUrl/app/fc/daily/getcomments',
+      headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},
+    );
+    print(rsp.body);
+    if (rsp.statusCode == 200) {
+      return CommentsRsp.fromJson(json.decode(rsp.body));
+    } else {
+      return CommentsRsp.base(illicit, '网络异常，请稍后再试。');
+    }
+  }
+  Future<BaseRsp> clearComments() async {
+    Response rsp = await client.post(
+      '$_baseUrl/app/fc/daily/clearcomments',
+      headers: {'Authorization': 'Bearer ${await Persistence().getToken()}'},
+    );
+    print(rsp.body);
+    if (rsp.statusCode == 200) {
+      return BaseRsp.fromJson(json.decode(rsp.body));
+    } else {
+      return BaseRsp(illicit, '网络异常，请稍后再试。');
     }
   }
 }
