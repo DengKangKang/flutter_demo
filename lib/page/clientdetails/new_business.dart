@@ -5,16 +5,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
-import 'package:flutter_app/page/base/CommonPageState.dart';
+import 'package:flutter_app/page/base/common_page_state.dart';
 import 'package:flutter_app/page/client_list_page.dart';
 import 'package:flutter_app/page/clientdetails/apply_account/client_apply_debug_account_page.dart';
 import 'package:flutter_app/page/clientdetails/apply_account/client_debug_account_page.dart';
-import 'package:flutter_app/weight/Tool.dart';
+import 'package:flutter_app/weight/tool.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../main.dart';
-import '../RadioListPage.dart';
+import '../radio_list_page.dart';
 
 class NewBusinessPage extends StatefulWidget {
   const NewBusinessPage({Key key, this.type}) : super(key: key);

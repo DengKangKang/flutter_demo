@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
+import 'package:flutter_app/data/persistence/persistence.dart';
 import 'package:flutter_app/main.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
+import 'package:flutter_app/page/radio_list_page.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'base/CommonPageState.dart';
+import 'base/common_page_state.dart';
 
 class NewDailyPage extends StatefulWidget {
   @override

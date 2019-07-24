@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter_app/common_route.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/apply_info.dart';
 import 'package:flutter_app/data/http/rsp/data/clients_data.dart';

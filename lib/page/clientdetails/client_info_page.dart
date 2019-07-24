@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/data/clients_data.dart';
 
-import '../RadioListPage.dart';
+import '../radio_list_page.dart';
 
 class ClientInfoPage extends StatefulWidget {
   ClientInfoPage({

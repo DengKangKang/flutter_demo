@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter_app/common_route.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/BaseRsp.dart';
 import 'package:flutter_app/data/http/rsp/LoginRsp.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
+import 'package:flutter_app/data/persistence/persistence.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/page/main_page.dart';
-import 'package:flutter_app/weight/Tool.dart';
+import 'package:flutter_app/weight/tool.dart';
 
 class LoginPage extends StatefulWidget {
   @override

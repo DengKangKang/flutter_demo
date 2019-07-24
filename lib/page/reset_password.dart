@@ -3,7 +3,7 @@ import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/main.dart';
 
-import 'base/CommonPageState.dart';
+import 'base/common_page_state.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({Key key}) : super(key: key);

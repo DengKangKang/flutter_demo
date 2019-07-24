@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter_app/common_route.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
-import 'package:flutter_app/weight/Tool.dart';
+import 'package:flutter_app/weight/tool.dart';
 
 abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
     extends State<T> {

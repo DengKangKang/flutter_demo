@@ -5,20 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter_app/common_route.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
+import 'package:flutter_app/data/persistence/persistence.dart';
 import 'package:flutter_app/main.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
+import 'package:flutter_app/page/radio_list_page.dart';
 import 'package:flutter_app/page/create_comment.dart';
 import 'package:flutter_app/page/main_page.dart';
-import 'package:flutter_app/weight/Tool.dart';
+import 'package:flutter_app/weight/tool.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'base/CommonPageState.dart';
+import 'base/common_page_state.dart';
 import 'new_daily_page.dart';
 
 const pageStateGroupMembers = 2;

@@ -7,7 +7,7 @@ import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/account_info.dart';
 import 'package:flutter_app/data/http/rsp/applied_plugins_rsp.dart';
 import 'package:flutter_app/data/http/rsp/department_info.dart';
-import 'package:flutter_app/page/base/CommonPageState.dart';
+import 'package:flutter_app/page/base/common_page_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../main.dart';

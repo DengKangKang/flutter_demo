@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
-import 'package:flutter_app/data/Constant.dart';
+import 'package:flutter_app/common_route.dart';
+import 'package:flutter_app/data/constant.dart';
 import 'package:flutter_app/data/http/api_service.dart';
-import 'package:flutter_app/data/http/rsp/VisitLogsRsp.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 import 'package:flutter_app/data/http/rsp/data/VisitLogsData.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../main.dart';
-import '../RadioListPage.dart';
-import 'NewPlainVisit.dart';
-import 'NewSpecialVisit.dart';
+import '../radio_list_page.dart';
+import 'new_plain_visit.dart';
+import 'new_special_visit.dart';
 
 class VisitLogsPage extends StatefulWidget {
   const VisitLogsPage({Key key, this.id}) : super(key: key);

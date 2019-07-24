@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_app/CommonRoute.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
+import 'package:flutter_app/common_route.dart';
+import 'package:flutter_app/data/persistence/persistence.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/page/login_page.dart';
 import 'package:flutter_app/page/reset_password.dart';

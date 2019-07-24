@@ -20,7 +20,7 @@ import 'package:flutter_app/data/http/rsp/data/comments.dart';
 import 'package:flutter_app/data/http/rsp/department_info.dart';
 import 'package:flutter_app/data/http/rsp/home_rsp.dart';
 import 'package:flutter_app/data/http/rsp/sign_log_rsp.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
+import 'package:flutter_app/data/persistence/persistence.dart';
 import 'package:flutter_app/page/clientdetails/apply_account/client_apply_debug_account_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -38,13 +38,13 @@ class ApiService {
 
   static final ApiService _singleton = ApiService._internal();
 
-//  static final String _baseUrl = 'http://op.deallinker.com/op';
-//  static final String _authority = 'op.deallinker.com';
-//  static final String _basePath = '/op';
+  static final String _baseUrl = 'http://op.deallinker.com/op';
+  static final String _authority = 'op.deallinker.com';
+  static final String _basePath = '/op';
 
-  static final String _baseUrl = 'http://192.168.1.241:3000/op/api';
-  static final String _authority = '192.168.1.241:3000';
-  static final String _basePath = '/op/api';
+//  static final String _baseUrl = 'http://192.168.1.241:3000/op/api';
+//  static final String _authority = '192.168.1.241:3000';
+//  static final String _basePath = '/op/api';
 
 //  static final String _baseUrl = 'http://op.deallinker.com/op';
   static final int success = 0;

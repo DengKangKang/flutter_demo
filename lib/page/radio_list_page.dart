@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/Constant.dart';
+import 'package:flutter_app/data/constant.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';
 
 class RadioListPage<T extends RadioBean> extends StatefulWidget {

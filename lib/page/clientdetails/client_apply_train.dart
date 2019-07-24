@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/CommonRoute.dart';
+import 'package:flutter_app/common_route.dart';
 import 'package:flutter_app/bloc/Bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/apply_info.dart';
-import 'package:flutter_app/page/base/CommonPageState.dart';
+import 'package:flutter_app/page/base/common_page_state.dart';
 import 'package:flutter_app/page/clientdetails/apply_account/client_apply_debug_account_page.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';

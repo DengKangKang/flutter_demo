@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/http/api_service.dart';
-import 'package:flutter_app/data/persistence/Persistence.dart';
-import 'package:flutter_app/page/RadioListPage.dart';
+import 'package:flutter_app/data/persistence/persistence.dart';
+import 'package:flutter_app/page/radio_list_page.dart';
 import 'package:flutter_app/page/login_page.dart';
 import 'package:flutter_app/page/main_page.dart';
 
