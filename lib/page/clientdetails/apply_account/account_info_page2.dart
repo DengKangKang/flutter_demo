@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/common_bloc.dart';
 
 import 'client_debug_account_page.dart';
 

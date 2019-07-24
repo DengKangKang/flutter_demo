@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/bloc/bloc.dart';
 import 'package:flutter_app/common_route.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/common_bloc.dart';
 import 'package:flutter_app/weight/tool.dart';
 
-abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
+abstract class CommonPageState<T extends StatefulWidget, K extends Bloc>
     extends State<T> {
   K bloc;
 
@@ -16,12 +17,12 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
       bloc.asObservable().listen((event) {
         print(event.id);
         switch (event.id) {
-          case BLOC_SHOW_END_DRAWER:
+          case blocShowEndDrawer:
             {
               scaffoldKey.currentState.openEndDrawer();
               break;
             }
-          case BLOC_EVENT_TIP:
+          case blocEventTip:
             {
               scaffoldKey.currentState.showSnackBar(
                 SnackBar(
@@ -32,7 +33,7 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
               );
               break;
             }
-          case BLOC_EVENT_NAVIGATION_PUSH:
+          case blocEventNavigationPush:
             {
               Navigator.of(context).push(
                 CommonRoute(
@@ -41,7 +42,7 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
               );
               break;
             }
-          case BLOC_EVENT_NAVIGATION_REPLACE:
+          case blocEventNavigationReplace:
             {
               Navigator.of(context).pushReplacement(
                 CommonRoute(
@@ -50,18 +51,18 @@ abstract class CommonPageState<T extends StatefulWidget, K extends CommonBloc>
               );
               break;
             }
-          case BLOC_EVENT_NAVIGATION_FINISH:
+          case blocEventNavigationFinish:
             {
               Navigator.of(context).pop(event.obj);
               break;
             }
-          case BLOC_EVENT_PAGE_LOADING:
+          case blocEventPageLoading:
             {
               onLoading(context);
 
               break;
             }
-          case BLOC_EVENT_PAGE_COMPLETED:
+          case blocEventPageCompleted:
             {
               loadingFinish(context);
               break;

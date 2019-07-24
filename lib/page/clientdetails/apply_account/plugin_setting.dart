@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/common_bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/applied_plugins_rsp.dart';
 import 'package:flutter_app/data/http/rsp/data/RadioBean.dart';

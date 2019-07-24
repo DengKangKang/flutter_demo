@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/common_bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/persistence/persistence.dart';
 import 'package:flutter_app/main.dart';

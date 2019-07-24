@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/common_bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/count_use.dart';
 import 'package:rxdart/rxdart.dart';

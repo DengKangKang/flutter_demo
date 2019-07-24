@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/common_route.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/common_bloc.dart';
 import 'package:flutter_app/data/http/api_service.dart';
 import 'package:flutter_app/data/http/rsp/DailiesRsp.dart';
 import 'package:flutter_app/data/persistence/persistence.dart';

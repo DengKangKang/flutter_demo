@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_app/bloc/Bloc.dart';
+import 'package:flutter_app/bloc/common_bloc.dart';
 import 'package:flutter_app/page/base/common_page_state.dart';
 import 'package:flutter_app/page/client_detail_page.dart' as prefix0;
 import 'package:flutter_app/page/daily_page.dart';
