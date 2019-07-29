@@ -38,59 +38,61 @@ class ResetPasswordState
           Flexible(
             child: ListView(
               children: <Widget>[
-                Container(
+                Material(
                   color: Colors.white,
-                  margin: EdgeInsets.only(top: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      TextField(
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 20,
-                            ),
-                            hintText: '请输入旧密码'),
-                        onChanged: (s) {
-                          bloc.oldPassword = s;
-                        },
-                        obscureText: true,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      Divider(
-                        height: 1,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 20,
-                            ),
-                            border: InputBorder.none,
-                            hintText: '请输入新密码'),
-                        onChanged: (s) {
-                          bloc.newPassword = s;
-                        },
-                        obscureText: true,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      Divider(
-                        height: 1,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 20,
-                            ),
-                            border: InputBorder.none,
-                            hintText: '请再次输入新密码'),
-                        onChanged: (s) {
-                          bloc.newPasswordAgain = s;
-                        },
-                        obscureText: true,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                    ],
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        TextField(
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 20,
+                              ),
+                              hintText: '请输入旧密码'),
+                          onChanged: (s) {
+                            bloc.oldPassword = s;
+                          },
+                          obscureText: true,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        Divider(
+                          height: 1,
+                        ),
+                        TextField(
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 20,
+                              ),
+                              border: InputBorder.none,
+                              hintText: '请输入新密码'),
+                          onChanged: (s) {
+                            bloc.newPassword = s;
+                          },
+                          obscureText: true,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        Divider(
+                          height: 1,
+                        ),
+                        TextField(
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 20,
+                              ),
+                              border: InputBorder.none,
+                              hintText: '请再次输入新密码'),
+                          onChanged: (s) {
+                            bloc.newPasswordAgain = s;
+                          },
+                          obscureText: true,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],

@@ -1058,63 +1058,65 @@ Widget buildInputItem({
   bool showLine = true,
   bool enabled = true,
 }) {
-  return Container(
+  return Material(
     color: Colors.white,
-    padding: EdgeInsets.symmetric(horizontal: 20),
-    child: Column(
-      children: <Widget>[
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RichText(
-                text: TextSpan(
-                  text: label ?? '',
-                  style: TextStyle(fontSize: 15, color: Colors.black),
-                  children: spans,
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    text: label ?? '',
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                    children: spans,
+                  ),
                 ),
-              ),
-              Flexible(
-                child: TextField(
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      text: content.toString(),
-                      selection: TextSelection.collapsed(
-                        offset: content.length,
+                Flexible(
+                  child: TextField(
+                    controller: TextEditingController.fromValue(
+                      TextEditingValue(
+                        text: content.toString(),
+                        selection: TextSelection.collapsed(
+                          offset: content.length,
+                        ),
                       ),
                     ),
-                  ),
-                  textAlign: TextAlign.end,
-                  inputFormatters: inputFormatters,
-                  keyboardType: inputType,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(
-                      left: 15,
-                      right: 0,
-                      top: 15,
-                      bottom: 15,
+                    textAlign: TextAlign.end,
+                    inputFormatters: inputFormatters,
+                    keyboardType: inputType,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(
+                        left: 15,
+                        right: 0,
+                        top: 15,
+                        bottom: 15,
+                      ),
+                      hintText: hint,
+                      border: InputBorder.none,
                     ),
-                    hintText: hint,
-                    border: InputBorder.none,
+                    style: TextStyle(fontSize: 15),
+                    enabled: enabled,
+                    onChanged: (s) {
+                      if (content.isNotEmpty) content.clear();
+                      content.write(s);
+                    },
                   ),
-                  style: TextStyle(fontSize: 15),
-                  enabled: enabled,
-                  onChanged: (s) {
-                    if (content.isNotEmpty) content.clear();
-                    content.write(s);
-                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Opacity(
-          child: Divider(
-            height: 1,
+          Opacity(
+            child: Divider(
+              height: 1,
+            ),
+            opacity: showLine ? 1 : 0,
           ),
-          opacity: showLine ? 1 : 0,
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
