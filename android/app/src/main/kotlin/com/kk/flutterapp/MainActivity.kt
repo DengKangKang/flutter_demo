@@ -77,7 +77,7 @@ class MainActivity : FlutterActivity() {
                 .schedule {
                    try {
                        val request = Request.Builder()
-                               .url("http://192.168.1.241:3000/op/api/app/fc/appupdate")
+                               .url("http://op.deallinker.com/op/app/fc/appupdate")
                                .build()
                        client.newCall(request)
                                .execute()
